@@ -1,11 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useAppForm } from '~/components/Form/use-app-form'
 
-export const Route = createFileRoute('/benefits-calculator/')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
+export function WhereYouLive() {
   const form = useAppForm({
     defaultValues: {
       Postcode: '',

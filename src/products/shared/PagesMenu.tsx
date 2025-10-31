@@ -1,19 +1,23 @@
 import { Link } from '@tanstack/react-router'
-
-import { PAGES } from './pages'
+import { useWorkflow } from './use-workflow'
 
 export function PagesMenu() {
+  const { basePath, visiblePages } = useWorkflow()
+
+  if (!basePath || !visiblePages) return null
+
   return (
     <div className="">
       <div className="text-lg font-bold uppercase tracking-[2px] text-[0.8rem] text-slate-500 mb-1">
         Table of Contents
       </div>
 
-      {PAGES.map((page) => {
+      {visiblePages.map((page) => {
         return (
           <Link
-            to={page.path}
-            key={page.path}
+            to={page.slug ? `${basePath}/$slug` : basePath}
+            params={{ slug: page.slug }}
+            key={page.slug}
             className="flex items-center gap-2 relative py-1.5 pl-3"
             activeProps={{ className: 'active bg-slate-100 rounded-md' }}
             activeOptions={{ exact: true }}

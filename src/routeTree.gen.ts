@@ -11,14 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BenefitsCalculatorRouteRouteImport } from './routes/benefits-calculator/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BenefitsCalculatorIndexRouteImport } from './routes/benefits-calculator/index'
-import { Route as BenefitsCalculatorYourHouseholdRouteImport } from './routes/benefits-calculator/your-household'
-import { Route as BenefitsCalculatorResultsRouteImport } from './routes/benefits-calculator/results'
-import { Route as BenefitsCalculatorNetIncomeRouteImport } from './routes/benefits-calculator/net-income'
-import { Route as BenefitsCalculatorHousingCostsRouteImport } from './routes/benefits-calculator/housing-costs'
-import { Route as BenefitsCalculatorCurrentBenefitsRouteImport } from './routes/benefits-calculator/current-benefits'
-import { Route as BenefitsCalculatorCouncilTaxRouteImport } from './routes/benefits-calculator/council-tax'
-import { Route as BenefitsCalculatorAgeAndDisabilityRouteImport } from './routes/benefits-calculator/age-and-disability'
+import { Route as BenefitsCalculatorSlugRouteImport } from './routes/benefits-calculator/$slug'
 
 const BenefitsCalculatorRouteRoute = BenefitsCalculatorRouteRouteImport.update({
   id: '/benefits-calculator',
@@ -30,126 +23,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BenefitsCalculatorIndexRoute = BenefitsCalculatorIndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BenefitsCalculatorSlugRoute = BenefitsCalculatorSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => BenefitsCalculatorRouteRoute,
 } as any)
-const BenefitsCalculatorYourHouseholdRoute =
-  BenefitsCalculatorYourHouseholdRouteImport.update({
-    id: '/your-household',
-    path: '/your-household',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorResultsRoute =
-  BenefitsCalculatorResultsRouteImport.update({
-    id: '/results',
-    path: '/results',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorNetIncomeRoute =
-  BenefitsCalculatorNetIncomeRouteImport.update({
-    id: '/net-income',
-    path: '/net-income',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorHousingCostsRoute =
-  BenefitsCalculatorHousingCostsRouteImport.update({
-    id: '/housing-costs',
-    path: '/housing-costs',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorCurrentBenefitsRoute =
-  BenefitsCalculatorCurrentBenefitsRouteImport.update({
-    id: '/current-benefits',
-    path: '/current-benefits',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorCouncilTaxRoute =
-  BenefitsCalculatorCouncilTaxRouteImport.update({
-    id: '/council-tax',
-    path: '/council-tax',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
-const BenefitsCalculatorAgeAndDisabilityRoute =
-  BenefitsCalculatorAgeAndDisabilityRouteImport.update({
-    id: '/age-and-disability',
-    path: '/age-and-disability',
-    getParentRoute: () => BenefitsCalculatorRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
-  '/benefits-calculator/age-and-disability': typeof BenefitsCalculatorAgeAndDisabilityRoute
-  '/benefits-calculator/council-tax': typeof BenefitsCalculatorCouncilTaxRoute
-  '/benefits-calculator/current-benefits': typeof BenefitsCalculatorCurrentBenefitsRoute
-  '/benefits-calculator/housing-costs': typeof BenefitsCalculatorHousingCostsRoute
-  '/benefits-calculator/net-income': typeof BenefitsCalculatorNetIncomeRoute
-  '/benefits-calculator/results': typeof BenefitsCalculatorResultsRoute
-  '/benefits-calculator/your-household': typeof BenefitsCalculatorYourHouseholdRoute
-  '/benefits-calculator/': typeof BenefitsCalculatorIndexRoute
+  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/benefits-calculator/age-and-disability': typeof BenefitsCalculatorAgeAndDisabilityRoute
-  '/benefits-calculator/council-tax': typeof BenefitsCalculatorCouncilTaxRoute
-  '/benefits-calculator/current-benefits': typeof BenefitsCalculatorCurrentBenefitsRoute
-  '/benefits-calculator/housing-costs': typeof BenefitsCalculatorHousingCostsRoute
-  '/benefits-calculator/net-income': typeof BenefitsCalculatorNetIncomeRoute
-  '/benefits-calculator/results': typeof BenefitsCalculatorResultsRoute
-  '/benefits-calculator/your-household': typeof BenefitsCalculatorYourHouseholdRoute
-  '/benefits-calculator': typeof BenefitsCalculatorIndexRoute
+  '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
+  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
-  '/benefits-calculator/age-and-disability': typeof BenefitsCalculatorAgeAndDisabilityRoute
-  '/benefits-calculator/council-tax': typeof BenefitsCalculatorCouncilTaxRoute
-  '/benefits-calculator/current-benefits': typeof BenefitsCalculatorCurrentBenefitsRoute
-  '/benefits-calculator/housing-costs': typeof BenefitsCalculatorHousingCostsRoute
-  '/benefits-calculator/net-income': typeof BenefitsCalculatorNetIncomeRoute
-  '/benefits-calculator/results': typeof BenefitsCalculatorResultsRoute
-  '/benefits-calculator/your-household': typeof BenefitsCalculatorYourHouseholdRoute
-  '/benefits-calculator/': typeof BenefitsCalculatorIndexRoute
+  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/benefits-calculator'
-    | '/benefits-calculator/age-and-disability'
-    | '/benefits-calculator/council-tax'
-    | '/benefits-calculator/current-benefits'
-    | '/benefits-calculator/housing-costs'
-    | '/benefits-calculator/net-income'
-    | '/benefits-calculator/results'
-    | '/benefits-calculator/your-household'
-    | '/benefits-calculator/'
+  fullPaths: '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/benefits-calculator/age-and-disability'
-    | '/benefits-calculator/council-tax'
-    | '/benefits-calculator/current-benefits'
-    | '/benefits-calculator/housing-costs'
-    | '/benefits-calculator/net-income'
-    | '/benefits-calculator/results'
-    | '/benefits-calculator/your-household'
-    | '/benefits-calculator'
-  id:
-    | '__root__'
-    | '/'
-    | '/benefits-calculator'
-    | '/benefits-calculator/age-and-disability'
-    | '/benefits-calculator/council-tax'
-    | '/benefits-calculator/current-benefits'
-    | '/benefits-calculator/housing-costs'
-    | '/benefits-calculator/net-income'
-    | '/benefits-calculator/results'
-    | '/benefits-calculator/your-household'
-    | '/benefits-calculator/'
+  to: '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
+  id: '__root__' | '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -173,88 +74,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/benefits-calculator/': {
-      id: '/benefits-calculator/'
-      path: '/'
-      fullPath: '/benefits-calculator/'
-      preLoaderRoute: typeof BenefitsCalculatorIndexRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/your-household': {
-      id: '/benefits-calculator/your-household'
-      path: '/your-household'
-      fullPath: '/benefits-calculator/your-household'
-      preLoaderRoute: typeof BenefitsCalculatorYourHouseholdRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/results': {
-      id: '/benefits-calculator/results'
-      path: '/results'
-      fullPath: '/benefits-calculator/results'
-      preLoaderRoute: typeof BenefitsCalculatorResultsRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/net-income': {
-      id: '/benefits-calculator/net-income'
-      path: '/net-income'
-      fullPath: '/benefits-calculator/net-income'
-      preLoaderRoute: typeof BenefitsCalculatorNetIncomeRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/housing-costs': {
-      id: '/benefits-calculator/housing-costs'
-      path: '/housing-costs'
-      fullPath: '/benefits-calculator/housing-costs'
-      preLoaderRoute: typeof BenefitsCalculatorHousingCostsRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/current-benefits': {
-      id: '/benefits-calculator/current-benefits'
-      path: '/current-benefits'
-      fullPath: '/benefits-calculator/current-benefits'
-      preLoaderRoute: typeof BenefitsCalculatorCurrentBenefitsRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/council-tax': {
-      id: '/benefits-calculator/council-tax'
-      path: '/council-tax'
-      fullPath: '/benefits-calculator/council-tax'
-      preLoaderRoute: typeof BenefitsCalculatorCouncilTaxRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
-    }
-    '/benefits-calculator/age-and-disability': {
-      id: '/benefits-calculator/age-and-disability'
-      path: '/age-and-disability'
-      fullPath: '/benefits-calculator/age-and-disability'
-      preLoaderRoute: typeof BenefitsCalculatorAgeAndDisabilityRouteImport
+    '/benefits-calculator/$slug': {
+      id: '/benefits-calculator/$slug'
+      path: '/$slug'
+      fullPath: '/benefits-calculator/$slug'
+      preLoaderRoute: typeof BenefitsCalculatorSlugRouteImport
       parentRoute: typeof BenefitsCalculatorRouteRoute
     }
   }
 }
 
 interface BenefitsCalculatorRouteRouteChildren {
-  BenefitsCalculatorAgeAndDisabilityRoute: typeof BenefitsCalculatorAgeAndDisabilityRoute
-  BenefitsCalculatorCouncilTaxRoute: typeof BenefitsCalculatorCouncilTaxRoute
-  BenefitsCalculatorCurrentBenefitsRoute: typeof BenefitsCalculatorCurrentBenefitsRoute
-  BenefitsCalculatorHousingCostsRoute: typeof BenefitsCalculatorHousingCostsRoute
-  BenefitsCalculatorNetIncomeRoute: typeof BenefitsCalculatorNetIncomeRoute
-  BenefitsCalculatorResultsRoute: typeof BenefitsCalculatorResultsRoute
-  BenefitsCalculatorYourHouseholdRoute: typeof BenefitsCalculatorYourHouseholdRoute
-  BenefitsCalculatorIndexRoute: typeof BenefitsCalculatorIndexRoute
+  BenefitsCalculatorSlugRoute: typeof BenefitsCalculatorSlugRoute
 }
 
 const BenefitsCalculatorRouteRouteChildren: BenefitsCalculatorRouteRouteChildren =
   {
-    BenefitsCalculatorAgeAndDisabilityRoute:
-      BenefitsCalculatorAgeAndDisabilityRoute,
-    BenefitsCalculatorCouncilTaxRoute: BenefitsCalculatorCouncilTaxRoute,
-    BenefitsCalculatorCurrentBenefitsRoute:
-      BenefitsCalculatorCurrentBenefitsRoute,
-    BenefitsCalculatorHousingCostsRoute: BenefitsCalculatorHousingCostsRoute,
-    BenefitsCalculatorNetIncomeRoute: BenefitsCalculatorNetIncomeRoute,
-    BenefitsCalculatorResultsRoute: BenefitsCalculatorResultsRoute,
-    BenefitsCalculatorYourHouseholdRoute: BenefitsCalculatorYourHouseholdRoute,
-    BenefitsCalculatorIndexRoute: BenefitsCalculatorIndexRoute,
+    BenefitsCalculatorSlugRoute: BenefitsCalculatorSlugRoute,
   }
 
 const BenefitsCalculatorRouteRouteWithChildren =

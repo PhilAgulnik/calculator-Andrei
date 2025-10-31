@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { EntitledtoLogo } from '../components/EntitledtoLogo'
-import CalculatorIcon from '~/components/ProductIcon'
+import { CalculatorIcon } from '~/components/ProductIcon'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
