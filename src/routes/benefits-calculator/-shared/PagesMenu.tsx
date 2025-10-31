@@ -1,11 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { Glyph } from '~/components/Glyph'
 
 import { PAGES } from './pages'
-
-// @ts-ignore-next-line
-import classes from './pages.module.css'
-import clsx from 'clsx'
 
 export function PagesMenu() {
   return (
@@ -14,7 +9,7 @@ export function PagesMenu() {
         Table of Contents
       </div>
 
-      {PAGES.map((page, index) => {
+      {PAGES.map((page) => {
         return (
           <Link
             to={page.path}
@@ -23,14 +18,7 @@ export function PagesMenu() {
             activeProps={{ className: 'active bg-slate-100 rounded-md' }}
             activeOptions={{ exact: true }}
           >
-            {/* <Glyph name={page.glyph} className="fill-[var(--primary-color)]" size="1.1em" /> */}
-            <span
-              className={clsx(
-                classes.activeIndicator,
-                index === 0 && 'first',
-                index === PAGES.length - 1 && 'last'
-              )}
-            />
+            <span className="w-2 h-2 rounded-full bg-white border border-slate-500/30 after:content-[''] after:absolute after:top-0 after:left-4 after:w-px after:bottom-0 after:bg-slate-500/30 after:-z-[1]" />
             {page.title}
           </Link>
         )

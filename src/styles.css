@@ -26,6 +26,10 @@
   --spacing-sidebar-width: 240px;
   --spacing-app-padding-x: 0.75rem;
   --spacing-input-height: 42px;
+
+  --breakpoint-mq400: 400px;
+  --breakpoint-mq500: 500px;
+  --breakpoint-mq600: 600px;
 }
 
 html {
@@ -37,11 +41,6 @@ html {
 *:before,
 *:after {
   box-sizing: inherit;
-}
-
-a {
-  color: var(--color-primary);
-  font-weight: 500;
 }
 
 /* App Layout */
@@ -72,7 +71,7 @@ a {
   flex-shrink: 0;
   height: var(--spacing-app-header-height);
   pointer-events: auto;
-  padding: 0 1rem;
+  /* padding: 0 1rem; */
   border-bottom: 1px solid var(--color-divider);
 }
 
@@ -167,6 +166,8 @@ a {
   flex-grow: 1;
   flex-shrink: 0;
   background-color: var(--color-main-bg);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
 @media (min-width: 960px) {
