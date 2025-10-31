@@ -49,15 +49,22 @@ type SelectFieldProps = {
   className?: string
   inputClassName?: string
   options: { value: string; label: string }[]
+  descriptionBefore?: React.ReactNode
+  descriptionAfter?: React.ReactNode
 }
 
 export function SelectField(props: SelectFieldProps) {
-  const { label, className, inputClassName, options } = props
+  const { label, className, inputClassName, options, descriptionBefore, descriptionAfter } = props
 
   const field = useFieldContext<string>()
 
   return (
-    <Field label={label} className={className}>
+    <Field
+      label={label}
+      className={className}
+      descriptionBefore={descriptionBefore}
+      descriptionAfter={descriptionAfter}
+    >
       <SelectInput
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}

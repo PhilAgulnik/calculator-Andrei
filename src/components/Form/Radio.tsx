@@ -63,7 +63,13 @@ export function RadioField(props: RadioFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
     >
-      <div className={clsx('grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]')}>
+      <div
+        className={clsx(
+          options.length === 2
+            ? 'flex gap-2'
+            : 'grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'
+        )}
+      >
         {options.map((option) => (
           <RadioInput
             key={option.value}
@@ -103,7 +109,13 @@ export function BooleanRadioField(props: BooleanRadioFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
     >
-      <div className={clsx('grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]')}>
+      <div
+        className={clsx(
+          booleanRadioOptions.length === 2
+            ? 'flex gap-2'
+            : 'grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'
+        )}
+      >
         {booleanRadioOptions.map((option) => (
           <RadioInput
             key={option.value.toString()}
