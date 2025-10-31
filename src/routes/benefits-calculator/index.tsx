@@ -8,9 +8,9 @@ export const Route = createFileRoute('/benefits-calculator/')({
 function RouteComponent() {
   const form = useAppForm({
     defaultValues: {
-      postcode: '',
-      housing_status: '',
-      tax_year: '2025_26',
+      Postcode: '',
+      NationalHousingStatus: '',
+      CalcYears: '22',
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
@@ -43,33 +43,33 @@ function RouteComponent() {
         className="mt-5"
       >
         <form.AppField
-          name="housing_status"
+          name="NationalHousingStatus"
           children={(field) => (
             <field.RadioField
               label="Which best describes your current housing status?"
               options={[
                 {
                   label: 'Council or housing association tenant',
-                  value: 'council_or_housing_association_tenant',
+                  value: 'CouncilTenant',
                 },
-                { label: 'Tenant - private sector', value: 'tenant__private_sector' },
-                { label: 'Mortgage or owned outright', value: 'mortgage_or_owned_outright' },
-                { label: 'Shared ownership', value: 'shared_ownership' },
-                { label: 'Boarder or lodger', value: 'boarder_or_lodger' },
-                { label: 'Supported accommodation', value: 'supported_accommodation' },
-                { label: 'Temporary accommodation', value: 'temporary_accommodation' },
+                { label: 'Tenant - private sector', value: 'TenantPrivateSector' },
+                { label: 'Mortgage or owned outright', value: 'MortgageOrOwned' },
+                { label: 'Shared ownership', value: 'SharedOwnership' },
+                { label: 'Boarder or lodger', value: 'BoarderOrLodger' },
+                { label: 'Supported accommodation', value: 'SupportedAccommodation' },
+                { label: 'Temporary accommodation', value: 'TemporaryAccommodation' },
                 {
                   label: 'Living rent-free with friends/family',
-                  value: 'living_rentfree_with_friends_family',
+                  value: 'LivingWithParents',
                 },
-                { label: 'Homeless', value: 'homeless' },
+                { label: 'Homeless', value: 'Homeless' },
               ]}
             />
           )}
         />
 
         <form.AppField
-          name="tax_year"
+          name="CalcYears"
           children={(field) => (
             <field.SelectField
               label="Work out my entitlements for year"
@@ -83,7 +83,7 @@ function RouteComponent() {
         />
 
         <form.AppField
-          name="postcode"
+          name="Postcode"
           children={(field) => (
             <field.TextInputField label="What is your postcode?" inputClassName="max-w-[150px]" />
           )}

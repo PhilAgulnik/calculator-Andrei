@@ -26,7 +26,7 @@ function RouteComponent() {
         className="mt-5"
       >
         <form.AppField
-          name="has_partner"
+          name="HasPartner"
           children={(field) => (
             <field.BooleanRadioField
               label="Do you have a partner who normally lives with you? "
@@ -43,7 +43,7 @@ function RouteComponent() {
         />
 
         <form.AppField
-          name="number_of_children"
+          name="HouseholdChildrenNumber"
           children={(field) => (
             <field.NumberInputField
               label="How many children are in your household?"
@@ -65,7 +65,7 @@ function RouteComponent() {
         />
 
         <form.AppField
-          name="has_other_residents"
+          name="HasUC_NumNonDeps"
           defaultValue={false}
           children={(field) => (
             <field.BooleanRadioField
@@ -81,7 +81,7 @@ function RouteComponent() {
         />
 
         <form.AppField
-          name="is_british_or_irish_citizen"
+          name="ImmigrationControl"
           defaultValue={true}
           children={(field) => (
             <field.BooleanRadioField label="Are you a British or Irish citizen living in the UK?" />
@@ -89,7 +89,7 @@ function RouteComponent() {
         />
 
         <form.AppField
-          name="is_in_special_circumstances"
+          name="ResCare"
           defaultValue={false}
           children={(field) => (
             <field.BooleanRadioField label="Are you in hospital/residential care, a prisoner, on strike, living abroad or a full-time student?" />
