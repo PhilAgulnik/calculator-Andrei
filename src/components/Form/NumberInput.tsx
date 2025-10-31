@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { Field } from './Field'
+import { CommonFieldProps, Field } from './Field'
 import { FieldInfo } from './FieldInfo'
 import { useFieldContext } from './use-app-form'
 
@@ -39,22 +39,22 @@ export function NumberInput(props: NumberInputProps) {
   )
 }
 
-type NumberInputFieldProps = {
-  label?: string
-  className?: string
+type NumberInputFieldProps = CommonFieldProps & {
   inputClassName?: string
-  before?: React.ReactNode
-  after?: React.ReactNode
 }
 
 export function NumberInputField(props: NumberInputFieldProps) {
-  const { label, className, inputClassName, before, after } = props
+  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
 
   const field = useFieldContext<number>()
 
   return (
-    <Field label={label} className={className}>
-      {before}
+    <Field
+      label={label}
+      className={className}
+      descriptionBefore={descriptionBefore}
+      descriptionAfter={descriptionAfter}
+    >
       <NumberInput
         value={field.state.value}
         onChange={(e) => field.handleChange(Number(e.target.value))}
@@ -62,7 +62,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
         name={field.name}
         className={inputClassName}
       />
-      {after}
+
       <FieldInfo field={field} />
     </Field>
   )

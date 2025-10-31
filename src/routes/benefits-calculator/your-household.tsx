@@ -30,14 +30,7 @@ function RouteComponent() {
           children={(field) => (
             <field.BooleanRadioField
               label="Do you have a partner who normally lives with you? "
-              before={
-                <p className="mb-3">
-                  Say yes if you are married or live with someone as a couple, including civil
-                  partners or people you live with as if you are civil partners. Please click on the
-                  help icon above for guidance on which member of a couple should be entered as
-                  'you' and which should be the 'partner' for this calculation.
-                </p>
-              }
+              descriptionBefore="Say yes if you are married or live with someone as a couple, including civil partners or people you live with as if you are civil partners. Please click on the help icon above for guidance on which member of a couple should be entered as 'you' and which should be the 'partner' for this calculation."
             />
           )}
         />
@@ -48,18 +41,7 @@ function RouteComponent() {
             <field.NumberInputField
               label="How many children are in your household?"
               inputClassName="max-w-[140px]"
-              before={
-                <p className="mb-3">
-                  Include any children under 19 who you or your partner get Child Benefit for (it
-                  does not matter if they are your biological children or not). If they are age 19
-                  please see our help guide for more information on when to include them. If you
-                  share custody, you should only include children if you receive Child Benefit for
-                  them. If you are pregnant or adopting and include the expected child we will
-                  calculate your benefits assuming the child is born/adopted. Do not include an
-                  expected child if you want to find out your current entitlements. Please enter a
-                  valid value from 0 to 10.
-                </p>
-              }
+              descriptionBefore="Include any children under 19 who you or your partner get Child Benefit for (itdoes not matter if they are your biological children or not). If they are age 19please see our help guide for more information on when to include them. If youshare custody, you should only include children if you receive Child Benefit forthem. If you are pregnant or adopting and include the expected child we willcalculate your benefits assuming the child is born/adopted. Do not include anexpected child if you want to find out your current entitlements. Please enter avalid value from 0 to 10."
             />
           )}
         />
@@ -70,12 +52,7 @@ function RouteComponent() {
           children={(field) => (
             <field.BooleanRadioField
               label="Does anyone else live in your home?"
-              before={
-                <p className="mb-3">
-                  For instance, a grown up child, elderly parent, joint tenant, sub-tenant or
-                  lodger.
-                </p>
-              }
+              descriptionBefore="For instance, a grown up child, elderly parent, joint tenant, sub-tenant or lodger."
             />
           )}
         />

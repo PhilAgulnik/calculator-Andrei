@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { Field } from './Field'
 import { FieldInfo } from './FieldInfo'
 import { useFieldContext } from './use-app-form'
+import { CommonFieldProps } from './Field'
 
 type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
@@ -39,22 +40,22 @@ export function TextInput(props: TextInputProps) {
   )
 }
 
-type TextInputFieldProps = {
-  label?: string
-  className?: string
+type TextInputFieldProps = CommonFieldProps & {
   inputClassName?: string
-  before?: React.ReactNode
-  after?: React.ReactNode
 }
 
 export function TextInputField(props: TextInputFieldProps) {
-  const { label, className, inputClassName, before, after } = props
+  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
 
   const field = useFieldContext<string>()
 
   return (
-    <Field label={label} className={className}>
-      {before}
+    <Field
+      label={label}
+      className={className}
+      descriptionBefore={descriptionBefore}
+      descriptionAfter={descriptionAfter}
+    >
       <TextInput
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
@@ -62,7 +63,6 @@ export function TextInputField(props: TextInputFieldProps) {
         name={field.name}
         className={inputClassName}
       />
-      {after}
       <FieldInfo field={field} />
     </Field>
   )

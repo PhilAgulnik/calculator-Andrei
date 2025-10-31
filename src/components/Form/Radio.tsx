@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { Field } from './Field'
+import { CommonFieldProps, Field } from './Field'
 import { FieldInfo } from './FieldInfo'
 import { useFieldContext } from './use-app-form'
 
@@ -45,23 +45,24 @@ export function RadioInput(props: RadioInputProps) {
   )
 }
 
-type RadioFieldProps = {
-  before?: React.ReactNode
-  after?: React.ReactNode
-  label?: string
-  className?: string
+type RadioFieldProps = CommonFieldProps & {
   inputClassName?: string
   options: { value: string; label: string }[]
 }
 
 export function RadioField(props: RadioFieldProps) {
-  const { label, className, inputClassName, options, before, after } = props
+  const { label, className, inputClassName, options, descriptionBefore, descriptionAfter } = props
 
   const field = useFieldContext<string>()
 
   return (
-    <Field as="div" label={label} className={className}>
-      {before}
+    <Field
+      as="div"
+      label={label}
+      className={className}
+      descriptionBefore={descriptionBefore}
+      descriptionAfter={descriptionAfter}
+    >
       <div className={clsx('grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]')}>
         {options.map((option) => (
           <RadioInput
@@ -76,7 +77,6 @@ export function RadioField(props: RadioFieldProps) {
           />
         ))}
       </div>
-      {after}
 
       <FieldInfo field={field} />
     </Field>
@@ -91,15 +91,19 @@ const booleanRadioOptions = [
 ]
 
 export function BooleanRadioField(props: BooleanRadioFieldProps) {
-  const { label, className, inputClassName, before, after } = props
+  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
 
   const field = useFieldContext<boolean | null>()
 
   return (
-    <Field as="div" label={label} className={className}>
-      {before}
-
-      <div className={clsx('flex gap-2')}>
+    <Field
+      as="div"
+      label={label}
+      className={className}
+      descriptionBefore={descriptionBefore}
+      descriptionAfter={descriptionAfter}
+    >
+      <div className={clsx('grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]')}>
         {booleanRadioOptions.map((option) => (
           <RadioInput
             key={option.value.toString()}
@@ -117,8 +121,6 @@ export function BooleanRadioField(props: BooleanRadioFieldProps) {
           />
         ))}
       </div>
-
-      {after}
 
       <FieldInfo field={field} />
     </Field>
