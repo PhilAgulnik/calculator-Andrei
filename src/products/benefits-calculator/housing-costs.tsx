@@ -13,12 +13,18 @@ const PAYMENT_PERIOD_OPTIONS = [
 ]
 
 const schema = z.object({
-  RentAmount: z.string().min(1, 'Please enter your rent amount'),
+  RentAmount: z.number().min(1, 'Please enter your rent amount'),
   RentPeriod: z.string(),
   UCAPA: z.boolean(),
-  NumberOfRentFreeWeeks: z.string(),
+  NumberOfRentFreeWeeks: z
+    .number()
+    .min(0, 'Please enter a valid number of rent-free weeks')
+    .max(52, 'Please enter a valid number of rent-free weeks'),
   SanctuarySchemeBedroomTaxExemption: z.boolean(),
-  BedroomsCount: z.string(),
+  BedroomsCount: z
+    .number()
+    .min(0, 'Please enter a valid number of bedrooms')
+    .max(6, 'Please enter a valid number of bedrooms'),
   HasMoreInfoAboutDisabledChilrdren: z.boolean(),
   IncludeExtraBedroom: z.boolean(),
 })
@@ -28,12 +34,12 @@ export function HousingCosts() {
 
   const form = useAppForm({
     defaultValues: {
-      RentAmount: '',
+      RentAmount: 0,
       RentPeriod: '2',
       UCAPA: false,
-      NumberOfRentFreeWeeks: '0',
+      NumberOfRentFreeWeeks: 0,
       SanctuarySchemeBedroomTaxExemption: false,
-      BedroomsCount: '1',
+      BedroomsCount: 1,
       HasMoreInfoAboutDisabledChilrdren: false,
       IncludeExtraBedroom: false,
     },
@@ -80,10 +86,7 @@ export function HousingCosts() {
         <form.AppField
           name="RentPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={PAYMENT_PERIOD_OPTIONS}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 

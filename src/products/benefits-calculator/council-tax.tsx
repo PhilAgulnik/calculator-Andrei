@@ -7,7 +7,6 @@ import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
 
 const COUNCIL_TAX_BAND_OPTIONS = [
-  { label: 'Please select', value: '' },
   { label: "Don't Know", value: 'DontKnow' },
   { label: 'no CT liability', value: 'X' },
   { label: 'A', value: 'A' },
@@ -171,10 +170,7 @@ export function CouncilTax() {
         <form.AppField
           name="CouncilTaxPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Payment period"
-              options={PAYMENT_PERIOD_OPTIONS}
-            />
+            <field.SelectField label="Payment period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
