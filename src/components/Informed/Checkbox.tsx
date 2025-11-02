@@ -62,11 +62,12 @@ export function CheckboxField(props: CheckboxFieldProps) {
     descriptionAfter,
     layout,
     required,
+    defaultValue,
   } = props
 
   const { fieldState, fieldApi, render, ref } = useField({
     name,
-    defaultValue: [],
+    defaultValue: defaultValue || [],
     validate: (value) => {
       if (required && (!value || (value as string[]).length === 0)) {
         return 'This field is required'
@@ -119,70 +120,6 @@ export function CheckboxField(props: CheckboxFieldProps) {
             className={inputClassName}
             label={option.label}
             checked={value?.includes(option.value)}
-          />
-        ))}
-      </div>
-    </Field>
-  )
-}
-
-type BooleanCheckboxFieldProps = Omit<CheckboxFieldProps, 'options'>
-
-const booleanCheckboxOptions = [
-  { label: 'Yes', value: 'true' },
-  { label: 'No', value: 'false' },
-]
-
-export function BooleanCheckboxField(props: BooleanCheckboxFieldProps) {
-  const { name, label, className, inputClassName, descriptionBefore, descriptionAfter, required } =
-    props
-
-  const { fieldState, fieldApi, render, ref } = useField({
-    name,
-    validate: (value) => {
-      if (required && value == null) {
-        return 'This field is required'
-      }
-      return undefined
-    },
-  })
-  const { value }: any = fieldState
-
-  return render(
-    <Field
-      as="div"
-      name={name}
-      label={label}
-      className={className}
-      descriptionBefore={descriptionBefore}
-      descriptionAfter={descriptionAfter}
-      required={required}
-    >
-      <div
-        className={clsx(
-          booleanCheckboxOptions.length === 2
-            ? 'flex gap-2'
-            : 'grid gap-2 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'
-        )}
-      >
-        {booleanCheckboxOptions.map((option) => (
-          <CheckboxInput
-            key={option.value}
-            ref={ref}
-            value={option.value}
-            onChange={(e) =>
-              fieldApi.setValue(
-                e.target.value === 'true' ? true : e.target.value === 'false' ? false : null,
-                e
-              )
-            }
-            onBlur={(e) => {
-              fieldApi.setTouched(true, e)
-            }}
-            name={name}
-            className={inputClassName}
-            label={option.label}
-            checked={value === (option.value === 'true')}
           />
         ))}
       </div>

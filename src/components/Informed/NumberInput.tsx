@@ -46,12 +46,21 @@ type NumberInputFieldProps = CommonFieldProps & {
 }
 
 export function NumberInputField(props: NumberInputFieldProps) {
-  const { name, label, className, inputClassName, descriptionBefore, descriptionAfter, required } =
-    props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
   const { fieldState, fieldApi, render, ref } = useField({
     type: 'number',
     name,
+    defaultValue: defaultValue,
     validate: (value) => {
       if (required && (value === null || value === undefined || value === '')) {
         return 'This field is required'

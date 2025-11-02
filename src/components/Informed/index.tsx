@@ -1,7 +1,6 @@
 import { TextInputField } from './TextInput'
 import { NumberInputField } from './NumberInput'
 import { CheckboxField } from './Checkbox'
-import { BooleanCheckboxField } from './Checkbox'
 import { RadioField } from './Radio'
 import { BooleanRadioField } from './Radio'
 import { SelectField } from './Select'
@@ -13,7 +12,6 @@ export const Fields = {
   TextInput: TextInputField,
   NumberInput: NumberInputField,
   Checkbox: CheckboxField,
-  BooleanCheckbox: BooleanCheckboxField,
   Radio: RadioField,
   BooleanRadio: BooleanRadioField,
   Select: SelectField,

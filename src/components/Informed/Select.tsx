@@ -52,11 +52,21 @@ type SelectFieldProps = CommonFieldProps & {
 }
 
 export function SelectField(props: SelectFieldProps) {
-  const { name, label, className, inputClassName, options, descriptionBefore, descriptionAfter, required } =
-    props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    options,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
   const { fieldState, fieldApi, render, ref } = useField({
     name,
+    defaultValue: defaultValue,
     validate: (value) => {
       if (required && !value) {
         return 'This field is required'
