@@ -1,0 +1,861 @@
+<form
+  class="claim-form__bar func-main-form"
+  action="/benefits-calculator/Intro/Household?cid=43e8136e-342e-4a65-aca4-4c21160e057a"
+  method="post"
+  novalidate="novalidate"
+>
+  <input
+    data-val="true"
+    data-val-required="The CalcIdent field is required."
+    id="CalcIdent"
+    name="CalcIdent"
+    type="hidden"
+    value="43e8136e-342e-4a65-aca4-4c21160e057a"
+  />
+  <input
+    data-val="true"
+    data-val-date="The field StartTime must be a date."
+    data-val-required="The StartTime field is required."
+    id="StartTime"
+    name="StartTime"
+    type="hidden"
+    value="02/11/2025 10:02:49"
+  />
+  <input id="CompanyName" name="CompanyName" type="hidden" value="entitledto" />
+  <input
+    data-val="true"
+    data-val-required="The HasSEISS field is required."
+    id="HasSEISS"
+    name="HasSEISS"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-required="The HideNonDeps field is required."
+    id="HideNonDeps"
+    name="HideNonDeps"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-number="The field SiteId must be a number."
+    data-val-required="The SiteId field is required."
+    id="SiteId"
+    name="SiteId"
+    type="hidden"
+    value="4"
+  />
+
+  <input type="hidden" id="CalcYears" name="CalcYears" value="22" />
+
+  <h1 class="content-title"><span>Your household</span></h1>
+  <h2 class="visually-hidden" role="heading" aria-level="2">Benefit calculator</h2>
+
+  <p></p>
+
+  <div class="form-group func-question">
+    <h2 id="HasPartner-label">
+      <span class="func-question-label">Do you have a partner who normally lives with you?</span>
+      <em class="icon-info-item">
+        <a
+          class="icon-info-item__link simple-link"
+          href="https://www.entitledto.co.uk/help/single-couple-benefits"
+          target="_blank"
+          title="Show help on 'Do you have a partner who normally lives with you?'"
+        >
+          <img
+            class="icon-info-bar"
+            src="/benefits-calculator/Content/images/ico-info.png"
+            alt="Help icon"
+          />
+        </a>
+      </em>
+    </h2>
+
+    <p class="form-group__note">
+      <strong class="note"
+        >Say yes if you are married or live with someone as a couple, including civil partners or
+        people you live with as if you are civil partners. Please click on the help icon above for
+        guidance on which member of a couple should be entered as 'you' and which should be the
+        'partner' for this calculation.</strong
+      >
+    </p>
+    <div class="func-form-row form-row" role="radiogroup" aria-labelledby="HasPartner-label">
+      <label class="choose-bar func-states" aria-checked="false">
+        <input
+          data-val="true"
+          data-val-required="The HasPartner field is required."
+          id="HasPartner"
+          name="HasPartner"
+          type="radio"
+          value="True"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-unchecked"><span></span></span>
+        <span class="func-answer">Yes</span>
+      </label>
+      <label class="choose-bar func-states jcf-label-active" aria-checked="true">
+        <input
+          checked="checked"
+          name="HasPartner"
+          type="radio"
+          value="False"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-checked"><span></span></span>
+        <span class="func-answer">No</span>
+      </label>
+    </div>
+
+    <strong class="error-message"
+      ><span
+        class="field-validation-valid"
+        data-valmsg-for="HasPartner"
+        data-valmsg-replace="true"
+      ></span
+    ></strong>
+
+    <div id="HasPartnerWarning" style="display: none">
+      <strong class="note font-icons age-note" role="alert" tabindex="0">
+        If you are currently getting a legacy benefit, please click on the help icon above to find
+        out who should be entered as 'you' and who should be the 'partner' for this calculation, as
+        it can make a difference. For Universal Credit it doesn't matter.
+      </strong>
+    </div>
+  </div>
+
+  <div class="walkthrough-guide-wrap">
+    <div class="form-group func-question">
+      <h2>
+        <label class="form-group__label" for="HouseholdChildrenNumber">
+          How many children are in your household?
+          <i class="visually-hidden"
+            >This is a required field. Please enter a valid value from 0 to 10</i
+          >
+        </label>
+        <em class="icon-star">*<span class="visually-hidden">This is a required field</span></em>
+        <em class="icon-info-item">
+          <a
+            class="icon-info-item__link simple-link"
+            href="https://www.entitledto.co.uk/help/children"
+            target="_blank"
+            title="Show help on 'How many children are in your household?'"
+          >
+            <img
+              class="icon-info-bar"
+              src="/benefits-calculator/Content/images/ico-info.png"
+              alt="Help icon"
+            />
+          </a>
+        </em>
+      </h2>
+      <p class="form-group__note form-group__note--field-info">
+        <strong class="note"
+          >Include any children under 19 who you or your partner get Child Benefit for (it does not
+          matter if they are your biological children or not). If they are age 19 please see our
+          <a href="javascript:gotoHelpPage('children');">help guide</a> for more information on when
+          to include them. If you share custody, you should only include children if you receive
+          Child Benefit for them. If you are pregnant or adopting and include the expected child we
+          will calculate your benefits assuming the child is born/adopted. Do not include an
+          expected child if you want to find out your current entitlements.</strong
+        >
+        <span class="note">Please enter a valid value from 0 to 10.</span>
+      </p>
+      <input
+        class="short age-input"
+        data-val="true"
+        data-val-number="The field Number of children must be a number."
+        data-val-range="Please enter a valid Number of children from 0 to 10"
+        data-val-range-max="10"
+        data-val-range-min="0"
+        id="HouseholdChildrenNumber"
+        maxlength="2"
+        name="HouseholdChildrenNumber"
+        type="text"
+        value="0"
+      />
+
+      <strong class="error-message"
+        ><span
+          class="field-validation-valid"
+          data-valmsg-for="HouseholdChildrenNumber"
+          data-valmsg-replace="true"
+        ></span
+      ></strong>
+    </div>
+  </div>
+
+  <input
+    type="hidden"
+    id="sharesHomeDescription_0"
+    value="Your benefit entitlement may be affected by rules on non-dependant deductions. Please tell us more about non-dependants who live with you on the next page."
+  />
+  <input
+    type="hidden"
+    id="sharesHomeDescription_1"
+    value="Your benefit entitlement may be affected by rules on non-dependant deductions. Please tell us more about non-dependants who live with you on the next page."
+  />
+  <input
+    type="hidden"
+    id="sharesHomeDescription_2"
+    value="Please tell us about any income you receive from your sub-tenant or lodger on the 'income for benefits' page, and make sure they are correctly included if you are affected by the 'bedroom tax'. If you are claiming Universal Credit the rules in relation to sub-tenants and lodgers are very different. For more information see &lt;a href=&quot;javascript:gotoHelpPage('Universal_Credit_Sub_Tenants');&quot;&gt;rules about sub-tenants and lodgers under Universal Credit&lt;/a&gt;."
+  />
+  <input
+    type="hidden"
+    id="sharesHomeDescription_3"
+    value="Please tell us about any income you receive from your sub-tenant or lodger on the 'income for benefits' page, and make sure they are correctly included if you are affected by the 'bedroom tax'. If you are claiming Universal Credit the rules in relation to sub-tenants and lodgers are very different. For more information see &lt;a href=&quot;javascript:gotoHelpPage('Universal_Credit_Sub_Tenants');&quot;&gt;rules about sub-tenants and lodgers under Universal Credit&lt;/a&gt;."
+  />
+  <input
+    type="hidden"
+    id="sharesHomeDescription_4"
+    value="If you rent privately and share some or all of the facilities in the property then help through Housing Benefit is normally calculated using the shared accommodation rate. The calculator will provide the maximum rent you can claim for and work out your entitlement. However, if you are a joint tenant who rents from your local council or a housing association, and you are affected by under occupation rules, you will need to get specialist advice. This is because the calculator does not correctly calculate how the reduction in benefit caused by having a spare room is split between joint tenants."
+  />
+  <input
+    type="hidden"
+    id="sharesHomeDescription_5"
+    value="If you share your home with someone who is not your partner or a dependant child you should try to find out how they are defined in terms of benefit rules. To get a correct calculation you should normally select one of the other options."
+  />
+  <div class="func-conditional-control">
+    <input
+      data-val="true"
+      data-val-required="The AnyoneElseLivesInYourHome field is required."
+      id="AnyoneElseLivesInYourHome"
+      name="AnyoneElseLivesInYourHome"
+      type="hidden"
+      value="No"
+    />
+  </div>
+  <div class="form-group func-question func-conditional-control">
+    <h2 id="HasUC_NumNonDeps-label">
+      <span class="func-question-label">Does anyone else live in your home?</span>
+      <em class="icon-info-item">
+        <a
+          class="icon-info-item__link simple-link"
+          href="https://www.entitledto.co.uk/help/non-dependants"
+          target="_blank"
+          title="Show help on 'Does anyone else live in your home?'"
+        >
+          <img
+            class="icon-info-bar"
+            src="/benefits-calculator/Content/images/ico-info.png"
+            alt="Help icon"
+          />
+        </a>
+      </em>
+    </h2>
+
+    <p class="form-group__note">
+      <strong class="note"
+        >For instance, a grown up child, elderly parent, joint tenant, sub-tenant or lodger.</strong
+      >
+    </p>
+    <div class="func-form-row form-row" role="radiogroup" aria-labelledby="HasUC_NumNonDeps-label">
+      <label class="choose-bar func-states func-conditional-btn" aria-checked="false">
+        <input
+          data-val="true"
+          data-val-required="The HasUC_NumNonDeps field is required."
+          id="HasUC_NumNonDeps"
+          name="HasUC_NumNonDeps"
+          type="radio"
+          value="True"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-unchecked"><span></span></span>
+        <span class="func-answer">Yes</span>
+      </label>
+      <label
+        class="choose-bar func-states func-conditional-btn jcf-label-active"
+        aria-checked="true"
+      >
+        <input
+          checked="checked"
+          name="HasUC_NumNonDeps"
+          type="radio"
+          value="False"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-checked"><span></span></span>
+        <span class="func-answer">No</span>
+      </label>
+    </div>
+
+    <strong class="error-message"
+      ><span
+        class="field-validation-valid"
+        data-valmsg-for="HasUC_NumNonDeps"
+        data-valmsg-replace="true"
+      ></span
+    ></strong>
+  </div>
+  <div class="open-close-holder">
+    <div class="open-close func-conditional-block">
+      <div class="form-group func-question">
+        <h2>
+          <label class="form-group__label" for="LodgersNumber">
+            How many other adults live with you?
+            <i class="visually-hidden">Please enter a valid value from 1 to 10</i>
+          </label>
+        </h2>
+        <p class="form-group__note form-group__note--field-info">
+          <span class="note">Please enter a valid value from 1 to 10.</span>
+        </p>
+        <input
+          value=""
+          class="short"
+          data-val="true"
+          data-val-number="The field Number of adults must be a number."
+          data-val-range="Please enter a valid Number of adults from 1 to 10"
+          data-val-range-max="10"
+          data-val-range-min="1"
+          id="LodgersNumber"
+          maxlength="2"
+          name="LodgersNumber"
+          type="text"
+        />
+
+        <strong class="error-message"
+          ><span
+            class="field-validation-valid"
+            data-valmsg-for="LodgersNumber"
+            data-valmsg-replace="true"
+          ></span
+        ></strong>
+      </div>
+    </div>
+  </div>
+
+  <input
+    value=""
+    data-value='["You should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br&gt;&lt;br&gt;Continue through the calculator and we will work out your entitlements.","The benefits you could be eligible for will depend on whether you have a right to reside alongside your pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br&gt;&lt;br&gt;If you have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If you don&apos;t have a right to reside you will not be entitled to all of the benefits listed in your calculation results.","You should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br&gt;&lt;br&gt;Continue through the calculator and we will work out your entitlements.","You will generally be excluded from entitlement to benefits as an asylum seeker but you may be able to get asylum support from the UK Home Office Border Agency. See our &lt;a href=\"javascript:gotoHelpPage(&apos;Immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation.","You will generally be excluded from entitlement to means-tested benefits and some non-contributory benefits if you have limited leave to remain. See our &lt;a href=\"javascript:gotoHelpPage(&apos;Immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation."]'
+    id="ImmigrationControlSingleMessages"
+    name="ImmigrationControlSingleMessages"
+    type="hidden"
+  />
+  <input
+    value=""
+    data-value='[["Please go back and answer &apos;yes&apos; to the question &apos;Are you and your partner both British or Irish citizens living in the UK?&apos;","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation."],["You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation."],["The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If you both have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our {help pages} for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. If you have a right to reside with your pre-settled status, you should seek specialist advice about whether you can claim benefits as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. If you have a right to reside with your pre-settled status, you should seek specialist advice about whether you can claim benefits as a single person, our calculator results will not be correct for your situation."],["You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","The benefits you and your partner could be eligible for will depend on whether there is a right to reside alongside the pre-settled status. Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. See our {help pages} for more information.&lt;br /&gt;&lt;br /&gt;If you do have a right to reside with your pre-settled status, continue through the calculator and we will work out your entitlements. If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","You and your partner should be eligible to claim benefits. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Continue through the calculator and we will work out your entitlements.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation."],["Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. If you have a right to reside with your pre-settled status, you should seek specialist advice about whether you can claim benefits as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","You will generally be excluded from entitlement to benefits as an asylum seeker but you may be able to get asylum support from the UK Home Office Border Agency. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation.","You will generally be excluded from entitlement to means-tested benefits and some non-contributory benefits if you are a &apos;person subject to immigration control&apos;. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation."],["Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;Some benefits are available to people with pre-settled status without a right to reside such as those based on national insurance contributions, but the main means-tested benefits need you to also have a right to reside. If you have a right to reside with your pre-settled status, you should seek specialist advice about whether you can claim benefits as a single person, our calculator results will not be correct for your situation.","Some benefits have special rules for couples where one member of the couple has an immigration or residence status that means they can&apos;t claim benefits in their own right.&nbsp;See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; for more information.&lt;br /&gt;&lt;br /&gt;If only one of you is eligible to claim benefits, you should seek specialist advice about whether you can claim as a single person, our calculator results will not be correct for your situation.","You will generally be excluded from entitlement to means-tested benefits and some non-contributory benefits if you are a &apos;person subject to immigration control&apos;. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation.","You will generally be excluded from entitlement to means-tested benefits and some non-contributory benefits if you are a &apos;person subject to immigration control&apos;. See our &lt;a href=\"javascript:gotoHelpPage(&apos;immigration_benefits&apos;);\"&gt;help pages&lt;/a&gt; and seek specialist advice as our calculator results will not be correct for your situation."]]'
+    id="ImmigrationControlBothMessages"
+    name="ImmigrationControlBothMessages"
+    type="hidden"
+  />
+  <input
+    value=""
+    data-value='["EUSettledStatusIndefiniteLeaveToRemain","EUPreSettledStatus","RefugeeStatusOrHumanitarianProtection","AsylumSeeker","Other"]'
+    id="SingleImmigrationStatuses"
+    name="SingleImmigrationStatuses"
+    type="hidden"
+  />
+  <input
+    value=""
+    data-value='["BritishOrIrish","EUSettledStatusIndefiniteLeaveToRemain","EUPreSettledStatus","RefugeeStatusOrHumanitarianProtection","AsylumSeeker","Other"]'
+    id="ClientImmigrationStatuses"
+    name="ClientImmigrationStatuses"
+    type="hidden"
+  />
+  <input
+    value=""
+    data-value='["BritishOrIrish","EUSettledStatusIndefiniteLeaveToRemain","EUPreSettledStatus","RefugeeStatusOrHumanitarianProtection","AsylumSeeker","Other"]'
+    id="PartnerImmigrationStatuses"
+    name="PartnerImmigrationStatuses"
+    type="hidden"
+  />
+  <div class="form-group func-question func-conditional-control">
+    <h2 id="ImmigrationControl-label">
+      <span class="func-question-label">Are you a British or Irish citizen living in the UK?</span>
+      <em class="icon-info-item">
+        <a
+          class="icon-info-item__link simple-link"
+          href="https://www.entitledto.co.uk/help/immigration-benefits"
+          target="_blank"
+          title="Show help on 'Are you a British or Irish citizen living in the UK?'"
+        >
+          <img
+            class="icon-info-bar"
+            src="/benefits-calculator/Content/images/ico-info.png"
+            alt="Help icon"
+          />
+        </a>
+      </em>
+    </h2>
+
+    <div
+      class="func-form-row form-row"
+      role="radiogroup"
+      aria-labelledby="ImmigrationControl-label"
+    >
+      <label
+        class="choose-bar func-states func-conditional-btn jcf-label-active"
+        aria-checked="true"
+      >
+        <input
+          checked="checked"
+          data-heading="Are you a British or Irish citizen living in the UK?"
+          data-headingpartner="Are you and your partner both British or Irish citizens living in the UK?"
+          data-is-vice-versa="True"
+          data-val="true"
+          data-val-required="The ImmigrationControl field is required."
+          id="ImmigrationControl"
+          name="ImmigrationControl"
+          type="radio"
+          value="True"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-checked"><span></span></span>
+        <span class="func-answer">Yes</span>
+      </label>
+      <label class="choose-bar func-states func-conditional-btn" aria-checked="false">
+        <input
+          data-is-vice-versa="True"
+          name="ImmigrationControl"
+          type="radio"
+          value="False"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-unchecked"><span></span></span>
+        <span class="func-answer">No</span>
+      </label>
+    </div>
+
+    <strong class="error-message"
+      ><span
+        class="field-validation-valid"
+        data-valmsg-for="ImmigrationControl"
+        data-valmsg-replace="true"
+      ></span
+    ></strong>
+  </div>
+
+  <div class="open-close-holder">
+    <div class="open-close func-conditional-block">
+      <div class="func-subgroup" data-messages="" style="display: none">
+        <div class="form-group func-question">
+          <h2 id="ClientImmigrationStatus-label">
+            <span class="func-question-label">Which best describes your immigration status?</span>
+            <em class="icon-star"
+              >* <span class="visually-hidden">This is a required field</span></em
+            >
+          </h2>
+
+          <div
+            class="func-form-row wrap-box housing-messages multiple-items-wrap"
+            role="radiogroup"
+            aria-labelledby="ClientImmigrationStatus-label"
+          >
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                id="ClientImmigrationStatus"
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="BritishOrIrish"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">British or Irish</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="EUSettledStatusIndefiniteLeaveToRemain"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Settled Status / Indefinite Leave to Remain</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="EUPreSettledStatus"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Pre-settled Status</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="RefugeeStatusOrHumanitarianProtection"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Refugee Status or Humanitarian Protection</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="AsylumSeeker"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Asylum-Seeker</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus"
+                type="radio"
+                value="Other"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Limited Leave to Remain/Enter</span>
+            </label>
+          </div>
+
+          <strong class="error-message"
+            ><span
+              class="field-validation-valid"
+              data-valmsg-for="ClientImmigrationStatus"
+              data-valmsg-replace="true"
+            ></span
+          ></strong>
+        </div>
+
+        <div class="form-group func-question">
+          <h2 id="PartnerImmigrationStatus-label">
+            <span class="func-question-label"
+              >Which best describes your partner's immigration status?</span
+            >
+            <em class="icon-star"
+              >* <span class="visually-hidden">This is a required field</span></em
+            >
+          </h2>
+
+          <div
+            class="func-form-row wrap-box housing-messages multiple-items-wrap"
+            role="radiogroup"
+            aria-labelledby="PartnerImmigrationStatus-label"
+          >
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                id="PartnerImmigrationStatus"
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="BritishOrIrish"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">British or Irish</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="EUSettledStatusIndefiniteLeaveToRemain"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Settled Status / Indefinite Leave to Remain</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="EUPreSettledStatus"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Pre-settled Status</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="RefugeeStatusOrHumanitarianProtection"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Refugee Status or Humanitarian Protection</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="AsylumSeeker"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Asylum-Seeker</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="PartnerImmigrationStatus"
+                type="radio"
+                value="Other"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Limited Leave to Remain/Enter</span>
+            </label>
+          </div>
+
+          <strong class="error-message"
+            ><span
+              class="field-validation-valid"
+              data-valmsg-for="PartnerImmigrationStatus"
+              data-valmsg-replace="true"
+            ></span
+          ></strong>
+        </div>
+      </div>
+      <div class="func-subgroup">
+        <div class="form-group func-question">
+          <h2 id="ClientImmigrationStatus2-label">
+            <span class="func-question-label">Which best describes your immigration status?</span>
+            <em class="icon-star"
+              >* <span class="visually-hidden">This is a required field</span></em
+            >
+          </h2>
+
+          <div
+            class="func-form-row wrap-box housing-messages multiple-items-wrap"
+            role="radiogroup"
+            aria-labelledby="ClientImmigrationStatus2-label"
+          >
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                id="ClientImmigrationStatus2"
+                name="ClientImmigrationStatus2"
+                type="radio"
+                value="EUSettledStatusIndefiniteLeaveToRemain"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Settled Status / Indefinite Leave to Remain</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus2"
+                type="radio"
+                value="EUPreSettledStatus"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">EU Pre-settled Status</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus2"
+                type="radio"
+                value="RefugeeStatusOrHumanitarianProtection"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Refugee Status or Humanitarian Protection</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus2"
+                type="radio"
+                value="AsylumSeeker"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Asylum-Seeker</span>
+            </label>
+            <label class="choose-bar func-states" aria-checked="false">
+              <input
+                name="ClientImmigrationStatus2"
+                type="radio"
+                value="Other"
+                class="jcf-hidden"
+              /><span class="jcf-radio jcf-unchecked"><span></span></span>
+              <span class="func-answer">Limited Leave to Remain/Enter</span>
+            </label>
+          </div>
+
+          <strong class="error-message"
+            ><span
+              class="field-validation-valid"
+              data-valmsg-for="ClientImmigrationStatus2"
+              data-valmsg-replace="true"
+            ></span
+          ></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+  <strong
+    class="note font-icons age-note func-immigration-status-message"
+    style="display: none"
+    role="alert"
+    tabindex="0"
+  ></strong>
+
+  <input id="CoronaVirusStatus" name="CoronaVirusStatus" type="hidden" value="None" />
+
+  <strong
+    class="note font-icons age-note CoronaVirusStatus_IllorCaringForSomeone_Note"
+    style="display: none"
+    role="alert"
+    tabindex="0"
+  >
+    <p>
+      If someone in your household is ill, or you have been told to self-isolate for another reason,
+      you may be entitled to some help.
+    </p>
+    <p>
+      <strong>Employed?</strong> If your employer does not offer paid sick leave you may be able to
+      claim <a href="javascript:gotoHelpPage('SSP');">Statutory Sick Pay (SSP)</a>. In the next few
+      pages of the calculator please:
+    </p>
+    <ul>
+      <li>
+        Choose 'Current claim' for the question ‘Do you receive a disability or sickness benefit ?’
+        followed by ‘Statutory Sick Pay’ in the list provided.
+      </li>
+      <li>Enter your current work hours as 0.</li>
+    </ul>
+    <p></p>
+    <p>
+      <strong>Self-employed or not eligible for SSP?</strong> Any entitlements will be based on both
+      the circumstances of your household as well as your previous work history and national
+      insurance contributions. As you go through the calculator we will check these details and work
+      out which benefits you may be entitled to.
+    </p>
+    <p>
+      <strong>Already claiming benefits?</strong> Please read the coronavirus help page (click the i
+      above) as guidance on what you need to report varies depending of what benefits you are
+      already claiming.
+    </p>
+  </strong>
+  <strong
+    class="note font-icons age-note CoronaVirusStatus_NotIllButIncomeHasChanged_Note"
+    style="display: none"
+    role="alert"
+    tabindex="0"
+  >
+    <p>
+      If your income has gone down because you (or someone else in your household) are working fewer
+      hours, have been asked to take unpaid leave, or any self-employed earnings have reduced, you
+      may be entitled to claim some benefits.
+    </p>
+    <p>
+      Your entitlements will be based on the circumstances of your entire household, so as you go
+      through the calculator we will ask about your circumstances to be able to work out which
+      benefits you may be entitled to.
+    </p>
+  </strong>
+
+  <div class="form-group func-question">
+    <h2 id="ResCare-label">
+      <span class="func-question-label"
+        >Are you in hospital/residential care, a prisoner, on strike, living abroad or a full-time
+        student?</span
+      >
+      <em class="icon-info-item">
+        <a
+          class="icon-info-item__link simple-link"
+          href="https://www.entitledto.co.uk/help/groups-not-included-benefits-calculator"
+          target="_blank"
+          title="Show help on 'Are you in hospital/residential care, a prisoner, on strike, living abroad or a full-time student?'"
+        >
+          <img
+            class="icon-info-bar"
+            src="/benefits-calculator/Content/images/ico-info.png"
+            alt="Help icon"
+          />
+        </a>
+      </em>
+    </h2>
+
+    <div class="func-form-row form-row" role="radiogroup" aria-labelledby="ResCare-label">
+      <label class="choose-bar func-states" aria-checked="false">
+        <input
+          data-val="true"
+          data-val-required="The ResCare field is required."
+          id="ResCare"
+          name="ResCare"
+          type="radio"
+          value="True"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-unchecked"><span></span></span>
+        <span class="func-answer">Yes</span>
+      </label>
+      <label class="choose-bar func-states jcf-label-active" aria-checked="true">
+        <input
+          checked="checked"
+          name="ResCare"
+          type="radio"
+          value="False"
+          class="jcf-hidden"
+        /><span class="jcf-radio jcf-checked"><span></span></span>
+        <span class="func-answer">No</span>
+      </label>
+    </div>
+
+    <strong class="error-message"
+      ><span
+        class="field-validation-valid"
+        data-valmsg-for="ResCare"
+        data-valmsg-replace="true"
+      ></span
+    ></strong>
+
+    <div id="ResCareWarning" style="display: none">
+      <div class="better-off-section__results--error font-icons" role="alert" tabindex="0">
+        <p>
+          <strong>Please note:</strong> If you’re a full time student, in hospital, a prisoner, on
+          strike or living abroad we cannot guarantee the accuracy of our estimates. As the
+          calculator does not calculate entitlements accurately for these groups we recommend seeing
+          an adviser to understand your personal circumstances.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <input
+    data-val="true"
+    data-val-required="The DoYouOwnAVehicle field is required."
+    id="VehiclesModel_DoYouOwnAVehicle"
+    name="VehiclesModel.DoYouOwnAVehicle"
+    type="hidden"
+    value="False"
+  />
+  <div class="open-close-holder">
+    <div class="open-close func-conditional-block">
+      <input
+        data-val="true"
+        data-val-number="The field Number of vehicles must be a number."
+        data-val-required="The Number of vehicles field is required."
+        id="VehiclesModel_NumberOfVehicles"
+        name="VehiclesModel.NumberOfVehicles"
+        type="hidden"
+        value="0"
+      />
+    </div>
+  </div>
+
+  <div class="progress-bar-area">
+    <span class="func-progress-bar-info progress-bar__info">25% complete</span>
+    <div class="progress-bar" title="25% complete">
+      <span class="func-progress-bar" style="width: 25%"></span>
+    </div>
+  </div>
+
+  <input
+    data-val="true"
+    data-val-required="The SaveButtonIsPressed field is required."
+    id="NavigationControls_SaveButtonIsPressed"
+    name="NavigationControls.SaveButtonIsPressed"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-required="The ShowSaveButton field is required."
+    id="NavigationControls_ShowSaveButton"
+    name="NavigationControls.ShowSaveButton"
+    type="hidden"
+    value="True"
+  />
+  <input
+    data-val="true"
+    data-val-required="The ShowNextButton field is required."
+    id="NavigationControls_ShowNextButton"
+    name="NavigationControls.ShowNextButton"
+    type="hidden"
+    value="True"
+  />
+
+  <div class="func-btns-section">
+    <div class="func-btn-section-wrap btn-section-wrap">
+      <div class="btn-section__block btn-section__block--prev">
+        <button
+          class="button btn-bottom__item simple-btn"
+          type="button"
+          onclick="window.location.href='/benefits-calculator/Intro/Home?cid=43e8136e-342e-4a65-aca4-4c21160e057a'"
+        >
+          <span aria-hidden="true"> &lt; </span> Previous
+        </button>
+      </div>
+      <div class="btn-section__block btn-section__block--next">
+        <button class="func-nav-next-btn btn-bottom__item simple-btn" type="submit" id="nextButton">
+          Next <span aria-hidden="true"> &gt; </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

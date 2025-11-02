@@ -1,0 +1,529 @@
+<form
+  class="claim-form__bar func-main-form"
+  action="/benefits-calculator/Calculator/CouncilTax?cid=43e8136e-342e-4a65-aca4-4c21160e057a"
+  method="Post"
+  novalidate="novalidate"
+>
+  <input
+    data-val="true"
+    data-val-required="The CalcIdent field is required."
+    id="CalcIdent"
+    name="CalcIdent"
+    type="hidden"
+    value="43e8136e-342e-4a65-aca4-4c21160e057a"
+  />
+  <input
+    data-val="true"
+    data-val-date="The field StartTime must be a date."
+    data-val-required="The StartTime field is required."
+    id="StartTime"
+    name="StartTime"
+    type="hidden"
+    value="02/11/2025 10:05:03"
+  />
+  <input
+    data-val="true"
+    data-val-required="The CalcYears field is required."
+    id="CalcYears"
+    name="CalcYears"
+    type="hidden"
+    value="Year2025_26"
+  />
+  <input
+    data-val="true"
+    data-val-required="The Country field is required."
+    id="Country"
+    name="Country"
+    type="hidden"
+    value="Scotland"
+  />
+  <input
+    data-val="true"
+    data-val-number="The field BandDAmount must be a number."
+    id="BandDAmount"
+    name="BandDAmount"
+    type="hidden"
+    value="1579.18"
+  />
+  <input id="PageTitle" name="PageTitle" type="hidden" value="Council Tax" />
+  <input id="LocalAuthorityName" name="LocalAuthorityName" type="hidden" value="East Lothian" />
+  <input
+    data-val="true"
+    data-val-required="The ShowCouncilTaxBandList field is required."
+    id="ShowCouncilTaxBandList"
+    name="ShowCouncilTaxBandList"
+    type="hidden"
+    value="True"
+  />
+  <input
+    data-val="true"
+    data-val-required="The ShowCouncilTaxBandAreaList field is required."
+    id="ShowCouncilTaxBandAreaList"
+    name="ShowCouncilTaxBandAreaList"
+    type="hidden"
+    value="False"
+  />
+  <input id="PostCode" name="PostCode" type="hidden" value="EH33 2DD" />
+  <input
+    data-val="true"
+    data-val-number="The field DomesticRatePoundage must be a number."
+    id="DomesticRatePoundage"
+    name="DomesticRatePoundage"
+    type="hidden"
+    value="0"
+  />
+  <input id="CTSMaxBand" name="CTSMaxBand" type="hidden" value="" />
+  <input
+    data-val="true"
+    data-val-required="The captureHasCTS field is required."
+    id="captureHasCTS"
+    name="captureHasCTS"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-required="The captureCTSDate field is required."
+    id="captureCTSDate"
+    name="captureCTSDate"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-required="The HasScotlandCTSMsg field is required."
+    id="HasScotlandCTSMsg"
+    name="HasScotlandCTSMsg"
+    type="hidden"
+    value="True"
+  />
+  <input
+    data-val="true"
+    data-val-required="The HideAmountIsCorrect field is required."
+    id="HideAmountIsCorrect"
+    name="HideAmountIsCorrect"
+    type="hidden"
+    value="False"
+  />
+
+  <h1 class="content-title">Council Tax</h1>
+  <h2 class="visually-hidden" role="heading" aria-level="2">Benefit calculator</h2>
+
+  <div class="result-page-box">
+    <div class="form-group func-question">
+      <h2>Local authority</h2>
+      <strong class="council-tax-block__item">East Lothian</strong>
+    </div>
+
+    <div class="note font-icons age-note" role="alert" tabindex="0">
+      In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support, not
+      the water and sewerage payments, so don't include these charges here. We will provide
+      information about Scotland's Water Charges Reduction Scheme on the results page if you
+      qualify.
+    </div>
+    <div class="walkthrough-guide-wrap">
+      <div class="form-group func-question">
+        <h2>
+          <label class="form-group__label" for="CouncilTaxBand">
+            Council Tax band for property
+            <i class="visually-hidden">. This is a required field. </i>
+          </label>
+          <em class="icon-star">*<span class="visually-hidden">This is a required field</span></em>
+          <em class="icon-info-item">
+            <a
+              class="icon-info-item__link simple-link"
+              href="https://www.entitledto.co.uk/help/council-tax-disregarded"
+              target="_blank"
+              title="Show help on 'Council Tax band for property'"
+            >
+              <img
+                class="icon-info-bar"
+                src="/benefits-calculator/Content/images/ico-info.png"
+                alt="Help icon"
+              />
+            </a>
+          </em>
+        </h2>
+        <p class="form-group__note">
+          If you are unsure you can select 'don't know' and we'll look it up for you. If you are
+          exempt or disregarded from paying Council Tax you can select 'no CT liability' from the
+          options here.
+        </p>
+
+        <select
+          class="short func-ddlanswer jcf-hidden"
+          data-feedback-message="Sorry. We couldn't find any property for postcode '&lt;span class=&quot;func-current-postcode&quot;&gt;EH33 2DD&lt;/span&gt;'."
+          id="CouncilTaxBand"
+          name="CouncilTaxBand"
+        >
+          <option value="">Please select</option>
+          <option value="DontKnow">Don't Know</option>
+          <option value="X">no CT liability</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option></select
+        ><span class="jcf-select jcf-unselectable jcf-select-short jcf-select-func-ddlanswer"
+          ><span class="jcf-select-text"><span class="">Please select</span></span
+          ><span class="jcf-select-opener"></span
+        ></span>
+
+        <strong class="error-message"
+          ><span
+            class="field-validation-valid"
+            data-valmsg-for="CouncilTaxBand"
+            data-valmsg-replace="true"
+          ></span
+        ></strong>
+      </div>
+    </div>
+    <div
+      id="CouncilTaxAddressListPopUp"
+      class="ct-address-popup"
+      style="display: none"
+      tabindex="0"
+    >
+      <h3>East Lothian (<span class="func-current-postcode">EH33 2DD</span>)</h3>
+      <p>
+        If you don’t know your Council Tax band select your address from the list below so we can
+        work out how much Council Tax you should pay. We do not store personal information about
+        individuals who use this website and will not associate your address with your calculation.
+      </p>
+      <p>Select your address from the list:</p>
+      <ul id="CouncilTaxAddressList" class="ct-address-list l-s-hlp"></ul>
+      <ul
+        class="func-get-property-list ct-address__pagination l-s-hlp align-c-hlp link-dcr-hlp--parent"
+      ></ul>
+    </div>
+    <div class="form-group func-question">
+      <h2 id="EligibleDisabilityReduction-label">
+        <span class="func-question-label">Eligible for disability-related reduction?</span>
+        <em class="icon-info-item">
+          <a
+            class="icon-info-item__link simple-link"
+            href="https://www.entitledto.co.uk/help/Disability-related-reduction-in-Council-Tax"
+            target="_blank"
+            title="Show help on 'Eligible for disability-related reduction?'"
+          >
+            <img
+              class="icon-info-bar"
+              src="/benefits-calculator/Content/images/ico-info.png"
+              alt="Help icon"
+            />
+          </a>
+        </em>
+      </h2>
+
+      <p class="form-group__note">
+        Please select 'yes' if you have already successfully applied for a reduction because you
+        have an extra room or adaptations needed for a disabled person.
+      </p>
+      <div
+        class="func-form-row form-row"
+        role="radiogroup"
+        aria-labelledby="EligibleDisabilityReduction-label"
+      >
+        <label class="choose-bar func-states" aria-checked="false">
+          <input
+            data-val="true"
+            data-val-required="The EligibleDisabilityReduction field is required."
+            id="EligibleDisabilityReduction"
+            name="EligibleDisabilityReduction"
+            type="radio"
+            value="True"
+            class="jcf-hidden"
+          /><span class="jcf-radio jcf-unchecked"><span></span></span>
+          <span class="func-answer">Yes</span>
+        </label>
+        <label class="choose-bar func-states jcf-label-active" aria-checked="true">
+          <input
+            checked="checked"
+            name="EligibleDisabilityReduction"
+            type="radio"
+            value="False"
+            class="jcf-hidden"
+          /><span class="jcf-radio jcf-checked"><span></span></span>
+          <span class="func-answer">No</span>
+        </label>
+      </div>
+
+      <strong class="error-message"
+        ><span
+          class="field-validation-valid"
+          data-valmsg-for="EligibleDisabilityReduction"
+          data-valmsg-replace="true"
+        ></span
+      ></strong>
+    </div>
+    <div class="form-group func-question">
+      <h2>
+        <label class="form-group__label" for="DiscountsApplicable"> Discounts applicable </label>
+
+        <em class="icon-info-item">
+          <a
+            class="icon-info-item__link simple-link"
+            href="https://www.entitledto.co.uk/help/Council-Tax-bill"
+            target="_blank"
+            title="Show help on 'Discounts applicable'"
+          >
+            <img
+              class="icon-info-bar"
+              src="/benefits-calculator/Content/images/ico-info.png"
+              alt="Help icon"
+            />
+          </a>
+        </em>
+      </h2>
+      <p class="form-group__note">
+        If you are the only adult in the household you normally qualify for a 25% discount. If no
+        adults count for Council Tax purposes a 50% discount could apply. If you qualify as severely
+        mentally impaired you can select the appropriate discount rate here.
+      </p>
+
+      <select
+        class="short func-ddlanswer jcf-hidden"
+        data-val="true"
+        data-val-required="The DiscountsApplicable field is required."
+        id="DiscountsApplicable"
+        name="DiscountsApplicable"
+      >
+        <option value="0">none</option>
+        <option selected="selected" value="25">25%</option>
+        <option value="50">50%</option>
+        <option value="100">100%</option></select
+      ><span class="jcf-select jcf-unselectable jcf-select-short jcf-select-func-ddlanswer"
+        ><span class="jcf-select-text"><span class="">25%</span></span
+        ><span class="jcf-select-opener"></span
+      ></span>
+
+      <strong class="error-message"
+        ><span
+          class="field-validation-valid"
+          data-valmsg-for="DiscountsApplicable"
+          data-valmsg-replace="true"
+        ></span
+      ></strong>
+
+      <div id="DiscountsApplicableNote" style="display: none">
+        <div class="note font-icons age-note" role="alert" tabindex="0">
+          <p>
+            This option is appropriate for people who live alone and have been certified as having a
+            severe mental impairment by a doctor, or young care leavers who are exempt from paying
+            Council Tax in some local authorities. If you live with another adult a different
+            discount may apply.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group func-question">
+      <h2>Council Tax liability</h2>
+      <p>
+        Based on the information provided we believe this is your Council Tax liability after any
+        discounts and reductions but before Council Tax Support is taken off.
+      </p>
+      <strong class="council-tax-block__item">
+        <span>£</span>
+        <span id="CouncilTaxLiability">0.00</span>
+      </strong>
+      <div>
+        <label for="CouncilTaxLiabilitySelector">Payment period:</label>
+        <p>
+          <select
+            id="CouncilTaxLiabilitySelector"
+            name="CouncilTaxLiabilitySelector"
+            class="jcf-hidden"
+          >
+            <option value="2">Weekly</option>
+            <option value="3">4 weeks</option>
+            <option value="1">Monthly</option>
+            <option selected="selected" value="0">Yearly</option></select
+          ><span class="jcf-select jcf-unselectable"
+            ><span class="jcf-select-text"><span class="">Yearly</span></span
+            ><span class="jcf-select-opener"></span
+          ></span>
+        </p>
+      </div>
+    </div>
+    <div class="form-group func-question func-conditional-control">
+      <h2 id="AmountIsCorrect-label">
+        <span class="func-question-label"
+          >Is the amount shown for your Council Tax liability correct?</span
+        >
+      </h2>
+
+      <p class="form-group__note">
+        If you are a joint tenant please enter your proportion of the Council Tax here. If your
+        Council Tax liability is different to the amount shown above select 'no' and enter the
+        correct amount.
+      </p>
+      <div class="func-form-row form-row" role="radiogroup" aria-labelledby="AmountIsCorrect-label">
+        <label
+          class="choose-bar func-states func-conditional-btn jcf-label-active"
+          aria-checked="true"
+        >
+          <input
+            checked="checked"
+            data-is-vice-versa="True"
+            data-val="true"
+            data-val-required="The AmountIsCorrect field is required."
+            id="AmountIsCorrect"
+            name="AmountIsCorrect"
+            type="radio"
+            value="True"
+            class="jcf-hidden"
+          /><span class="jcf-radio jcf-checked"><span></span></span>
+          <span class="func-answer">Yes</span>
+        </label>
+        <label class="choose-bar func-states func-conditional-btn" aria-checked="false">
+          <input
+            data-is-vice-versa="True"
+            name="AmountIsCorrect"
+            type="radio"
+            value="False"
+            class="jcf-hidden"
+          /><span class="jcf-radio jcf-unchecked"><span></span></span>
+          <span class="func-answer">No</span>
+        </label>
+      </div>
+
+      <strong class="error-message"
+        ><span
+          class="field-validation-valid"
+          data-valmsg-for="AmountIsCorrect"
+          data-valmsg-replace="true"
+        ></span
+      ></strong>
+    </div>
+    <div class="open-close-holder">
+      <div class="open-close func-conditional-block">
+        <div class="subgroup-item">
+          <div class="form-group func-question">
+            <h2>
+              <label class="form-group__label" for="CouncilTax">
+                Council Tax liability (AFTER any discounts eg, disability, single person)
+                <i class="visually-hidden">This is a required field. </i>
+              </label>
+              <em class="icon-star"
+                >*<span class="visually-hidden">This is a required field</span></em
+              >
+            </h2>
+            <p class="form-group__note">
+              Please tell us your Council Tax liability after any discounts and reductions but
+              before Council Tax Support is taken off.
+            </p>
+            <div class="input-box">
+              <label class="form-group__label-sign" for="CouncilTax"
+                ><span aria-hidden="true" class="notranslate">£</span></label
+              >
+              <input
+                value="0"
+                class="short"
+                data-val="true"
+                data-val-number="The field CouncilTax must be a number."
+                id="CouncilTax"
+                max="99999.99"
+                maxlength="8"
+                min="0"
+                name="CouncilTax"
+                type="text"
+              />
+            </div>
+
+            <strong class="error-message"
+              ><span
+                class="field-validation-valid"
+                data-valmsg-for="CouncilTax"
+                data-valmsg-replace="true"
+              ></span
+            ></strong>
+          </div>
+          <div class="form-group func-question">
+            <h2>
+              <label class="form-group__label" for="CouncilTaxPeriod"> Payment period </label>
+            </h2>
+
+            <select
+              class="short func-ddlanswer jcf-hidden"
+              data-val="true"
+              data-val-required="The CouncilTaxPeriod field is required."
+              id="CouncilTaxPeriod"
+              name="CouncilTaxPeriod"
+            >
+              <option value="2">Weekly</option>
+              <option value="3">4 weeks</option>
+              <option value="1">Monthly</option>
+              <option selected="selected" value="0">Yearly</option></select
+            ><span class="jcf-select jcf-unselectable jcf-select-short jcf-select-func-ddlanswer"
+              ><span class="jcf-select-text"><span class="">Yearly</span></span
+              ><span class="jcf-select-opener"></span
+            ></span>
+
+            <strong class="error-message"
+              ><span
+                class="field-validation-valid"
+                data-valmsg-for="CouncilTaxPeriod"
+                data-valmsg-replace="true"
+              ></span
+            ></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar-area">
+    <span class="func-progress-bar-info progress-bar__info">87% complete</span>
+    <div class="progress-bar" title="87% complete">
+      <span class="func-progress-bar" style="width: 87%"></span>
+    </div>
+  </div>
+
+  <input
+    data-val="true"
+    data-val-required="The SaveButtonIsPressed field is required."
+    id="NavigationControls_SaveButtonIsPressed"
+    name="NavigationControls.SaveButtonIsPressed"
+    type="hidden"
+    value="False"
+  />
+  <input
+    data-val="true"
+    data-val-required="The ShowSaveButton field is required."
+    id="NavigationControls_ShowSaveButton"
+    name="NavigationControls.ShowSaveButton"
+    type="hidden"
+    value="True"
+  />
+  <input
+    data-val="true"
+    data-val-required="The ShowNextButton field is required."
+    id="NavigationControls_ShowNextButton"
+    name="NavigationControls.ShowNextButton"
+    type="hidden"
+    value="True"
+  />
+
+  <div class="func-btns-section">
+    <div class="func-btn-section-wrap btn-section-wrap">
+      <div class="btn-section__block btn-section__block--prev">
+        <button
+          class="button btn-bottom__item simple-btn"
+          type="button"
+          onclick="window.location.href='/benefits-calculator/Calculator/HousingCosts?cid=43e8136e-342e-4a65-aca4-4c21160e057a'"
+        >
+          <span aria-hidden="true"> &lt; </span> Previous
+        </button>
+      </div>
+      <div class="btn-section__block btn-section__block--next">
+        <button class="func-nav-next-btn btn-bottom__item simple-btn" type="submit" id="nextButton">
+          Next <span aria-hidden="true"> &gt; </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
