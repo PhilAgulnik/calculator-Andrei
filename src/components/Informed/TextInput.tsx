@@ -78,6 +78,7 @@ export function TextInputField(props: TextInputFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
       required={required}
+      isInvalid={!fieldState.valid}
     >
       <TextInput
         ref={ref}

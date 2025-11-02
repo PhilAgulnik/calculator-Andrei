@@ -84,6 +84,7 @@ export function RadioField(props: RadioFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
       required={required}
+      isInvalid={!fieldState.valid}
     >
       <div
         className={clsx(

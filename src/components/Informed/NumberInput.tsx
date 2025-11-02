@@ -78,6 +78,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
       required={required}
+      isInvalid={!fieldState.valid}
     >
       <NumberInput
         ref={ref}

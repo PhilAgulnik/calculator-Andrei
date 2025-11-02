@@ -84,6 +84,7 @@ export function SelectField(props: SelectFieldProps) {
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
       required={required}
+      isInvalid={!fieldState.valid}
     >
       <SelectInput
         ref={ref}
