@@ -1,1 +1,1 @@
-export const REPO_NAME = '/calculator-Andrei/'
+export const APP_BASE_PATH = '/calculator-Andrei/'

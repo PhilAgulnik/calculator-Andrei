@@ -4,13 +4,13 @@ import checker from 'vite-plugin-checker'
 import react from '@vitejs/plugin-react'
 import tsConfigPaths from 'vite-tsconfig-paths'
 
-import { REPO_NAME } from './constants'
+import { APP_BASE_PATH } from './constants'
 
 export default defineConfig({
   server: {
     port: 3000,
   },
-  base: REPO_NAME,
+  base: APP_BASE_PATH,
   plugins: [
     checker({
       typescript: true,

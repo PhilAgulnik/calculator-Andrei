@@ -4,14 +4,14 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import './styles.css'
 
-import { REPO_NAME } from '../constants'
+import { APP_BASE_PATH } from '../constants'
 
 // Set up a Router instance
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
-  basepath: REPO_NAME,
+  basepath: APP_BASE_PATH,
 })
 
 // Register things for typesafety

@@ -1,5 +1,5 @@
-import { REPO_NAME } from '../../constants'
+import { APP_BASE_PATH } from '../../constants'
 
 export function EntitledtoLogo({ className }: { className?: string }) {
-  return <img src={`${REPO_NAME}logo.svg`} alt="Entitledto Logo" className={className} />
+  return <img src={`${APP_BASE_PATH}logo.svg`} alt="Entitledto Logo" className={className} />
 }
