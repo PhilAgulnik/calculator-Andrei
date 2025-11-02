@@ -13,7 +13,7 @@ export function Form(props: FormProps) {
   return (
     <InformedForm onSubmit={onSubmit} className={className} initialValues={initialValues}>
       {children}
-      <Debug valid pristine dirty values errors touched />
+      {/* <Debug valid pristine dirty values errors touched /> */}
     </InformedForm>
   )
 }

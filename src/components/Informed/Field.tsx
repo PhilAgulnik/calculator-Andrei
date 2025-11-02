@@ -14,6 +14,7 @@ type FieldProps = {
   descriptionAfter?: React.ReactNode
   required?: boolean
   defaultValue?: any
+  isInvalid?: boolean
 }
 
 export type CommonFieldProps = Pick<
@@ -37,9 +38,8 @@ export function Field(props: FieldProps) {
     descriptionBefore,
     descriptionAfter,
     required,
+    isInvalid,
   } = props
-
-  const isInvalid = false
 
   const Component = useMemo(() => {
     return as

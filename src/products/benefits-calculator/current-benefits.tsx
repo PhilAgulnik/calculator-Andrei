@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
-import { Form, Fields } from '~/components/Informed'
+import { Form, Fields, Show } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
 const CONTRIBUTORY_BENEFIT_OPTIONS = [
@@ -85,6 +85,146 @@ export function CurrentBenefits() {
         <Page.Main>
           <h1 className="text-3xl font-bold">Current benefits</h1>
 
+          <Fields.BooleanRadio
+            label="Do you get Universal Credit?"
+            name="GetsUniversalCredit"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsUniversalCredit === true}>
+            <Fields.NumberInput
+              label="Monthly Universal Credit payment received in last assessment period"
+              name="UniversalCreditAmount"
+              defaultValue="0"
+              inputClassName="max-w-[200px]"
+            />
+
+            <Fields.BooleanRadio
+              label="Do you get a transitional element in your Universal Credit award?"
+              name="HasTransitionalElement"
+              defaultValue={false}
+            />
+          </Show>
+
+          <Fields.Select
+            label="Which contributory benefit, if any, do you currently receive?"
+            name="ContributoryBenefit"
+            defaultValue="none"
+            options={[
+              { label: 'Select a contributory benefit', value: '' },
+              { label: 'None', value: 'none' },
+              { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
+              { label: 'Contributory Employment and Support Allowance', value: 'contributory_esa' },
+              { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
+              { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
+            ]}
+          />
+
+          <Fields.Select
+            label="Which contributory benefit, if any, does your partner currently receive?"
+            name="PartnerContributoryBenefit"
+            defaultValue="none"
+            options={[
+              { label: 'Select a contributory benefit', value: '' },
+              { label: 'None', value: 'none' },
+              { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
+              { label: 'Contributory Employment and Support Allowance', value: 'contributory_esa' },
+              { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
+              { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
+            ]}
+          />
+
+          <Fields.BooleanRadio
+            label="Do you currently receive Carer's Allowance?"
+            name="GetsCarersAllowance"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsCarersAllowance === true}>
+            <Fields.AmountPeriod label="Carer's Allowance income" name="CarersAllowance" />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Does your partner currently receive Carer's Allowance?"
+            name="PartnerGetsCarersAllowance"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.PartnerGetsCarersAllowance === true}>
+            <Fields.AmountPeriod
+              label="Partner's Carer's Allowance income"
+              name="PartnerCarersAllowance"
+            />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Do you get Guardian's Allowance?"
+            name="GetsGuardiansAllowance"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsGuardiansAllowance === true}>
+            <Fields.AmountPeriod label="Guardian's Allowance income" name="GuardiansAllowance" />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Do you get Maternity Allowance?"
+            name="GetsMaternityAllowance"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsMaternityAllowance === true}>
+            <Fields.AmountPeriod label="Maternity Allowance income" name="MaternityAllowance" />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Do you get Statutory Maternity, Paternity or Adoption pay?"
+            name="GetsStatutoryPay"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsStatutoryPay === true}>
+            <Fields.AmountPeriod label="Statutory pay income" name="StatutoryPay" />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Do you get Occupational Maternity Pay or Occupational Paternity Pay?"
+            name="GetsOccupationalPay"
+            defaultValue={false}
+          />
+
+          <Show when={({ formState }) => formState.values.GetsOccupationalPay === true}>
+            <Fields.AmountPeriod label="Occupational pay income" name="OccupationalPay" />
+          </Show>
+
+          <Fields.BooleanRadio
+            label="Do you get a War Pension or War Widower's Pension?"
+            name="GetsWarPension"
+          />
+
+          <Show when={({ formState }) => formState.values.GetsWarPension === true}>
+            <Fields.Checkbox
+              label="War Pension or War Widower's Pension"
+              descriptionBefore="Select all that apply"
+              name="WarPension"
+              layout="vertical"
+              options={[
+                { label: 'Yes, with Constant Attendance Allowance', value: 'wp_caa' },
+                { label: 'Yes, with Mobility Supplement', value: 'wp_mobility' },
+                { label: 'Yes, with Unemployability Supplement', value: 'wp_unsup' },
+                {
+                  label: 'Yes, with Allowance for Lowered Standard of Occupation',
+                  value: 'wp_also',
+                },
+                { label: "Yes, War Widower's Pension", value: 'wp_widower' },
+                { label: 'Yes, Other rate', value: 'wp_other' },
+              ]}
+            />
+          </Show>
+
+          <Fields.AmountPeriod label="Armed Forces Compensation" name="ArmedForcesCompensation" />
+
+          {/* 
           <Fields.BooleanRadio
             label="Do you get Universal Credit?"
             name="GetsUniversalCredit"
@@ -306,7 +446,7 @@ export function CurrentBenefits() {
             name="WidowedParentPeriod"
             defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
-          />
+          /> */}
         </Page.Main>
 
         <Page.Footer nextButton={<Button type="submit">Next →</Button>} />

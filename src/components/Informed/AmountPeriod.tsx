@@ -4,6 +4,7 @@ import { Field } from './Field'
 import { CommonFieldProps } from './Field'
 import { SelectInput } from './Select'
 import { NumberInput } from './NumberInput'
+import { FieldInfo } from './FieldInfo'
 
 type AmountPeriodFieldProps = CommonFieldProps & {
   amountName?: string
@@ -43,7 +44,7 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
     defaultValue: defaultAmount || defaultValue,
     validate: (value) => {
       if (required && !value) {
-        return 'This field is required'
+        return 'Please enter a valid amount'
       }
       return undefined
     },
@@ -55,7 +56,7 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
     defaultValue: defaultPeriod,
     validate: (value) => {
       if (required && !value) {
-        return 'This field is required'
+        return 'Please select a valid period'
       }
       return undefined
     },
@@ -66,6 +67,7 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
 
   return (
     <Field
+      isInvalid={!amountField.fieldState.valid || !periodField.fieldState.valid}
       name={name}
       label={label}
       className={className}
@@ -104,6 +106,9 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
           />
         )}
       </div>
+
+      <FieldInfo name={amountName} />
+      <FieldInfo name={periodName} />
     </Field>
   )
 }

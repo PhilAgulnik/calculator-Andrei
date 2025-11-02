@@ -1,80 +1,11 @@
-import { z } from 'zod'
-
-import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
-import { Form, Fields } from '~/components/Informed'
+import { Form, Fields, Show } from '~/components/Informed'
 import { Button } from '~/components/Button'
-
-const PAYMENT_PERIOD_OPTIONS = [
-  { label: 'Weekly', value: '2' },
-  { label: '4 weeks', value: '3' },
-  { label: 'Monthly', value: '1' },
-  { label: 'Yearly', value: '0' },
-]
-
-const schema = z.object({
-  IsClientIncomeNonStatePensions: z.boolean(),
-  IncomeNonStatePension1: z.string(),
-  IncomeNonStatePensions1CalcPeriod: z.string(),
-  IncomeNonStatePension2: z.string(),
-  IncomeNonStatePensions2CalcPeriod: z.string(),
-  IncomeNonStatePension3: z.string(),
-  IncomeNonStatePensions3CalcPeriod: z.string(),
-  IncomeNonStatePensions: z.string(),
-  IsFosteringAllowanceOption: z.boolean(),
-  FosteringAllowance: z.string(),
-  FosteringAllowanceCalcPeriod: z.string(),
-  IncomeFromSavingsChk: z.boolean(),
-  IsIncomeFromMaintenancePaymentsOption: z.boolean(),
-  IncomeFromMaintenancePayments: z.string(),
-  IncomeFromMaintenanceCalcPeriod: z.string(),
-  IsIncomeFromVoluntaryCharitablePaymentsOption: z.boolean(),
-  IncomeFromVoluntaryCharitablePayments: z.string(),
-  IncomeFromVoluntaryCharitablePaymentsCalcPeriod: z.string(),
-  OwnOtherProperty: z.boolean(),
-  IsOtherSourcesIncome: z.boolean(),
-  IncomeOtherSources: z.string(),
-  IncomeOtherSourcesCalcPeriod: z.string(),
-})
 
 export function NetIncome() {
   const { goToNextPage } = useWorkflow()
-
-  const form = useAppForm({
-    defaultValues: {
-      IsClientIncomeNonStatePensions: false,
-      IncomeNonStatePension1: '0',
-      IncomeNonStatePensions1CalcPeriod: '2',
-      IncomeNonStatePension2: '0',
-      IncomeNonStatePensions2CalcPeriod: '2',
-      IncomeNonStatePension3: '0',
-      IncomeNonStatePensions3CalcPeriod: '2',
-      IncomeNonStatePensions: '0',
-      IsFosteringAllowanceOption: false,
-      FosteringAllowance: '0',
-      FosteringAllowanceCalcPeriod: '2',
-      IncomeFromSavingsChk: false,
-      IsIncomeFromMaintenancePaymentsOption: false,
-      IncomeFromMaintenancePayments: '0',
-      IncomeFromMaintenanceCalcPeriod: '2',
-      IsIncomeFromVoluntaryCharitablePaymentsOption: false,
-      IncomeFromVoluntaryCharitablePayments: '0',
-      IncomeFromVoluntaryCharitablePaymentsCalcPeriod: '0',
-      OwnOtherProperty: false,
-      IsOtherSourcesIncome: false,
-      IncomeOtherSources: '0',
-      IncomeOtherSourcesCalcPeriod: '2',
-    },
-    onSubmit: async ({ value }) => {
-      console.log('onSubmit', value)
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
 
   return (
     <>
@@ -105,64 +36,23 @@ export function NetIncome() {
             defaultValue={false}
           />
 
-          <Fields.NumberInput
-            label="Income from pension 1 - Amount"
-            name="IncomeNonStatePension1"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeNonStatePensions1CalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
-
-          <Fields.NumberInput
-            label="Income from pension 2 - Amount"
-            name="IncomeNonStatePension2"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeNonStatePensions2CalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
-
-          <Fields.NumberInput
-            label="Income from pension 3 - Amount"
-            name="IncomeNonStatePension3"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeNonStatePensions3CalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
-
-          <Fields.NumberInput
-            label="Amount (per week)"
-            name="IncomeNonStatePensions"
-            inputClassName="max-w-[140px]"
-          />
+          <Show when={({ formState }) => formState.values.IsClientIncomeNonStatePensions === true}>
+            <Fields.AmountPeriod label="Income from pension 1" name="IncomeNonStatePension1" />
+            <Fields.AmountPeriod label="Income from pension 2" name="IncomeNonStatePension2" />
+            <Fields.AmountPeriod label="Income from pension 3" name="IncomeNonStatePension3" />
+          </Show>
 
           <Fields.BooleanRadio
             label="Income from Fostering Allowance?"
             name="IsFosteringAllowanceOption"
           />
 
-          <Fields.NumberInput
-            label="Amount"
-            name="FosteringAllowance"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="FosteringAllowanceCalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
+          <Show when={({ formState }) => formState.values.IsFosteringAllowanceOption === true}>
+            <Fields.AmountPeriod
+              label="Income from Fostering Allowance"
+              name="FosteringAllowance"
+            />
+          </Show>
 
           <Fields.BooleanRadio
             label="Household savings or capital over £6,000?"
@@ -175,17 +65,16 @@ export function NetIncome() {
             name="IsIncomeFromMaintenancePaymentsOption"
           />
 
-          <Fields.NumberInput
-            label="Amount"
-            name="IncomeFromMaintenancePayments"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeFromMaintenanceCalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
+          <Show
+            when={({ formState }) =>
+              formState.values.IsIncomeFromMaintenancePaymentsOption === true
+            }
+          >
+            <Fields.AmountPeriod
+              label="Income from spousal maintenance payments"
+              name="IncomeFromMaintenancePayments"
+            />
+          </Show>
 
           <Fields.BooleanRadio
             label="Income from charity or voluntary sources"
@@ -193,17 +82,16 @@ export function NetIncome() {
             descriptionBefore="This income is not counted when working out entitlement to benefits."
           />
 
-          <Fields.NumberInput
-            label="Amount"
-            name="IncomeFromVoluntaryCharitablePayments"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeFromVoluntaryCharitablePaymentsCalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
+          <Show
+            when={({ formState }) =>
+              formState.values.IsIncomeFromVoluntaryCharitablePaymentsOption === true
+            }
+          >
+            <Fields.AmountPeriod
+              label="Income from charity or voluntary sources"
+              name="IncomeFromVoluntaryCharitablePayments"
+            />
+          </Show>
 
           <Fields.BooleanRadio
             label="Do you own land or property other than your current home?"
@@ -217,17 +105,12 @@ export function NetIncome() {
             descriptionBefore="If you receive any income that you have not already entered, then you should use the 'i' icon to check if you should enter it here. Please DO NOT INCLUDE income from benefits that we have not asked about (e.g. tax credits, Housing Benefit, Universal Credit, Child Benefit etc.). We calculate means-tested benefits and income from these sources does not need to be entered. Also, do not include income from savings or investments but instead enter the value of these assets as savings."
           />
 
-          <Fields.NumberInput
-            label="Amount"
-            name="IncomeOtherSources"
-            inputClassName="max-w-[140px]"
-          />
-
-          <Fields.Select
-            label="Period"
-            name="IncomeOtherSourcesCalcPeriod"
-            options={PAYMENT_PERIOD_OPTIONS}
-          />
+          <Show when={({ formState }) => formState.values.IsOtherSourcesIncome === true}>
+            <Fields.AmountPeriod
+              label="Income from sources not already mentioned"
+              name="IncomeOtherSources"
+            />
+          </Show>
         </Page.Main>
 
         <Page.Footer nextButton={<Button type="submit">Next →</Button>} />
