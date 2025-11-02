@@ -1,35 +1,41 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function NetIncome() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {},
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Net income</h1>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="contents"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Net income</h1>
 
-      <p className="mt-3">
-        We need to check whether you (and your partner if you have one) receive any other income
-        that we haven't already asked about.
-      </p>
+        <p className="mt-3">
+          We need to check whether you (and your partner if you have one) receive any other income
+          that we haven't already asked about.
+        </p>
 
-      <p className="mt-3">
-        If you're not sure what classes as extra income please read our information on what counts
-        as income.
-      </p>
+        <p className="mt-3">
+          If you're not sure what classes as extra income please read our information on what counts
+          as income.
+        </p>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
         <form.AppField
           name="IsClientIncomeNonStatePensions"
           defaultValue={false}
@@ -119,10 +125,7 @@ export function NetIncome() {
         <form.AppField
           name="IncomeNonStatePensions"
           children={(field) => (
-            <field.NumberInputField
-              label="Amount (per week)"
-              inputClassName="max-w-[140px]"
-            />
+            <field.NumberInputField label="Amount (per week)" inputClassName="max-w-[140px]" />
           )}
         />
 
@@ -271,7 +274,19 @@ export function NetIncome() {
             />
           )}
         />
-      </form>
-    </div>
+
+        {/* <form.AppForm>
+          <form.FormDebug />
+        </form.AppForm> */}
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

@@ -1,6 +1,11 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function HousingCosts() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {
       RentAmount: '',
@@ -14,30 +19,31 @@ export function HousingCosts() {
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Housing costs</h1>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="contents"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Housing costs</h1>
 
-      <p className="mt-4">
-        You may qualify for help with your rent through Housing Benefit / Universal Credit housing
-        costs element.
-      </p>
-      <p className="mt-3">
-        Whether you are claiming Housing Benefit or Universal Credit, please enter your eligible
-        rent as defined under Housing Benefit rent rules and Universal Credit rent rules.
-      </p>
+        <p className="mt-4">
+          You may qualify for help with your rent through Housing Benefit / Universal Credit housing
+          costs element.
+        </p>
+        <p className="mt-3">
+          Whether you are claiming Housing Benefit or Universal Credit, please enter your eligible
+          rent as defined under Housing Benefit rent rules and Universal Credit rent rules.
+        </p>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
         <form.AppField
           name="RentAmount"
           children={(field) => (
@@ -156,7 +162,19 @@ export function HousingCosts() {
             />
           )}
         />
-      </form>
-    </div>
+
+        {/* <form.AppForm>
+          <form.FormDebug />
+        </form.AppForm> */}
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

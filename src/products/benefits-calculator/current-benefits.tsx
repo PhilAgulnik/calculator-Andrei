@@ -1,6 +1,11 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function CurrentBenefits() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {
       GetsUniversalCredit: false,
@@ -38,21 +43,22 @@ export function CurrentBenefits() {
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Current benefits</h1>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="contents"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Current benefits</h1>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
         <form.AppField
           name="GetsUniversalCredit"
           children={(field) => <field.BooleanRadioField label="Do you get Universal Credit?" />}
@@ -129,7 +135,10 @@ export function CurrentBenefits() {
         <form.AppField
           name="CarersAllowanceAmount"
           children={(field) => (
-            <field.NumberInputField label="Carer's Allowance income" inputClassName="max-w-[200px]" />
+            <field.NumberInputField
+              label="Carer's Allowance income"
+              inputClassName="max-w-[200px]"
+            />
           )}
         />
 
@@ -161,7 +170,10 @@ export function CurrentBenefits() {
         <form.AppField
           name="PartnerCarersAllowanceAmount"
           children={(field) => (
-            <field.NumberInputField label="Carer's Allowance income" inputClassName="max-w-[200px]" />
+            <field.NumberInputField
+              label="Carer's Allowance income"
+              inputClassName="max-w-[200px]"
+            />
           )}
         />
 
@@ -376,7 +388,15 @@ export function CurrentBenefits() {
         {/* <form.AppForm>
           <form.FormDebug />
         </form.AppForm> */}
-      </form>
-    </div>
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

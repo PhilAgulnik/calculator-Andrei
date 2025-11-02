@@ -1,25 +1,31 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function AgeAndDisability() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {},
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Age and disability status</h1>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="contents"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Age and disability status</h1>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
         <form.AppField
           name="Age"
           children={(field) => (
@@ -132,7 +138,19 @@ export function AgeAndDisability() {
             <field.BooleanRadioField label="Do you care for someone who is sick or disabled?" />
           )}
         />
-      </form>
-    </div>
+
+        {/* <form.AppForm>
+          <form.FormDebug />
+        </form.AppForm> */}
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

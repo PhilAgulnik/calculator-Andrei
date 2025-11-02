@@ -1,6 +1,11 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function CouncilTax() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {
       CouncilTaxBand: '',
@@ -12,31 +17,32 @@ export function CouncilTax() {
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Council Tax</h1>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="contents"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Council Tax</h1>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
         <div className="font-bold mb-4">
           <h2 className="text-xl mb-2">Local authority</h2>
           <strong>East Lothian</strong>
         </div>
 
         <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6" role="alert">
-          In the Council Tax Reduction scheme, only the Council Tax rate is eligible for
-          support, not the water and sewerage payments, so don't include these charges here. We
-          will provide information about Scotland's Water Charges Reduction Scheme on the
-          results page if you qualify.
+          In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support,
+          not the water and sewerage payments, so don't include these charges here. We will provide
+          information about Scotland's Water Charges Reduction Scheme on the results page if you
+          qualify.
         </div>
 
         <form.AppField
@@ -92,8 +98,8 @@ export function CouncilTax() {
         <div className="mb-6">
           <h2 className="text-xl font-bold mb-2">Council Tax liability</h2>
           <p className="mb-4">
-            Based on the information provided we believe this is your Council Tax liability
-            after any discounts and reductions but before Council Tax Support is taken off.
+            Based on the information provided we believe this is your Council Tax liability after
+            any discounts and reductions but before Council Tax Support is taken off.
           </p>
           <strong className="text-2xl">
             <span>£</span>
@@ -137,7 +143,19 @@ export function CouncilTax() {
             />
           )}
         />
-      </form>
-    </div>
+
+        {/* <form.AppForm>
+          <form.FormDebug />
+        </form.AppForm> */}
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

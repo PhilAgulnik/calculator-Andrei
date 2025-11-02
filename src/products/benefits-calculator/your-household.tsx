@@ -2,6 +2,7 @@ import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+import { Alert } from '~/components/Alert'
 
 export function YourHousehold() {
   const { goToNextPage } = useWorkflow()
@@ -21,18 +22,33 @@ export function YourHousehold() {
         e.stopPropagation()
         form.handleSubmit()
       }}
-      className="mt-5"
+      className="contents"
     >
       <Page.Main>
         <h1 className="text-3xl font-bold">Your household</h1>
         <form.AppField
           name="HasPartner"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Do you have a partner who normally lives with you? "
-              descriptionBefore="Say yes if you are married or live with someone as a couple, including civil partners or people you live with as if you are civil partners. Please click on the help icon above for guidance on which member of a couple should be entered as 'you' and which should be the 'partner' for this calculation."
-            />
-          )}
+          children={(field) => {
+            console.log(field)
+            return (
+              <>
+                <field.BooleanRadioField
+                  label="Do you have a partner who normally lives with you? "
+                  descriptionBefore="Say yes if you are married or live with someone as a couple, including civil partners or people you live with as if you are civil partners. Please click on the help icon above for guidance on which member of a couple should be entered as 'you' and which should be the 'partner' for this calculation."
+                  descriptionAfter={
+                    field.state.value === true && (
+                      <Alert type="info">
+                        If you are currently getting a legacy benefit, please click on the help icon
+                        above to find out who should be entered as 'you' and who should be the
+                        'partner' for this calculation, as it can make a difference. For Universal
+                        Credit it doesn't matter.
+                      </Alert>
+                    )
+                  }
+                />
+              </>
+            )
+          }}
         />
 
         <form.AppField
