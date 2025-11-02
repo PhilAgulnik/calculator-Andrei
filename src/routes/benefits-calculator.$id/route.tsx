@@ -6,6 +6,7 @@ import { PAGES } from '~/products/benefits-calculator/constants'
 import { PagesMenu } from '~/products/shared/PagesMenu'
 import { WorkflowProvider, useWorkflow } from '~/products/shared/use-workflow'
 import { Fragment, useMemo } from 'react'
+import { EntitledtoLogo } from '~/components/EntitledtoLogo'
 
 export const Route = createFileRoute('/benefits-calculator/$id')({
   component: RouteComponent,
@@ -37,7 +38,7 @@ function Product() {
       <header className="app-header">
         <div className="app-header-inner px-4 mq600:px-7">
           <Link to="/">
-            <img src="logo.svg" alt="" className="w-auto block h-[42px]" />
+            <EntitledtoLogo className="w-auto block h-[42px]" />
           </Link>
         </div>
       </header>

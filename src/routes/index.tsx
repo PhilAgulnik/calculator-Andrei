@@ -1,12 +1,11 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Accordion } from '~/components/Accordion'
 import { CalculatorIcon } from '~/components/ProductIcon'
-import { WorkflowProvider } from '~/products/shared/use-workflow'
 
 import { BASE_PATH as BenefitsCalculatorBasePath } from '~/products/benefits-calculator/constants'
-import { useMemo } from 'react'
 import { useEntries } from '~/products/shared/use-entries'
 import { Glyph } from '~/components/Glyph'
+import { EntitledtoLogo } from '~/components/EntitledtoLogo'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -21,7 +20,7 @@ function HomeComponent() {
       <header className="p-4">
         <div className="w-full max-w-layout-max-width mx-auto flex justify-center items-center">
           <Link to="/">
-            <img src="logo.svg" alt="" className="w-auto block h-[42px]" />
+            <EntitledtoLogo className="w-auto block h-[42px]" />
           </Link>
         </div>
       </header>
