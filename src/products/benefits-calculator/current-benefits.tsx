@@ -11,6 +11,7 @@ export function CurrentBenefits() {
       GetsUniversalCredit: false,
       UniversalCreditAmount: 0,
       HasTransitionalElement: false,
+      GetsIncomeRelatedESA: false,
       ContributoryBenefit: '',
       PartnerContributoryBenefit: '',
       GetsCarersAllowance: false,
@@ -62,6 +63,40 @@ export function CurrentBenefits() {
         <form.AppField
           name="GetsUniversalCredit"
           children={(field) => <field.BooleanRadioField label="Do you get Universal Credit?" />}
+        />
+
+        <form.AppField
+          name="UniversalCreditAmount"
+          children={(field) => (
+            <field.NumberInputField
+              label="Monthly Universal Credit payment received in last assessment period"
+              inputClassName="max-w-[200px]"
+            />
+          )}
+        />
+
+        <form.AppField
+          name="HasTransitionalElement"
+          children={(field) => (
+            <field.BooleanRadioField
+              label="Do you get a transitional element in your Universal Credit award?"
+              descriptionBefore="You may get a transitional element if you moved onto Universal Credit from your old benefits after receiving a migration notice."
+            />
+          )}
+        />
+
+        <form.AppField
+          name="GetsIncomeRelatedESA"
+          children={(field) => (
+            <field.BooleanRadioField label="Do you get income-related Employment and Support Allowance (ESA)?" />
+          )}
+        />
+
+        <form.AppField
+          name="GetsIncomeRelatedESA"
+          children={(field) => (
+            <field.BooleanRadioField label="Do you get income-related Employment and Support Allowance (ESA)?" />
+          )}
         />
 
         <form.AppField
@@ -304,6 +339,51 @@ export function CurrentBenefits() {
                 { label: 'Yearly', value: 'yearly' },
               ]}
             />
+          )}
+        />
+
+        <form.AppField
+          name="WarPensionOptions"
+          children={(field) => (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Do you get a War Pension or War Widower's Pension?
+              </h3>
+              <p className="text-sm text-gray-600 mb-3">Select all that apply</p>
+              <div className="space-y-2">
+                {[
+                  { value: 'none', label: 'No' },
+                  { value: 'caa', label: 'Yes, with Constant Attendance Allowance' },
+                  { value: 'mobility', label: 'Yes, with Mobility Supplement' },
+                  { value: 'unsup', label: 'Yes, with Unemployability Supplement' },
+                  { value: 'also', label: 'Yes, with Allowance for Lowered Standard of Occupation' },
+                  { value: 'widower', label: "Yes, War Widower's Pension" },
+                  { value: 'other', label: 'Yes, Other rate' },
+                ].map((option) => (
+                  <label key={option.value} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={field.state.value?.includes(option.value) || false}
+                      onChange={(e) => {
+                        const currentValue = field.state.value || []
+                        if (e.target.checked) {
+                          if (option.value === 'none') {
+                            field.handleChange([option.value])
+                          } else {
+                            const newValue = currentValue.filter((v) => v !== 'none')
+                            field.handleChange([...newValue, option.value])
+                          }
+                        } else {
+                          field.handleChange(currentValue.filter((v) => v !== option.value))
+                        }
+                      }}
+                      className="rounded border-gray-300"
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
           )}
         />
 

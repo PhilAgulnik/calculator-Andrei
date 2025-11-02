@@ -3,11 +3,12 @@ import { Glyph } from './Glyph'
 
 type AlertProps = {
   children: React.ReactNode
-  type: 'info' | 'warning' | 'error'
+  type?: 'info' | 'warning' | 'error'
+  className?: string
 }
 
 export function Alert(props: AlertProps) {
-  const { children, type = 'info' } = props
+  const { children, type = 'info', className } = props
 
   return (
     <div
@@ -17,7 +18,8 @@ export function Alert(props: AlertProps) {
           'bg-blue-100 border-blue-200': type === 'info',
           'bg-orange-50 border-orange-200': type === 'warning',
           'bg-red-100 border-red-200': type === 'error',
-        }
+        },
+        className
       )}
       role="alert"
     >

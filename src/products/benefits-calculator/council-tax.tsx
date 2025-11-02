@@ -2,6 +2,7 @@ import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+import { Alert } from '~/components/Alert'
 
 export function CouncilTax() {
   const { goToNextPage } = useWorkflow()
@@ -11,6 +12,7 @@ export function CouncilTax() {
       CouncilTaxBand: '',
       EligibleDisabilityReduction: false,
       DiscountsApplicable: '25',
+      CouncilTaxLiabilitySelector: '0',
       AmountIsCorrect: true,
       CouncilTax: '0',
       CouncilTaxPeriod: '0',
@@ -38,12 +40,12 @@ export function CouncilTax() {
           <strong>East Lothian</strong>
         </div>
 
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6" role="alert">
+        <Alert type="info">
           In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support,
           not the water and sewerage payments, so don't include these charges here. We will provide
           information about Scotland's Water Charges Reduction Scheme on the results page if you
           qualify.
-        </div>
+        </Alert>
 
         <form.AppField
           name="CouncilTaxBand"
@@ -95,17 +97,33 @@ export function CouncilTax() {
           )}
         />
 
-        <div className="mb-6">
-          <h2 className="text-xl font-bold mb-2">Council Tax liability</h2>
-          <p className="mb-4">
-            Based on the information provided we believe this is your Council Tax liability after
-            any discounts and reductions but before Council Tax Support is taken off.
-          </p>
-          <strong className="text-2xl">
-            <span>£</span>
-            <span>0.00</span>
-          </strong>
-        </div>
+        <form.AppField
+          name="CouncilTaxLiabilitySelector"
+          children={(field) => (
+            <field.SelectField
+              label="Council Tax liability"
+              descriptionBefore={
+                <>
+                  <p>
+                    Based on the information provided we believe this is your Council Tax liability
+                    after any discounts and reductions but before Council Tax Support is taken off.
+                  </p>
+
+                  <p className="text-2xl">
+                    <span>£</span>
+                    <span>0.00</span>
+                  </p>
+                </>
+              }
+              options={[
+                { label: 'Weekly', value: '2' },
+                { label: '4 weeks', value: '3' },
+                { label: 'Monthly', value: '1' },
+                { label: 'Yearly', value: '0' },
+              ]}
+            />
+          )}
+        />
 
         <form.AppField
           name="AmountIsCorrect"

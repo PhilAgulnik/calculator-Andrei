@@ -8,7 +8,14 @@ export function YourHousehold() {
   const { goToNextPage } = useWorkflow()
 
   const form = useAppForm({
-    defaultValues: {},
+    defaultValues: {
+      HasPartner: false,
+      HouseholdChildrenNumber: 0,
+      HasUC_NumNonDeps: false,
+      LodgersNumber: 0,
+      ImmigrationControl: true,
+      ResCare: false,
+    },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
@@ -69,6 +76,17 @@ export function YourHousehold() {
             <field.BooleanRadioField
               label="Does anyone else live in your home?"
               descriptionBefore="For instance, a grown up child, elderly parent, joint tenant, sub-tenant or lodger."
+            />
+          )}
+        />
+
+        <form.AppField
+          name="LodgersNumber"
+          children={(field) => (
+            <field.NumberInputField
+              label="How many other adults live with you?"
+              inputClassName="max-w-[140px]"
+              descriptionBefore="Please enter a valid value from 1 to 10."
             />
           )}
         />
