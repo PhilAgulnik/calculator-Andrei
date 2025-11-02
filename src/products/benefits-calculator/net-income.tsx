@@ -94,14 +94,15 @@ export function NetIncome() {
           </p>
 
           <p className="mt-3">
-            If you're not sure what classes as extra income please read our information on what counts
-            as income.
+            If you're not sure what classes as extra income please read our information on what
+            counts as income.
           </p>
 
           <Fields.BooleanRadio
             label="Income from non-state pensions?"
             name="IsClientIncomeNonStatePensions"
             descriptionBefore="Enter the net amount of income received from non-state pensions, after any tax that is deductible. You should include money you get from occupational pensions, annuities, private pensions and any payments you receive from your former employer on account of early retirement."
+            defaultValue={false}
           />
 
           <Fields.NumberInput

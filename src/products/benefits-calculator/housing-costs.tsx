@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -34,26 +33,6 @@ const schema = z.object({
 export function HousingCosts() {
   const { goToNextPage } = useWorkflow()
 
-  const form = useAppForm({
-    defaultValues: {
-      RentAmount: 0,
-      RentPeriod: '2',
-      UCAPA: false,
-      NumberOfRentFreeWeeks: 0,
-      SanctuarySchemeBedroomTaxExemption: false,
-      BedroomsCount: 1,
-      HasMoreInfoAboutDisabledChilrdren: false,
-      IncludeExtraBedroom: false,
-    },
-    onSubmit: async ({ value }) => {
-      console.log('onSubmit', value)
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
-
   return (
     <>
       <Form
@@ -79,24 +58,28 @@ export function HousingCosts() {
             required
             label="How much is your eligible rent?"
             name="RentAmount"
+            defaultValue={0}
             inputClassName="max-w-[140px]"
           />
 
           <Fields.Select
             label="Period"
             name="RentPeriod"
+            defaultValue="2"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Is help with housing costs paid directly to your landlord by the DWP?"
             name="UCAPA"
+            defaultValue={false}
             descriptionBefore="If you have or have had trouble paying your rent you may have an Alternative Payment Arrangement. This means you receive a Universal Credit amount for you and your household but help with housing costs is paid directly to your landlord. If this applies to you please say yes to this question. If you are starting a new Universal Credit claim you should normally answer no."
           />
 
           <Fields.NumberInput
             label="Number of rent-free weeks"
             name="NumberOfRentFreeWeeks"
+            defaultValue={0}
             inputClassName="max-w-[140px]"
             descriptionBefore="If you have rent free weeks please read the help text accessed via the i icon next to this question. Please enter a valid value from 0 to 52."
           />
@@ -104,11 +87,13 @@ export function HousingCosts() {
           <Fields.BooleanRadio
             label="Do you live in a Sanctuary Scheme amended property?"
             name="SanctuarySchemeBedroomTaxExemption"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="How many bedrooms do you currently have?"
             name="BedroomsCount"
+            defaultValue={1}
             inputClassName="max-w-[140px]"
             descriptionBefore="Please tell us how many bedrooms you have as determined by your landlord. For joint tenants, enter the number of bedrooms you have access to. Benefits to help with housing costs may not be based on your full eligible rent if you are thought to have more bedrooms than you need. Please enter a valid value from 0 to 6."
           />
@@ -116,12 +101,14 @@ export function HousingCosts() {
           <Fields.BooleanRadio
             label="Would you like more information on when an extra bedroom may be included?"
             name="HasMoreInfoAboutDisabledChilrdren"
+            defaultValue={false}
             descriptionBefore="In some circumstances you may qualify for an extra bedroom when working out how many bedrooms you need. Select 'Yes' to find out more or add an extra bedroom to your entitlement."
           />
 
           <Fields.BooleanRadio
             label="Should we include an extra bedroom in your calculation?"
             name="IncludeExtraBedroom"
+            defaultValue={false}
             descriptionBefore={
               <>
                 <p>

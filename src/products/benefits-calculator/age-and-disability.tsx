@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -44,24 +43,6 @@ const schema = z.object({
 export function AgeAndDisability() {
   const { goToNextPage } = useWorkflow()
 
-  const form = useAppForm({
-    defaultValues: {
-      Age: 0,
-      ClientWorkStatus: 'NotEmployed',
-      WeekWorkHoursAmount: '0',
-      ClientDisbens: 'NotClaimed',
-      ClientDisabledNotClaiming: false,
-      ClientCareForDisabled: false,
-    },
-    onSubmit: async ({ value }) => {
-      console.log('onSubmit', value)
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
-
   return (
     <>
       <Form
@@ -78,6 +59,7 @@ export function AgeAndDisability() {
             required
             label="Age"
             name="Age"
+            defaultValue={0}
             inputClassName="max-w-[140px]"
             descriptionBefore="Please enter current age. Enter a valid value from 16 to 120."
           />
@@ -86,6 +68,7 @@ export function AgeAndDisability() {
             required
             label="Which best describes your employment status?"
             name="ClientWorkStatus"
+            defaultValue="NotEmployed"
             options={WORK_STATUS_OPTIONS}
             descriptionBefore={
               <>
@@ -107,6 +90,7 @@ export function AgeAndDisability() {
             required
             label="How many hours a week do you work?"
             name="WeekWorkHoursAmount"
+            defaultValue="0"
             inputClassName="max-w-[140px]"
             descriptionBefore="Please enter a valid value from 0 to 168."
           />
@@ -115,6 +99,7 @@ export function AgeAndDisability() {
             required
             label="Do you receive a disability or sickness benefit?"
             name="ClientDisbens"
+            defaultValue="NotClaimed"
             options={DISBENS_OPTIONS}
             descriptionBefore="Common disability benefits are Attendance Allowance, Pension Age Disability Payment, Disability Living Allowance (DLA), Personal Independence Payment (PIP), Adult Disability Payment, Employment and Support Allowance (ESA), Universal Credit limited capability for work element (LCW/RA) and Statutory Sick Pay (SSP)."
           />
@@ -122,12 +107,14 @@ export function AgeAndDisability() {
           <Fields.BooleanRadio
             label="Are you ill or disabled but not claiming one of the disability benefits listed below?"
             name="ClientDisabledNotClaiming"
+            defaultValue={false}
             descriptionBefore="Answer 'yes' if you have have a health condition that affects your daily living or mobility and would like to find out more about Personal Independence Payment, Adult Disability Payment or Attendance Allowance."
           />
 
           <Fields.BooleanRadio
             label="Do you care for someone who is sick or disabled?"
             name="ClientCareForDisabled"
+            defaultValue={false}
           />
         </Page.Main>
 

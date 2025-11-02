@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -74,51 +73,6 @@ const schema = z.object({
 export function CurrentBenefits() {
   const { goToNextPage } = useWorkflow()
 
-  const form = useAppForm({
-    defaultValues: {
-      GetsUniversalCredit: false,
-      UniversalCreditAmount: '0',
-      HasTransitionalElement: false,
-      GetsIncomeRelatedESA: false,
-      ContributoryBenefit: 'none',
-      PartnerContributoryBenefit: 'none',
-      GetsCarersAllowance: false,
-      CarersAllowanceAmount: '0',
-      CarersAllowancePeriod: 'weekly',
-      PartnerGetsCarersAllowance: false,
-      PartnerCarersAllowanceAmount: '0',
-      PartnerCarersAllowancePeriod: 'weekly',
-      GetsGuardiansAllowance: false,
-      GuardiansAllowanceAmount: '0',
-      GuardiansAllowancePeriod: 'weekly',
-      GetsMaternityAllowance: false,
-      MaternityAllowanceAmount: '0',
-      MaternityAllowancePeriod: 'weekly',
-      GetsStatutoryPay: false,
-      StatutoryPayAmount: '0',
-      StatutoryPayPeriod: 'weekly',
-      GetsOccupationalPay: false,
-      OccupationalPayAmount: '0',
-      OccupationalPayPeriod: 'weekly',
-      WarPensionOptions: null as any,
-      GetsArmedForcesCompensation: false,
-      GetsServicePension: false,
-      GetsBereavementSupport: false,
-      BereavementSupportAmount: '0',
-      BereavementSupportPeriod: 'weekly',
-      GetsWidowedParent: false,
-      WidowedParentAmount: '0',
-      WidowedParentPeriod: 'weekly',
-    },
-    onSubmit: async ({ value }) => {
-      console.log('onSubmit', value)
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
-
   return (
     <>
       <Form
@@ -134,145 +88,170 @@ export function CurrentBenefits() {
           <Fields.BooleanRadio
             label="Do you get Universal Credit?"
             name="GetsUniversalCredit"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Monthly Universal Credit payment received in last assessment period"
             name="UniversalCreditAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.BooleanRadio
             label="Do you get a transitional element in your Universal Credit award?"
             name="HasTransitionalElement"
+            defaultValue={false}
             descriptionBefore="You may get a transitional element if you moved onto Universal Credit from your old benefits after receiving a migration notice."
           />
 
           <Fields.BooleanRadio
             label="Do you get income-related Employment and Support Allowance (ESA)?"
             name="GetsIncomeRelatedESA"
+            defaultValue={false}
           />
 
           <Fields.Select
             label="Which contributory benefit, if any, do you currently receive?"
             name="ContributoryBenefit"
+            defaultValue="none"
             options={CONTRIBUTORY_BENEFIT_OPTIONS}
           />
 
           <Fields.Select
             label="Which contributory benefit, if any, does your partner currently receive?"
             name="PartnerContributoryBenefit"
+            defaultValue="none"
             options={CONTRIBUTORY_BENEFIT_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you currently receive Carer's Allowance?"
             name="GetsCarersAllowance"
+            defaultValue={false}
             descriptionBefore="You may be getting this if you care for someone receiving a disability benefit."
           />
 
-          <Fields.NumberInput
+          <Fields.AmountPeriod
             label="Carer's Allowance income"
-            name="CarersAllowanceAmount"
-            inputClassName="max-w-[200px]"
+            name="CarersAllowance"
+            defaultAmount={0}
+            defaultPeriod="weekly"
           />
 
           <Fields.Select
             label="Period"
             name="CarersAllowancePeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Does your partner currently receive Carer's Allowance?"
             name="PartnerGetsCarersAllowance"
+            defaultValue={false}
             descriptionBefore="Your partner may be getting this if s/he cares for someone receiving a disability benefit."
           />
 
           <Fields.NumberInput
             label="Carer's Allowance income"
             name="PartnerCarersAllowanceAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="PartnerCarersAllowancePeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you get Guardian's Allowance?"
             name="GetsGuardiansAllowance"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Income amount"
             name="GuardiansAllowanceAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="GuardiansAllowancePeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you get Maternity Allowance?"
             name="GetsMaternityAllowance"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Income amount"
             name="MaternityAllowanceAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="MaternityAllowancePeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you get Statutory Maternity, Paternity or Adoption pay?"
             name="GetsStatutoryPay"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Income amount"
             name="StatutoryPayAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="StatutoryPayPeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you get Occupational Maternity Pay or Occupational Paternity Pay?"
             name="GetsOccupationalPay"
+            defaultValue={false}
             descriptionBefore="Do not include the Statutory Maternity, Paternity or Adoption pay you receive here or it will be counted twice."
           />
 
           <Fields.NumberInput
             label="Income amount"
             name="OccupationalPayAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="OccupationalPayPeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.Checkbox
             label="Do you get a War Pension or War Widower's Pension?"
             name="WarPensionOptions"
+            defaultValue={null}
             options={WAR_PENSION_OPTIONS}
             layout="vertical"
           />
@@ -280,44 +259,52 @@ export function CurrentBenefits() {
           <Fields.BooleanRadio
             label="Do you get Armed Forces Compensation?"
             name="GetsArmedForcesCompensation"
+            defaultValue={false}
           />
 
           <Fields.BooleanRadio
             label="Do you get a Service Attributable Pension?"
             name="GetsServicePension"
+            defaultValue={false}
           />
 
           <Fields.BooleanRadio
             label="Do you get a Bereavement Support Payment?"
             name="GetsBereavementSupport"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Bereavement Support Payment income"
             name="BereavementSupportAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="BereavementSupportPeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
 
           <Fields.BooleanRadio
             label="Do you get a Widowed Parent's Allowance?"
             name="GetsWidowedParent"
+            defaultValue={false}
           />
 
           <Fields.NumberInput
             label="Widowed Parent's Allowance income"
             name="WidowedParentAmount"
+            defaultValue="0"
             inputClassName="max-w-[200px]"
           />
 
           <Fields.Select
             label="Period"
             name="WidowedParentPeriod"
+            defaultValue="weekly"
             options={PAYMENT_PERIOD_OPTIONS}
           />
         </Page.Main>
