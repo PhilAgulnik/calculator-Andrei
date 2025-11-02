@@ -9,6 +9,7 @@ const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
+  basepath: '/calculator-Andrei/',
 })
 
 // Register things for typesafety
