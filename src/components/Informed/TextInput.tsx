@@ -85,7 +85,6 @@ export function TextInputField(props: TextInputFieldProps) {
         className={inputClassName}
         value={!value && value !== 0 ? '' : value}
         onChange={(e) => {
-          console.log('e.target.value', e.target.value)
           fieldApi.setValue(e.target.value, e)
         }}
         onBlur={(e) => {

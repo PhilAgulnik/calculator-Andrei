@@ -2,13 +2,12 @@ import { createFileRoute, Link, Outlet, useLocation } from '@tanstack/react-rout
 
 import { CalculatorIcon } from '~/components/ProductIcon'
 
-import { PAGES } from '~/products/benefits-calculator/pages'
+import { PAGES } from '~/products/benefits-calculator/constants'
 import { PagesMenu } from '~/products/shared/PagesMenu'
 import { WorkflowProvider, useWorkflow } from '~/products/shared/use-workflow'
 import { Fragment, useMemo } from 'react'
-import { Footer } from '~/products/shared/Page'
 
-export const Route = createFileRoute('/benefits-calculator')({
+export const Route = createFileRoute('/benefits-calculator/$id')({
   component: RouteComponent,
 })
 

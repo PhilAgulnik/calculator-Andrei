@@ -18,6 +18,11 @@ export type WorkflowContext = {
   visiblePages: Page[]
   basePath: '/benefits-calculator' | null
   goToNextPage: () => void
+  entry: Record<string, unknown> | null
+  entries: Record<string, unknown>[]
+  addEntry: () => void
+  removeEntry: (id: string) => void
+  updateEntryData: (data: any) => void
 }
 
 export const WorkflowContext = createContext<WorkflowContext>({
@@ -28,4 +33,9 @@ export const WorkflowContext = createContext<WorkflowContext>({
   visiblePages: [],
   basePath: null,
   goToNextPage: () => {},
+  entry: null,
+  entries: [],
+  addEntry: () => {},
+  removeEntry: () => {},
+  updateEntryData: () => {},
 })

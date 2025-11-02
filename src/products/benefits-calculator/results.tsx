@@ -2,7 +2,6 @@ import { Page } from '~/products/shared/Page'
 import { Alert } from '~/components/Alert'
 
 export function Results() {
-  // Mock data - in a real application this would come from form submission
   const totalBenefits = 1305.98
   const universalCredit = 1229.41
   const councilTaxReduction = 76.57
@@ -46,7 +45,8 @@ export function Results() {
                 <strong>You are affected by the benefit cap</strong>
               </Alert>
               <p className="mt-4 mb-4">
-                We estimate your monthly Universal Credit award will be £{universalCredit.toFixed(2)}.
+                We estimate your monthly Universal Credit award will be £
+                {universalCredit.toFixed(2)}.
               </p>
               <div className="flex flex-wrap gap-3">
                 <a href="#" className="text-blue-600 hover:text-blue-800 underline">

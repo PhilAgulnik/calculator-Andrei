@@ -5,16 +5,17 @@ import { Form, Fields, Show } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
 export function NetIncome() {
-  const { goToNextPage } = useWorkflow()
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">Net income</h1>

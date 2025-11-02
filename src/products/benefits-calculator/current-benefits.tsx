@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -24,63 +22,18 @@ const PAYMENT_PERIOD_OPTIONS = [
   { label: 'Yearly', value: 'yearly' },
 ]
 
-const WAR_PENSION_OPTIONS = [
-  { label: 'No', value: 'wp_none' },
-  { label: 'Yes, with Constant Attendance Allowance', value: 'wp_caa' },
-  { label: 'Yes, with Mobility Supplement', value: 'wp_mobility' },
-  { label: 'Yes, with Unemployability Supplement', value: 'wp_unsup' },
-  { label: 'Yes, with Allowance for Lowered Standard of Occupation', value: 'wp_also' },
-  { label: "Yes, War Widower's Pension", value: 'wp_widower' },
-  { label: 'Yes, Other rate', value: 'wp_other' },
-]
-
-const schema = z.object({
-  GetsUniversalCredit: z.boolean(),
-  UniversalCreditAmount: z.string(),
-  HasTransitionalElement: z.boolean(),
-  GetsIncomeRelatedESA: z.boolean(),
-  ContributoryBenefit: z.string(),
-  PartnerContributoryBenefit: z.string(),
-  GetsCarersAllowance: z.boolean(),
-  CarersAllowanceAmount: z.string(),
-  CarersAllowancePeriod: z.string(),
-  PartnerGetsCarersAllowance: z.boolean(),
-  PartnerCarersAllowanceAmount: z.string(),
-  PartnerCarersAllowancePeriod: z.string(),
-  GetsGuardiansAllowance: z.boolean(),
-  GuardiansAllowanceAmount: z.string(),
-  GuardiansAllowancePeriod: z.string(),
-  GetsMaternityAllowance: z.boolean(),
-  MaternityAllowanceAmount: z.string(),
-  MaternityAllowancePeriod: z.string(),
-  GetsStatutoryPay: z.boolean(),
-  StatutoryPayAmount: z.string(),
-  StatutoryPayPeriod: z.string(),
-  GetsOccupationalPay: z.boolean(),
-  OccupationalPayAmount: z.string(),
-  OccupationalPayPeriod: z.string(),
-  WarPensionOptions: z.any(),
-  GetsArmedForcesCompensation: z.boolean(),
-  GetsServicePension: z.boolean(),
-  GetsBereavementSupport: z.boolean(),
-  BereavementSupportAmount: z.string(),
-  BereavementSupportPeriod: z.string(),
-  GetsWidowedParent: z.boolean(),
-  WidowedParentAmount: z.string(),
-  WidowedParentPeriod: z.string(),
-})
-
 export function CurrentBenefits() {
-  const { goToNextPage } = useWorkflow()
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">Current benefits</h1>

@@ -9,64 +9,63 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as BenefitsCalculatorRouteRouteImport } from './routes/benefits-calculator/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BenefitsCalculatorSlugRouteImport } from './routes/benefits-calculator/$slug'
+import { Route as BenefitsCalculatorIdRouteRouteImport } from './routes/benefits-calculator.$id/route'
+import { Route as BenefitsCalculatorIdSlugRouteImport } from './routes/benefits-calculator.$id/$slug'
 
-const BenefitsCalculatorRouteRoute = BenefitsCalculatorRouteRouteImport.update({
-  id: '/benefits-calculator',
-  path: '/benefits-calculator',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BenefitsCalculatorSlugRoute = BenefitsCalculatorSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BenefitsCalculatorRouteRoute,
-} as any)
+const BenefitsCalculatorIdRouteRoute =
+  BenefitsCalculatorIdRouteRouteImport.update({
+    id: '/benefits-calculator/$id',
+    path: '/benefits-calculator/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BenefitsCalculatorIdSlugRoute =
+  BenefitsCalculatorIdSlugRouteImport.update({
+    id: '/$slug',
+    path: '/$slug',
+    getParentRoute: () => BenefitsCalculatorIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
-  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
+  '/benefits-calculator/$id': typeof BenefitsCalculatorIdRouteRouteWithChildren
+  '/benefits-calculator/$id/$slug': typeof BenefitsCalculatorIdSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
-  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
+  '/benefits-calculator/$id': typeof BenefitsCalculatorIdRouteRouteWithChildren
+  '/benefits-calculator/$id/$slug': typeof BenefitsCalculatorIdSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/benefits-calculator': typeof BenefitsCalculatorRouteRouteWithChildren
-  '/benefits-calculator/$slug': typeof BenefitsCalculatorSlugRoute
+  '/benefits-calculator/$id': typeof BenefitsCalculatorIdRouteRouteWithChildren
+  '/benefits-calculator/$id/$slug': typeof BenefitsCalculatorIdSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
+  fullPaths: '/' | '/benefits-calculator/$id' | '/benefits-calculator/$id/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
-  id: '__root__' | '/' | '/benefits-calculator' | '/benefits-calculator/$slug'
+  to: '/' | '/benefits-calculator/$id' | '/benefits-calculator/$id/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/benefits-calculator/$id'
+    | '/benefits-calculator/$id/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BenefitsCalculatorRouteRoute: typeof BenefitsCalculatorRouteRouteWithChildren
+  BenefitsCalculatorIdRouteRoute: typeof BenefitsCalculatorIdRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/benefits-calculator': {
-      id: '/benefits-calculator'
-      path: '/benefits-calculator'
-      fullPath: '/benefits-calculator'
-      preLoaderRoute: typeof BenefitsCalculatorRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -74,33 +73,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/benefits-calculator/$slug': {
-      id: '/benefits-calculator/$slug'
+    '/benefits-calculator/$id': {
+      id: '/benefits-calculator/$id'
+      path: '/benefits-calculator/$id'
+      fullPath: '/benefits-calculator/$id'
+      preLoaderRoute: typeof BenefitsCalculatorIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/benefits-calculator/$id/$slug': {
+      id: '/benefits-calculator/$id/$slug'
       path: '/$slug'
-      fullPath: '/benefits-calculator/$slug'
-      preLoaderRoute: typeof BenefitsCalculatorSlugRouteImport
-      parentRoute: typeof BenefitsCalculatorRouteRoute
+      fullPath: '/benefits-calculator/$id/$slug'
+      preLoaderRoute: typeof BenefitsCalculatorIdSlugRouteImport
+      parentRoute: typeof BenefitsCalculatorIdRouteRoute
     }
   }
 }
 
-interface BenefitsCalculatorRouteRouteChildren {
-  BenefitsCalculatorSlugRoute: typeof BenefitsCalculatorSlugRoute
+interface BenefitsCalculatorIdRouteRouteChildren {
+  BenefitsCalculatorIdSlugRoute: typeof BenefitsCalculatorIdSlugRoute
 }
 
-const BenefitsCalculatorRouteRouteChildren: BenefitsCalculatorRouteRouteChildren =
+const BenefitsCalculatorIdRouteRouteChildren: BenefitsCalculatorIdRouteRouteChildren =
   {
-    BenefitsCalculatorSlugRoute: BenefitsCalculatorSlugRoute,
+    BenefitsCalculatorIdSlugRoute: BenefitsCalculatorIdSlugRoute,
   }
 
-const BenefitsCalculatorRouteRouteWithChildren =
-  BenefitsCalculatorRouteRoute._addFileChildren(
-    BenefitsCalculatorRouteRouteChildren,
+const BenefitsCalculatorIdRouteRouteWithChildren =
+  BenefitsCalculatorIdRouteRoute._addFileChildren(
+    BenefitsCalculatorIdRouteRouteChildren,
   )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BenefitsCalculatorRouteRoute: BenefitsCalculatorRouteRouteWithChildren,
+  BenefitsCalculatorIdRouteRoute: BenefitsCalculatorIdRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

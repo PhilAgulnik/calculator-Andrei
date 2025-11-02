@@ -1,10 +1,7 @@
-import { z } from 'zod'
-
 import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
 import { Form, Fields, Show } from '~/components/Informed'
 import { Page } from '~/products/shared/Page'
-import { useAppForm } from '~/components/Form/use-app-form'
 
 import { useWorkflow } from '../shared/use-workflow'
 
@@ -32,44 +29,18 @@ const CALC_YEARS_OPTIONS = [
   { label: '2025/26', value: '2025_26' },
 ]
 
-const schema = z.object({
-  NationalHousingStatus: z.enum(
-    HOUSING_STATUS_OPTIONS.map((option) => option.value),
-    'Please select a housing status'
-  ),
-  CalcYears: z.enum(
-    CALC_YEARS_OPTIONS.map((option) => option.value),
-    'Please select a tax year'
-  ),
-  Postcode: z.string().min(1, 'Please enter a valid postcode'),
-})
-
 export function WhereYouLive() {
-  const { goToNextPage } = useWorkflow()
-
-  const form = useAppForm({
-    defaultValues: {
-      Postcode: '',
-      NationalHousingStatus: '',
-      CalcYears: '2024_25',
-    },
-    onSubmit: async ({ value, meta }) => {
-      console.log('onSubmit', { value, meta })
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">What are you entitled to?</h1>

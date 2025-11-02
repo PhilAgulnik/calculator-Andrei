@@ -1,6 +1,3 @@
-import { z } from 'zod'
-
-import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -8,44 +5,18 @@ import { Alert } from '~/components/Alert'
 import { Form, Fields, Show } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
-const schema = z.object({
-  HasPartner: z.boolean(),
-  HouseholdChildrenNumber: z.string().min(1, 'Please enter the number of children'),
-  HasUC_NumNonDeps: z.boolean(),
-  LodgersNumber: z.string(),
-  ImmigrationControl: z.boolean(),
-  ResCare: z.boolean(),
-})
-
 export function YourHousehold() {
-  const { goToNextPage } = useWorkflow()
-
-  const form = useAppForm({
-    defaultValues: {
-      HasPartner: false,
-      HouseholdChildrenNumber: '0',
-      HasUC_NumNonDeps: false,
-      LodgersNumber: '0',
-      ImmigrationControl: true,
-      ResCare: false,
-    },
-    onSubmit: async ({ value }) => {
-      console.log('onSubmit', value)
-      goToNextPage()
-    },
-    validators: {
-      onSubmit: schema,
-    },
-  })
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">Your household</h1>
@@ -57,10 +28,10 @@ export function YourHousehold() {
             descriptionAfter={
               <Show when={({ formState }) => formState.values.HasPartner === true}>
                 <Alert type="info">
-                  If you are currently getting a legacy benefit, please click on the help icon
-                  above to find out who should be entered as 'you' and who should be the
-                  'partner' for this calculation, as it can make a difference. For Universal
-                  Credit it doesn't matter.
+                  If you are currently getting a legacy benefit, please click on the help icon above
+                  to find out who should be entered as 'you' and who should be the 'partner' for
+                  this calculation, as it can make a difference. For Universal Credit it doesn't
+                  matter.
                 </Alert>
               </Show>
             }

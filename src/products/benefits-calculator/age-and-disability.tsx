@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
@@ -22,35 +20,18 @@ const DISBENS_OPTIONS = [
   { value: 'CurrentlyClaiming', label: 'Yes' },
 ]
 
-const schema = z.object({
-  Age: z
-    .number()
-    .min(16, 'Age must be between 16 and 120')
-    .max(120, 'Age must be between 16 and 120'),
-  ClientWorkStatus: z.enum(
-    WORK_STATUS_OPTIONS.map((option) => option.value),
-    'Please select your employment status'
-  ),
-  WeekWorkHoursAmount: z.string().min(1, 'Please enter work hours'),
-  ClientDisbens: z.enum(
-    DISBENS_OPTIONS.map((option) => option.value),
-    'Please select an option'
-  ),
-  ClientDisabledNotClaiming: z.boolean(),
-  ClientCareForDisabled: z.boolean(),
-})
-
 export function AgeAndDisability() {
-  const { goToNextPage } = useWorkflow()
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">Age and disability status</h1>

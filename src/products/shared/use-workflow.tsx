@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useLocation, useMatch, useNavigate } from '@tanstack/react-router'
+import { useMatch, useNavigate, useParams } from '@tanstack/react-router'
 
 import { useContext } from 'react'
 import { type Page, WorkflowContext } from './context'
+import { useEntries } from './use-entries'
 
 type WorkflowProviderProps = {
   children: React.ReactNode
@@ -17,9 +18,12 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
 
   const [pages, setPages] = useState<Page[]>(initialPages)
 
-  const match = useMatch({ from: `${basePath}/$slug`, shouldThrow: false })
-  const slug = match?.params.slug || ''
+  const params = useParams({ strict: false })
 
+  const id = params?.id || ''
+  const slug = params?.slug || ''
+
+  // Pages
   const visiblePages = useMemo(() => {
     return pages.filter((page) => page.isVisible)
   }, [pages])
@@ -56,10 +60,12 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
   const goToNextPage = useCallback(() => {
     if (!nextPage) return
 
-    if (!nextPage.slug) navigate({ to: basePath })
-
-    navigate({ to: `${basePath}/$slug`, params: { slug: nextPage.slug } })
+    navigate({ to: `${basePath}/$id`, params: { id, slug: nextPage.slug } })
+    navigate({ to: `${basePath}/$id/$slug`, params: { id, slug: nextPage.slug } })
   }, [basePath, nextPage])
+
+  // Entries
+  const { entries, addEntry, removeEntry, updateEntryData } = useEntries({ basePath })
 
   const context = useMemo(
     () => ({
@@ -70,6 +76,11 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
       visiblePages,
       basePath,
       goToNextPage,
+      entry: entries[id] || null,
+      entries,
+      addEntry,
+      removeEntry,
+      updateEntryData: (data: any) => updateEntryData(id, data),
     }),
     [currentPage, nextPage, previousPage, progressPercentage, visiblePages, goToNextPage]
   )

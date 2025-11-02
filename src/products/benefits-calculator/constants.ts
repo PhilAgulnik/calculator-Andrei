@@ -9,6 +9,8 @@ import { YourHousehold } from './your-household'
 
 import { type Page } from '../shared/context'
 
+export const BASE_PATH = '/benefits-calculator'
+
 export const PAGES: Page[] = [
   {
     title: 'Where you live',

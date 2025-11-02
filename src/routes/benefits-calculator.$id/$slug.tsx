@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { useWorkflow } from '~/products/shared/use-workflow'
 
-export const Route = createFileRoute('/benefits-calculator/$slug')({
+export const Route = createFileRoute('/benefits-calculator/$id/$slug')({
   component: RouteComponent,
 })
 

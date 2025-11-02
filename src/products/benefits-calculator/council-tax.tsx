@@ -1,10 +1,8 @@
-import { z } from 'zod'
-
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
-import { Form, Fields, Show } from '~/components/Informed'
+import { Form, Fields } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
 const COUNCIL_TAX_BAND_OPTIONS = [
@@ -34,27 +32,18 @@ const PAYMENT_PERIOD_OPTIONS = [
   { label: 'Yearly', value: '0' },
 ]
 
-const schema = z.object({
-  CouncilTaxBand: z.string().min(1, 'Please select a council tax band'),
-  EligibleDisabilityReduction: z.boolean(),
-  DiscountsApplicable: z.string(),
-  CouncilTaxLiabilitySelector: z.string(),
-  AmountIsCorrect: z.boolean(),
-  CouncilTax: z.string(),
-  CouncilTaxPeriod: z.string(),
-})
-
 export function CouncilTax() {
-  const { goToNextPage } = useWorkflow()
+  const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
   return (
     <>
       <Form
-        onSubmit={(values) => {
-          console.log('onSubmit', { values })
+        onSubmit={({ values }) => {
+          updateEntryData(values)
           goToNextPage()
         }}
         className="contents"
+        initialValues={!!entry ? entry?.data : {}}
       >
         <Page.Main>
           <h1 className="text-3xl font-bold">Council Tax</h1>
@@ -66,9 +55,9 @@ export function CouncilTax() {
 
           <Alert type="info">
             In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support,
-            not the water and sewerage payments, so don't include these charges here. We will provide
-            information about Scotland's Water Charges Reduction Scheme on the results page if you
-            qualify.
+            not the water and sewerage payments, so don't include these charges here. We will
+            provide information about Scotland's Water Charges Reduction Scheme on the results page
+            if you qualify.
           </Alert>
 
           <Fields.Select

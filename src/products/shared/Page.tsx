@@ -1,3 +1,4 @@
+import { useParams } from '@tanstack/react-router'
 import { useWorkflow } from './use-workflow'
 
 import { LinkButton } from '~/components/LinkButton'
@@ -14,6 +15,7 @@ type FooterProps = {
 export function Footer(props: FooterProps) {
   const { nextButton } = props
   const { basePath, nextPage, previousPage, progressPercentage } = useWorkflow()
+  const { id } = useParams({ from: '/benefits-calculator/$id' })
 
   if (!basePath) return null
 
@@ -21,8 +23,8 @@ export function Footer(props: FooterProps) {
     <footer className="min-h-app-header-height flex flex-nowrap items-center justify-between gap-2 mq600:gap-5 px-4 py-3 mq600:px-7 sticky z-1 bottom-0 bg-main-bg border-t-1 border-divider">
       <LinkButton
         disabled={!previousPage}
-        to={previousPage?.slug ? `${basePath}/$slug` : basePath}
-        params={{ slug: previousPage?.slug ?? '' }}
+        to={previousPage?.slug ? `${basePath}/$id/$slug` : `${basePath}/$id`}
+        params={{ id, slug: previousPage?.slug ?? '' }}
       >
         ← Previous
       </LinkButton>
@@ -37,8 +39,8 @@ export function Footer(props: FooterProps) {
       {nextButton || (
         <LinkButton
           disabled={!nextPage}
-          to={`${basePath}/$slug`}
-          params={{ slug: nextPage?.slug ?? '' }}
+          to={`${basePath}/$id/$slug`}
+          params={{ id, slug: nextPage?.slug ?? '' }}
         >
           Next →
         </LinkButton>

@@ -4,7 +4,7 @@ type FormProps = {
   children: React.ReactNode
   onSubmit?: (values: Record<string, unknown>) => void
   className?: string
-  initialValues?: Record<string, unknown>
+  initialValues?: any
 }
 
 export function Form(props: FormProps) {

@@ -1,8 +1,11 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useParams } from '@tanstack/react-router'
 import { useWorkflow } from './use-workflow'
 
 export function PagesMenu() {
   const { basePath, visiblePages } = useWorkflow()
+
+  const params = useParams({ strict: false })
+  const id = params?.id || ''
 
   if (!basePath || !visiblePages) return null
 
@@ -15,8 +18,8 @@ export function PagesMenu() {
       {visiblePages.map((page) => {
         return (
           <Link
-            to={page.slug ? `${basePath}/$slug` : basePath}
-            params={{ slug: page.slug }}
+            to={page.slug ? `${basePath}/$id/$slug` : `${basePath}/$id`}
+            params={{ id, slug: page.slug }}
             key={page.slug}
             className="flex items-center gap-2 relative py-1.5 pl-3"
             activeProps={{ className: 'active bg-slate-100 rounded-md' }}
