@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { useLocation, useMatch } from '@tanstack/react-router'
+import { useCallback, useMemo, useState } from 'react'
+import { useLocation, useMatch, useNavigate } from '@tanstack/react-router'
 
 import { useContext } from 'react'
 import { type Page, WorkflowContext } from './context'
@@ -12,6 +12,8 @@ type WorkflowProviderProps = {
 
 export function WorkflowProvider(props: WorkflowProviderProps) {
   const { children, pages: initialPages, basePath } = props
+
+  const navigate = useNavigate()
 
   const [pages, setPages] = useState<Page[]>(initialPages)
 
@@ -51,6 +53,14 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
     return Math.round(((index + 1) / visiblePagesLength) * 100)
   }, [visiblePagesLength, slug])
 
+  const goToNextPage = useCallback(() => {
+    if (!nextPage) return
+
+    if (!nextPage.slug) navigate({ to: basePath })
+
+    navigate({ to: `${basePath}/$slug`, params: { slug: nextPage.slug } })
+  }, [basePath, nextPage])
+
   const context = useMemo(
     () => ({
       currentPage,
@@ -59,8 +69,9 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
       progressPercentage,
       visiblePages,
       basePath,
+      goToNextPage,
     }),
-    [currentPage, nextPage, previousPage, progressPercentage, visiblePages]
+    [currentPage, nextPage, previousPage, progressPercentage, visiblePages, goToNextPage]
   )
 
   return <WorkflowContext.Provider value={context}>{children}</WorkflowContext.Provider>

@@ -1,4 +1,5 @@
 import { createContext } from 'react'
+import { z } from 'zod'
 
 export type Page = {
   title: string
@@ -6,6 +7,7 @@ export type Page = {
   glyph: string
   isVisible: boolean
   component: React.ComponentType<any>
+  schema?: z.ZodSchema
 }
 
 export type WorkflowContext = {
@@ -15,6 +17,7 @@ export type WorkflowContext = {
   progressPercentage: number
   visiblePages: Page[]
   basePath: '/benefits-calculator' | null
+  goToNextPage: () => void
 }
 
 export const WorkflowContext = createContext<WorkflowContext>({
@@ -24,4 +27,5 @@ export const WorkflowContext = createContext<WorkflowContext>({
   progressPercentage: 0,
   visiblePages: [],
   basePath: null,
+  goToNextPage: () => {},
 })

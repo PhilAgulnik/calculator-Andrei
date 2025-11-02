@@ -3,7 +3,16 @@ import { useWorkflow } from './use-workflow'
 import { LinkButton } from '~/components/LinkButton'
 import { ProgressBar } from '~/components/ProgressBar'
 
-export function Footer() {
+export function Main({ children }: { children: React.ReactNode }) {
+  return <div className="py-5 px-4 mq600:px-7">{children}</div>
+}
+
+type FooterProps = {
+  nextButton?: React.ReactNode
+}
+
+export function Footer(props: FooterProps) {
+  const { nextButton } = props
   const { basePath, nextPage, previousPage, progressPercentage } = useWorkflow()
 
   if (!basePath) return null
@@ -25,13 +34,17 @@ export function Footer() {
         <ProgressBar percentage={progressPercentage} className="hidden mq500:block" />
       </div>
 
-      <LinkButton
-        disabled={!nextPage}
-        to={`${basePath}/$slug`}
-        params={{ slug: nextPage?.slug ?? '' }}
-      >
-        Next →
-      </LinkButton>
+      {nextButton || (
+        <LinkButton
+          disabled={!nextPage}
+          to={`${basePath}/$slug`}
+          params={{ slug: nextPage?.slug ?? '' }}
+        >
+          Next →
+        </LinkButton>
+      )}
     </footer>
   )
 }
+
+export const Page = { Main, Footer }

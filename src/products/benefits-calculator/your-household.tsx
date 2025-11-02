@@ -1,25 +1,30 @@
 import { useAppForm } from '~/components/Form/use-app-form'
+import { Page } from '~/products/shared/Page'
+
+import { useWorkflow } from '../shared/use-workflow'
 
 export function YourHousehold() {
+  const { goToNextPage } = useWorkflow()
+
   const form = useAppForm({
     defaultValues: {},
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
+      goToNextPage()
     },
   })
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold">Your household</h1>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="mt-5"
-      >
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+      className="mt-5"
+    >
+      <Page.Main>
+        <h1 className="text-3xl font-bold">Your household</h1>
         <form.AppField
           name="HasPartner"
           children={(field) => (
@@ -71,7 +76,15 @@ export function YourHousehold() {
         {/* <form.AppForm>
           <form.FormDebug />
         </form.AppForm> */}
-      </form>
-    </div>
+      </Page.Main>
+
+      <Page.Footer
+        nextButton={
+          <form.AppForm>
+            <form.SubmitButton>Next →</form.SubmitButton>
+          </form.AppForm>
+        }
+      />
+    </form>
   )
 }

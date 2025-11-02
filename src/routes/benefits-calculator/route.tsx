@@ -6,7 +6,7 @@ import { PAGES } from '~/products/benefits-calculator/pages'
 import { PagesMenu } from '~/products/shared/PagesMenu'
 import { WorkflowProvider, useWorkflow } from '~/products/shared/use-workflow'
 import { Fragment, useMemo } from 'react'
-import { Footer } from '~/products/shared/Footer'
+import { Footer } from '~/products/shared/Page'
 
 export const Route = createFileRoute('/benefits-calculator')({
   component: RouteComponent,
@@ -59,11 +59,7 @@ function Product() {
           </h1>
         </header>
 
-        <div className="py-5 px-4 mq600:px-7">
-          {isHomepage ? <HomepageComponent /> : <Outlet />}
-        </div>
-
-        <Footer />
+        {isHomepage ? <HomepageComponent /> : <Outlet />}
       </main>
     </div>
   )
