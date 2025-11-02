@@ -1,0 +1,1 @@
+import{e as t,r,j as u}from"./index-DpxrsPB5.js";import{a}from"./use-workflow-C3UIp1is.js";function i(){const{slug:o}=t.useParams(),{visiblePages:e}=a(),n=r.useMemo(()=>e.find(s=>s.slug===o)?.component??null,[e,o]);return n?u.jsx(n,{}):null}export{i as component};
