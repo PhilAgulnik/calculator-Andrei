@@ -21,7 +21,7 @@ function HomeComponent() {
       <header className="p-4">
         <div className="w-full max-w-layout-max-width mx-auto flex justify-center items-center">
           <Link to="/">
-            <img src="/logo.svg" alt="" className="w-auto block h-[42px]" />
+            <img src="logo.svg" alt="" className="w-auto block h-[42px]" />
           </Link>
         </div>
       </header>

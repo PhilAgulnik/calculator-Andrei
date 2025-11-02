@@ -4,12 +4,14 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import './styles.css'
 
+import { REPO_NAME } from '../constants'
+
 // Set up a Router instance
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
-  basepath: '/calculator-Andrei/',
+  basepath: REPO_NAME,
 })
 
 // Register things for typesafety

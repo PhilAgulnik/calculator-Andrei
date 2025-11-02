@@ -37,7 +37,7 @@ function Product() {
       <header className="app-header">
         <div className="app-header-inner px-4 mq600:px-7">
           <Link to="/">
-            <img src="/logo.svg" alt="" className="w-auto block h-[42px]" />
+            <img src="logo.svg" alt="" className="w-auto block h-[42px]" />
           </Link>
         </div>
       </header>
