@@ -1,16 +1,62 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 
+const WORK_STATUS_OPTIONS = [
+  { value: 'NotEmployed', label: 'Not employed' },
+  {
+    value: 'NotEmployedButWorkedRecently',
+    label: 'Not employed but worked in the last 2 years',
+  },
+  { value: 'Employed', label: 'Employed' },
+  { value: 'EmployedOnStatutoryLeave', label: 'Employed - on statutory leave' },
+  { value: 'SelfEmployed', label: 'Self-employed' },
+]
+
+const DISBENS_OPTIONS = [
+  { value: 'NotClaimed', label: 'No' },
+  { value: 'CurrentlyClaiming', label: 'Yes' },
+]
+
+const schema = z.object({
+  Age: z
+    .number()
+    .min(16, 'Age must be between 16 and 120')
+    .max(120, 'Age must be between 16 and 120'),
+  ClientWorkStatus: z.enum(
+    WORK_STATUS_OPTIONS.map((option) => option.value),
+    'Please select your employment status'
+  ),
+  WeekWorkHoursAmount: z.string().min(1, 'Please enter work hours'),
+  ClientDisbens: z.enum(
+    DISBENS_OPTIONS.map((option) => option.value),
+    'Please select an option'
+  ),
+  ClientDisabledNotClaiming: z.boolean(),
+  ClientCareForDisabled: z.boolean(),
+})
+
 export function AgeAndDisability() {
   const { goToNextPage } = useWorkflow()
 
   const form = useAppForm({
-    defaultValues: {},
+    defaultValues: {
+      Age: 0,
+      ClientWorkStatus: 'NotEmployed',
+      WeekWorkHoursAmount: '0',
+      ClientDisbens: 'NotClaimed',
+      ClientDisabledNotClaiming: false,
+      ClientCareForDisabled: false,
+    },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 
@@ -81,16 +127,7 @@ export function AgeAndDisability() {
                   </p>
                 </>
               }
-              options={[
-                { value: 'NotEmployed', label: 'Not employed' },
-                {
-                  value: 'NotEmployedButWorkedRecently',
-                  label: 'Not employed but worked in the last 2 years',
-                },
-                { value: 'Employed', label: 'Employed' },
-                { value: 'EmployedOnStatutoryLeave', label: 'Employed - on statutory leave' },
-                { value: 'SelfEmployed', label: 'Self-employed' },
-              ]}
+              options={WORK_STATUS_OPTIONS}
             />
           )}
         />
@@ -112,10 +149,7 @@ export function AgeAndDisability() {
             <field.RadioField
               label="Do you receive a disability or sickness benefit?"
               descriptionBefore="Common disability benefits are Attendance Allowance, Pension Age Disability Payment, Disability Living Allowance (DLA), Personal Independence Payment (PIP), Adult Disability Payment, Employment and Support Allowance (ESA), Universal Credit limited capability for work element (LCW/RA) and Statutory Sick Pay (SSP)."
-              options={[
-                { value: 'NotClaimed', label: 'No' },
-                { value: 'CurrentlyClaiming', label: 'Yes' },
-              ]}
+              options={DISBENS_OPTIONS}
             />
           )}
         />

@@ -1,16 +1,76 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 
+const PAYMENT_PERIOD_OPTIONS = [
+  { label: 'Weekly', value: '2' },
+  { label: '4 weeks', value: '3' },
+  { label: 'Monthly', value: '1' },
+  { label: 'Yearly', value: '0' },
+]
+
+const schema = z.object({
+  IsClientIncomeNonStatePensions: z.boolean(),
+  IncomeNonStatePension1: z.string(),
+  IncomeNonStatePensions1CalcPeriod: z.string(),
+  IncomeNonStatePension2: z.string(),
+  IncomeNonStatePensions2CalcPeriod: z.string(),
+  IncomeNonStatePension3: z.string(),
+  IncomeNonStatePensions3CalcPeriod: z.string(),
+  IncomeNonStatePensions: z.string(),
+  IsFosteringAllowanceOption: z.boolean(),
+  FosteringAllowance: z.string(),
+  FosteringAllowanceCalcPeriod: z.string(),
+  IncomeFromSavingsChk: z.boolean(),
+  IsIncomeFromMaintenancePaymentsOption: z.boolean(),
+  IncomeFromMaintenancePayments: z.string(),
+  IncomeFromMaintenanceCalcPeriod: z.string(),
+  IsIncomeFromVoluntaryCharitablePaymentsOption: z.boolean(),
+  IncomeFromVoluntaryCharitablePayments: z.string(),
+  IncomeFromVoluntaryCharitablePaymentsCalcPeriod: z.string(),
+  OwnOtherProperty: z.boolean(),
+  IsOtherSourcesIncome: z.boolean(),
+  IncomeOtherSources: z.string(),
+  IncomeOtherSourcesCalcPeriod: z.string(),
+})
+
 export function NetIncome() {
   const { goToNextPage } = useWorkflow()
 
   const form = useAppForm({
-    defaultValues: {},
+    defaultValues: {
+      IsClientIncomeNonStatePensions: false,
+      IncomeNonStatePension1: '0',
+      IncomeNonStatePensions1CalcPeriod: '2',
+      IncomeNonStatePension2: '0',
+      IncomeNonStatePensions2CalcPeriod: '2',
+      IncomeNonStatePension3: '0',
+      IncomeNonStatePensions3CalcPeriod: '2',
+      IncomeNonStatePensions: '0',
+      IsFosteringAllowanceOption: false,
+      FosteringAllowance: '0',
+      FosteringAllowanceCalcPeriod: '2',
+      IncomeFromSavingsChk: false,
+      IsIncomeFromMaintenancePaymentsOption: false,
+      IncomeFromMaintenancePayments: '0',
+      IncomeFromMaintenanceCalcPeriod: '2',
+      IsIncomeFromVoluntaryCharitablePaymentsOption: false,
+      IncomeFromVoluntaryCharitablePayments: '0',
+      IncomeFromVoluntaryCharitablePaymentsCalcPeriod: '0',
+      OwnOtherProperty: false,
+      IsOtherSourcesIncome: false,
+      IncomeOtherSources: '0',
+      IncomeOtherSourcesCalcPeriod: '2',
+    },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 
@@ -62,12 +122,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -87,12 +142,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -112,12 +162,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -147,12 +192,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -188,12 +228,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -221,12 +256,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -265,12 +295,7 @@ export function NetIncome() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />

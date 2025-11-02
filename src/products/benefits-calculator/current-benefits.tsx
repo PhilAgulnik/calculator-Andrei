@@ -1,7 +1,73 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+
+const CONTRIBUTORY_BENEFIT_OPTIONS = [
+  { label: 'None', value: 'none' },
+  { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
+  {
+    label: 'Contributory Employment and Support Allowance',
+    value: 'contributory_esa',
+  },
+  { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
+  { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
+]
+
+const PAYMENT_PERIOD_OPTIONS = [
+  { label: 'Weekly', value: 'weekly' },
+  { label: '4 weekly', value: '4weekly' },
+  { label: 'Monthly', value: 'monthly' },
+  { label: 'Yearly', value: 'yearly' },
+]
+
+const WAR_PENSION_OPTIONS = [
+  { label: 'No', value: 'wp_none' },
+  { label: 'Yes, with Constant Attendance Allowance', value: 'wp_caa' },
+  { label: 'Yes, with Mobility Supplement', value: 'wp_mobility' },
+  { label: 'Yes, with Unemployability Supplement', value: 'wp_unsup' },
+  { label: 'Yes, with Allowance for Lowered Standard of Occupation', value: 'wp_also' },
+  { label: "Yes, War Widower's Pension", value: 'wp_widower' },
+  { label: 'Yes, Other rate', value: 'wp_other' },
+]
+
+const schema = z.object({
+  GetsUniversalCredit: z.boolean(),
+  UniversalCreditAmount: z.string(),
+  HasTransitionalElement: z.boolean(),
+  GetsIncomeRelatedESA: z.boolean(),
+  ContributoryBenefit: z.string(),
+  PartnerContributoryBenefit: z.string(),
+  GetsCarersAllowance: z.boolean(),
+  CarersAllowanceAmount: z.string(),
+  CarersAllowancePeriod: z.string(),
+  PartnerGetsCarersAllowance: z.boolean(),
+  PartnerCarersAllowanceAmount: z.string(),
+  PartnerCarersAllowancePeriod: z.string(),
+  GetsGuardiansAllowance: z.boolean(),
+  GuardiansAllowanceAmount: z.string(),
+  GuardiansAllowancePeriod: z.string(),
+  GetsMaternityAllowance: z.boolean(),
+  MaternityAllowanceAmount: z.string(),
+  MaternityAllowancePeriod: z.string(),
+  GetsStatutoryPay: z.boolean(),
+  StatutoryPayAmount: z.string(),
+  StatutoryPayPeriod: z.string(),
+  GetsOccupationalPay: z.boolean(),
+  OccupationalPayAmount: z.string(),
+  OccupationalPayPeriod: z.string(),
+  WarPensionOptions: z.any(),
+  GetsArmedForcesCompensation: z.boolean(),
+  GetsServicePension: z.boolean(),
+  GetsBereavementSupport: z.boolean(),
+  BereavementSupportAmount: z.string(),
+  BereavementSupportPeriod: z.string(),
+  GetsWidowedParent: z.boolean(),
+  WidowedParentAmount: z.string(),
+  WidowedParentPeriod: z.string(),
+})
 
 export function CurrentBenefits() {
   const { goToNextPage } = useWorkflow()
@@ -9,42 +75,45 @@ export function CurrentBenefits() {
   const form = useAppForm({
     defaultValues: {
       GetsUniversalCredit: false,
-      UniversalCreditAmount: 0,
+      UniversalCreditAmount: '0',
       HasTransitionalElement: false,
       GetsIncomeRelatedESA: false,
-      ContributoryBenefit: '',
-      PartnerContributoryBenefit: '',
+      ContributoryBenefit: 'none',
+      PartnerContributoryBenefit: 'none',
       GetsCarersAllowance: false,
-      CarersAllowanceAmount: 0,
-      CarersAllowancePeriod: '',
+      CarersAllowanceAmount: '0',
+      CarersAllowancePeriod: 'weekly',
       PartnerGetsCarersAllowance: false,
-      PartnerCarersAllowanceAmount: 0,
-      PartnerCarersAllowancePeriod: '',
+      PartnerCarersAllowanceAmount: '0',
+      PartnerCarersAllowancePeriod: 'weekly',
       GetsGuardiansAllowance: false,
-      GuardiansAllowanceAmount: 0,
-      GuardiansAllowancePeriod: '',
+      GuardiansAllowanceAmount: '0',
+      GuardiansAllowancePeriod: 'weekly',
       GetsMaternityAllowance: false,
-      MaternityAllowanceAmount: 0,
-      MaternityAllowancePeriod: '',
+      MaternityAllowanceAmount: '0',
+      MaternityAllowancePeriod: 'weekly',
       GetsStatutoryPay: false,
-      StatutoryPayAmount: 0,
-      StatutoryPayPeriod: '',
+      StatutoryPayAmount: '0',
+      StatutoryPayPeriod: 'weekly',
       GetsOccupationalPay: false,
-      OccupationalPayAmount: 0,
-      OccupationalPayPeriod: '',
-      WarPensionOptions: [] as string[],
+      OccupationalPayAmount: '0',
+      OccupationalPayPeriod: 'weekly',
+      WarPensionOptions: null as any,
       GetsArmedForcesCompensation: false,
       GetsServicePension: false,
       GetsBereavementSupport: false,
-      BereavementSupportAmount: 0,
-      BereavementSupportPeriod: '',
+      BereavementSupportAmount: '0',
+      BereavementSupportPeriod: 'weekly',
       GetsWidowedParent: false,
-      WidowedParentAmount: 0,
-      WidowedParentPeriod: '',
+      WidowedParentAmount: '0',
+      WidowedParentPeriod: 'weekly',
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 
@@ -124,16 +193,7 @@ export function CurrentBenefits() {
           children={(field) => (
             <field.SelectField
               label="Which contributory benefit, if any, do you currently receive?"
-              options={[
-                { label: 'None', value: 'none' },
-                { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
-                {
-                  label: 'Contributory Employment and Support Allowance',
-                  value: 'contributory_esa',
-                },
-                { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
-                { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
-              ]}
+              options={CONTRIBUTORY_BENEFIT_OPTIONS}
             />
           )}
         />
@@ -143,16 +203,7 @@ export function CurrentBenefits() {
           children={(field) => (
             <field.SelectField
               label="Which contributory benefit, if any, does your partner currently receive?"
-              options={[
-                { label: 'None', value: 'none' },
-                { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
-                {
-                  label: 'Contributory Employment and Support Allowance',
-                  value: 'contributory_esa',
-                },
-                { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
-                { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
-              ]}
+              options={CONTRIBUTORY_BENEFIT_OPTIONS}
             />
           )}
         />
@@ -180,15 +231,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="CarersAllowancePeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -215,15 +258,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="PartnerCarersAllowancePeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -242,15 +277,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="GuardiansAllowancePeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -269,15 +296,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="MaternityAllowancePeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -298,15 +317,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="StatutoryPayPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -330,19 +341,11 @@ export function CurrentBenefits() {
         <form.AppField
           name="OccupationalPayPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
-        <form.AppField
+        {/* <form.AppField
           name="WarPensionOptions"
           children={(field) => (
             <div>
@@ -356,7 +359,10 @@ export function CurrentBenefits() {
                   { value: 'caa', label: 'Yes, with Constant Attendance Allowance' },
                   { value: 'mobility', label: 'Yes, with Mobility Supplement' },
                   { value: 'unsup', label: 'Yes, with Unemployability Supplement' },
-                  { value: 'also', label: 'Yes, with Allowance for Lowered Standard of Occupation' },
+                  {
+                    value: 'also',
+                    label: 'Yes, with Allowance for Lowered Standard of Occupation',
+                  },
                   { value: 'widower', label: "Yes, War Widower's Pension" },
                   { value: 'other', label: 'Yes, Other rate' },
                 ].map((option) => (
@@ -384,6 +390,17 @@ export function CurrentBenefits() {
                 ))}
               </div>
             </div>
+          )}
+        /> */}
+
+        <form.AppField
+          name="WarPensionOptions"
+          children={(field) => (
+            <field.CheckboxField
+              label="Do you get a War Pension or War Widower's Pension?"
+              options={WAR_PENSION_OPTIONS}
+              layout="vertical"
+            />
           )}
         />
 
@@ -421,15 +438,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="BereavementSupportPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 
@@ -453,15 +462,7 @@ export function CurrentBenefits() {
         <form.AppField
           name="WidowedParentPeriod"
           children={(field) => (
-            <field.SelectField
-              label="Period"
-              options={[
-                { label: 'Weekly', value: 'weekly' },
-                { label: '4 weekly', value: '4weekly' },
-                { label: 'Monthly', value: 'monthly' },
-                { label: 'Yearly', value: 'yearly' },
-              ]}
-            />
+            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
           )}
         />
 

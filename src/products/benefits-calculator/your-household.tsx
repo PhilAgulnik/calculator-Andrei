@@ -1,8 +1,19 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
+
+const schema = z.object({
+  HasPartner: z.boolean(),
+  HouseholdChildrenNumber: z.string().min(1, 'Please enter the number of children'),
+  HasUC_NumNonDeps: z.boolean(),
+  LodgersNumber: z.string(),
+  ImmigrationControl: z.boolean(),
+  ResCare: z.boolean(),
+})
 
 export function YourHousehold() {
   const { goToNextPage } = useWorkflow()
@@ -10,15 +21,18 @@ export function YourHousehold() {
   const form = useAppForm({
     defaultValues: {
       HasPartner: false,
-      HouseholdChildrenNumber: 0,
+      HouseholdChildrenNumber: '0',
       HasUC_NumNonDeps: false,
-      LodgersNumber: 0,
+      LodgersNumber: '0',
       ImmigrationControl: true,
       ResCare: false,
     },
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 

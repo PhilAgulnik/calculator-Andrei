@@ -1,7 +1,27 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+
+const PAYMENT_PERIOD_OPTIONS = [
+  { label: 'Weekly', value: '2' },
+  { label: '4 weeks', value: '3' },
+  { label: 'Monthly', value: '1' },
+  { label: 'Yearly', value: '0' },
+]
+
+const schema = z.object({
+  RentAmount: z.string().min(1, 'Please enter your rent amount'),
+  RentPeriod: z.string(),
+  UCAPA: z.boolean(),
+  NumberOfRentFreeWeeks: z.string(),
+  SanctuarySchemeBedroomTaxExemption: z.boolean(),
+  BedroomsCount: z.string(),
+  HasMoreInfoAboutDisabledChilrdren: z.boolean(),
+  IncludeExtraBedroom: z.boolean(),
+})
 
 export function HousingCosts() {
   const { goToNextPage } = useWorkflow()
@@ -20,6 +40,9 @@ export function HousingCosts() {
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 
@@ -59,12 +82,7 @@ export function HousingCosts() {
           children={(field) => (
             <field.SelectField
               label="Period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />

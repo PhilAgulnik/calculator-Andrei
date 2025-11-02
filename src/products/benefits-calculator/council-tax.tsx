@@ -1,8 +1,48 @@
+import { z } from 'zod'
+
 import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
+
+const COUNCIL_TAX_BAND_OPTIONS = [
+  { label: 'Please select', value: '' },
+  { label: "Don't Know", value: 'DontKnow' },
+  { label: 'no CT liability', value: 'X' },
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'C', value: 'C' },
+  { label: 'D', value: 'D' },
+  { label: 'E', value: 'E' },
+  { label: 'F', value: 'F' },
+  { label: 'G', value: 'G' },
+  { label: 'H', value: 'H' },
+]
+
+const DISCOUNTS_OPTIONS = [
+  { label: 'none', value: '0' },
+  { label: '25%', value: '25' },
+  { label: '50%', value: '50' },
+  { label: '100%', value: '100' },
+]
+
+const PAYMENT_PERIOD_OPTIONS = [
+  { label: 'Weekly', value: '2' },
+  { label: '4 weeks', value: '3' },
+  { label: 'Monthly', value: '1' },
+  { label: 'Yearly', value: '0' },
+]
+
+const schema = z.object({
+  CouncilTaxBand: z.string().min(1, 'Please select a council tax band'),
+  EligibleDisabilityReduction: z.boolean(),
+  DiscountsApplicable: z.string(),
+  CouncilTaxLiabilitySelector: z.string(),
+  AmountIsCorrect: z.boolean(),
+  CouncilTax: z.string(),
+  CouncilTaxPeriod: z.string(),
+})
 
 export function CouncilTax() {
   const { goToNextPage } = useWorkflow()
@@ -20,6 +60,9 @@ export function CouncilTax() {
     onSubmit: async ({ value }) => {
       console.log('onSubmit', value)
       goToNextPage()
+    },
+    validators: {
+      onSubmit: schema,
     },
   })
 
@@ -53,19 +96,7 @@ export function CouncilTax() {
             <field.SelectField
               label="Council Tax band for property"
               descriptionBefore="If you are unsure you can select 'don't know' and we'll look it up for you. If you are exempt or disregarded from paying Council Tax you can select 'no CT liability' from the options here."
-              options={[
-                { label: 'Please select', value: '' },
-                { label: "Don't Know", value: 'DontKnow' },
-                { label: 'no CT liability', value: 'X' },
-                { label: 'A', value: 'A' },
-                { label: 'B', value: 'B' },
-                { label: 'C', value: 'C' },
-                { label: 'D', value: 'D' },
-                { label: 'E', value: 'E' },
-                { label: 'F', value: 'F' },
-                { label: 'G', value: 'G' },
-                { label: 'H', value: 'H' },
-              ]}
+              options={COUNCIL_TAX_BAND_OPTIONS}
             />
           )}
         />
@@ -87,12 +118,7 @@ export function CouncilTax() {
             <field.SelectField
               label="Discounts applicable"
               descriptionBefore="If you are the only adult in the household you normally qualify for a 25% discount. If no adults count for Council Tax purposes a 50% discount could apply. If you qualify as severely mentally impaired you can select the appropriate discount rate here."
-              options={[
-                { label: 'none', value: '0' },
-                { label: '25%', value: '25' },
-                { label: '50%', value: '50' },
-                { label: '100%', value: '100' },
-              ]}
+              options={DISCOUNTS_OPTIONS}
             />
           )}
         />
@@ -115,12 +141,7 @@ export function CouncilTax() {
                   </p>
                 </>
               }
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
@@ -152,12 +173,7 @@ export function CouncilTax() {
           children={(field) => (
             <field.SelectField
               label="Payment period"
-              options={[
-                { label: 'Weekly', value: '2' },
-                { label: '4 weeks', value: '3' },
-                { label: 'Monthly', value: '1' },
-                { label: 'Yearly', value: '0' },
-              ]}
+              options={PAYMENT_PERIOD_OPTIONS}
             />
           )}
         />
