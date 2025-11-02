@@ -4,6 +4,8 @@ import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+import { Form, Fields } from '~/components/Informed'
+import { Button } from '~/components/Button'
 
 const CONTRIBUTORY_BENEFIT_OPTIONS = [
   { label: 'None', value: 'none' },
@@ -118,366 +120,210 @@ export function CurrentBenefits() {
   })
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit()
-      }}
-      className="contents"
-    >
-      <Page.Main>
-        <h1 className="text-3xl font-bold">Current benefits</h1>
+    <>
+      <Form
+        onSubmit={(values) => {
+          console.log('onSubmit', { values })
+          goToNextPage()
+        }}
+        className="contents"
+      >
+        <Page.Main>
+          <h1 className="text-3xl font-bold">Current benefits</h1>
 
-        <form.AppField
-          name="GetsUniversalCredit"
-          children={(field) => <field.BooleanRadioField label="Do you get Universal Credit?" />}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Universal Credit?"
+            name="GetsUniversalCredit"
+          />
 
-        <form.AppField
-          name="UniversalCreditAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Monthly Universal Credit payment received in last assessment period"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Monthly Universal Credit payment received in last assessment period"
+            name="UniversalCreditAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="HasTransitionalElement"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Do you get a transitional element in your Universal Credit award?"
-              descriptionBefore="You may get a transitional element if you moved onto Universal Credit from your old benefits after receiving a migration notice."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get a transitional element in your Universal Credit award?"
+            name="HasTransitionalElement"
+            descriptionBefore="You may get a transitional element if you moved onto Universal Credit from your old benefits after receiving a migration notice."
+          />
 
-        <form.AppField
-          name="GetsIncomeRelatedESA"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get income-related Employment and Support Allowance (ESA)?" />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get income-related Employment and Support Allowance (ESA)?"
+            name="GetsIncomeRelatedESA"
+          />
 
-        <form.AppField
-          name="GetsIncomeRelatedESA"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get income-related Employment and Support Allowance (ESA)?" />
-          )}
-        />
+          <Fields.Select
+            label="Which contributory benefit, if any, do you currently receive?"
+            name="ContributoryBenefit"
+            options={CONTRIBUTORY_BENEFIT_OPTIONS}
+          />
 
-        <form.AppField
-          name="UniversalCreditAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Monthly Universal Credit payment received in last assessment period"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
+          <Fields.Select
+            label="Which contributory benefit, if any, does your partner currently receive?"
+            name="PartnerContributoryBenefit"
+            options={CONTRIBUTORY_BENEFIT_OPTIONS}
+          />
 
-        <form.AppField
-          name="HasTransitionalElement"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Do you get a transitional element in your Universal Credit award?"
-              descriptionBefore="You may get a transitional element if you moved onto Universal Credit from your old benefits after receiving a migration notice."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you currently receive Carer's Allowance?"
+            name="GetsCarersAllowance"
+            descriptionBefore="You may be getting this if you care for someone receiving a disability benefit."
+          />
 
-        <form.AppField
-          name="ContributoryBenefit"
-          children={(field) => (
-            <field.SelectField
-              label="Which contributory benefit, if any, do you currently receive?"
-              options={CONTRIBUTORY_BENEFIT_OPTIONS}
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Carer's Allowance income"
+            name="CarersAllowanceAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="PartnerContributoryBenefit"
-          children={(field) => (
-            <field.SelectField
-              label="Which contributory benefit, if any, does your partner currently receive?"
-              options={CONTRIBUTORY_BENEFIT_OPTIONS}
-            />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="CarersAllowancePeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsCarersAllowance"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Do you currently receive Carer's Allowance?"
-              descriptionBefore="You may be getting this if you care for someone receiving a disability benefit."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Does your partner currently receive Carer's Allowance?"
+            name="PartnerGetsCarersAllowance"
+            descriptionBefore="Your partner may be getting this if s/he cares for someone receiving a disability benefit."
+          />
 
-        <form.AppField
-          name="CarersAllowanceAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Carer's Allowance income"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Carer's Allowance income"
+            name="PartnerCarersAllowanceAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="CarersAllowancePeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="PartnerCarersAllowancePeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="PartnerGetsCarersAllowance"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Does your partner currently receive Carer's Allowance?"
-              descriptionBefore="Your partner may be getting this if s/he cares for someone receiving a disability benefit."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Guardian's Allowance?"
+            name="GetsGuardiansAllowance"
+          />
 
-        <form.AppField
-          name="PartnerCarersAllowanceAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Carer's Allowance income"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Income amount"
+            name="GuardiansAllowanceAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="PartnerCarersAllowancePeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="GuardiansAllowancePeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsGuardiansAllowance"
-          children={(field) => <field.BooleanRadioField label="Do you get Guardian's Allowance?" />}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Maternity Allowance?"
+            name="GetsMaternityAllowance"
+          />
 
-        <form.AppField
-          name="GuardiansAllowanceAmount"
-          children={(field) => (
-            <field.NumberInputField label="Income amount" inputClassName="max-w-[200px]" />
-          )}
-        />
+          <Fields.NumberInput
+            label="Income amount"
+            name="MaternityAllowanceAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="GuardiansAllowancePeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="MaternityAllowancePeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsMaternityAllowance"
-          children={(field) => <field.BooleanRadioField label="Do you get Maternity Allowance?" />}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Statutory Maternity, Paternity or Adoption pay?"
+            name="GetsStatutoryPay"
+          />
 
-        <form.AppField
-          name="MaternityAllowanceAmount"
-          children={(field) => (
-            <field.NumberInputField label="Income amount" inputClassName="max-w-[200px]" />
-          )}
-        />
+          <Fields.NumberInput
+            label="Income amount"
+            name="StatutoryPayAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="MaternityAllowancePeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="StatutoryPayPeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsStatutoryPay"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get Statutory Maternity, Paternity or Adoption pay?" />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Occupational Maternity Pay or Occupational Paternity Pay?"
+            name="GetsOccupationalPay"
+            descriptionBefore="Do not include the Statutory Maternity, Paternity or Adoption pay you receive here or it will be counted twice."
+          />
 
-        <form.AppField
-          name="StatutoryPayAmount"
-          children={(field) => (
-            <field.NumberInputField label="Income amount" inputClassName="max-w-[200px]" />
-          )}
-        />
+          <Fields.NumberInput
+            label="Income amount"
+            name="OccupationalPayAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="StatutoryPayPeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="OccupationalPayPeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsOccupationalPay"
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Do you get Occupational Maternity Pay or Occupational Paternity Pay?"
-              descriptionBefore="Do not include the Statutory Maternity, Paternity or Adoption pay you receive here or it will be counted twice."
-            />
-          )}
-        />
+          <Fields.Checkbox
+            label="Do you get a War Pension or War Widower's Pension?"
+            name="WarPensionOptions"
+            options={WAR_PENSION_OPTIONS}
+            layout="vertical"
+          />
 
-        <form.AppField
-          name="OccupationalPayAmount"
-          children={(field) => (
-            <field.NumberInputField label="Income amount" inputClassName="max-w-[200px]" />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get Armed Forces Compensation?"
+            name="GetsArmedForcesCompensation"
+          />
 
-        <form.AppField
-          name="OccupationalPayPeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get a Service Attributable Pension?"
+            name="GetsServicePension"
+          />
 
-        {/* <form.AppField
-          name="WarPensionOptions"
-          children={(field) => (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">
-                Do you get a War Pension or War Widower's Pension?
-              </h3>
-              <p className="text-sm text-gray-600 mb-3">Select all that apply</p>
-              <div className="space-y-2">
-                {[
-                  { value: 'none', label: 'No' },
-                  { value: 'caa', label: 'Yes, with Constant Attendance Allowance' },
-                  { value: 'mobility', label: 'Yes, with Mobility Supplement' },
-                  { value: 'unsup', label: 'Yes, with Unemployability Supplement' },
-                  {
-                    value: 'also',
-                    label: 'Yes, with Allowance for Lowered Standard of Occupation',
-                  },
-                  { value: 'widower', label: "Yes, War Widower's Pension" },
-                  { value: 'other', label: 'Yes, Other rate' },
-                ].map((option) => (
-                  <label key={option.value} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={field.state.value?.includes(option.value) || false}
-                      onChange={(e) => {
-                        const currentValue = field.state.value || []
-                        if (e.target.checked) {
-                          if (option.value === 'none') {
-                            field.handleChange([option.value])
-                          } else {
-                            const newValue = currentValue.filter((v) => v !== 'none')
-                            field.handleChange([...newValue, option.value])
-                          }
-                        } else {
-                          field.handleChange(currentValue.filter((v) => v !== option.value))
-                        }
-                      }}
-                      className="rounded border-gray-300"
-                    />
-                    <span>{option.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-        /> */}
+          <Fields.BooleanRadio
+            label="Do you get a Bereavement Support Payment?"
+            name="GetsBereavementSupport"
+          />
 
-        <form.AppField
-          name="WarPensionOptions"
-          children={(field) => (
-            <field.CheckboxField
-              label="Do you get a War Pension or War Widower's Pension?"
-              options={WAR_PENSION_OPTIONS}
-              layout="vertical"
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Bereavement Support Payment income"
+            name="BereavementSupportAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="GetsArmedForcesCompensation"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get Armed Forces Compensation?" />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="BereavementSupportPeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
 
-        <form.AppField
-          name="GetsServicePension"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get a Service Attributable Pension?" />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you get a Widowed Parent's Allowance?"
+            name="GetsWidowedParent"
+          />
 
-        <form.AppField
-          name="GetsBereavementSupport"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get a Bereavement Support Payment?" />
-          )}
-        />
+          <Fields.NumberInput
+            label="Widowed Parent's Allowance income"
+            name="WidowedParentAmount"
+            inputClassName="max-w-[200px]"
+          />
 
-        <form.AppField
-          name="BereavementSupportAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Bereavement Support Payment income"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
+          <Fields.Select
+            label="Period"
+            name="WidowedParentPeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
+        </Page.Main>
 
-        <form.AppField
-          name="BereavementSupportPeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
-
-        <form.AppField
-          name="GetsWidowedParent"
-          children={(field) => (
-            <field.BooleanRadioField label="Do you get a Widowed Parent's Allowance?" />
-          )}
-        />
-
-        <form.AppField
-          name="WidowedParentAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="Widowed Parent's Allowance income"
-              inputClassName="max-w-[200px]"
-            />
-          )}
-        />
-
-        <form.AppField
-          name="WidowedParentPeriod"
-          children={(field) => (
-            <field.SelectField label="Period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
-
-        {/* <form.AppForm>
-          <form.FormDebug />
-        </form.AppForm> */}
-      </Page.Main>
-
-      <Page.Footer
-        nextButton={
-          <form.AppForm>
-            <form.SubmitButton>Next →</form.SubmitButton>
-          </form.AppForm>
-        }
-      />
-    </form>
+        <Page.Footer nextButton={<Button type="submit">Next →</Button>} />
+      </Form>
+    </>
   )
 }

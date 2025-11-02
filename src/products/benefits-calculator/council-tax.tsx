@@ -5,6 +5,8 @@ import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
+import { Form, Fields, Show } from '~/components/Informed'
+import { Button } from '~/components/Button'
 
 const COUNCIL_TAX_BAND_OPTIONS = [
   { label: "Don't Know", value: 'DontKnow' },
@@ -66,126 +68,91 @@ export function CouncilTax() {
   })
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit()
-      }}
-      className="contents"
-    >
-      <Page.Main>
-        <h1 className="text-3xl font-bold">Council Tax</h1>
+    <>
+      <Form
+        onSubmit={(values) => {
+          console.log('onSubmit', { values })
+          goToNextPage()
+        }}
+        className="contents"
+      >
+        <Page.Main>
+          <h1 className="text-3xl font-bold">Council Tax</h1>
 
-        <div className="font-bold mb-4">
-          <h2 className="text-xl mb-2">Local authority</h2>
-          <strong>East Lothian</strong>
-        </div>
+          <div className="font-bold mb-4">
+            <h2 className="text-xl mb-2">Local authority</h2>
+            <strong>East Lothian</strong>
+          </div>
 
-        <Alert type="info">
-          In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support,
-          not the water and sewerage payments, so don't include these charges here. We will provide
-          information about Scotland's Water Charges Reduction Scheme on the results page if you
-          qualify.
-        </Alert>
+          <Alert type="info">
+            In the Council Tax Reduction scheme, only the Council Tax rate is eligible for support,
+            not the water and sewerage payments, so don't include these charges here. We will provide
+            information about Scotland's Water Charges Reduction Scheme on the results page if you
+            qualify.
+          </Alert>
 
-        <form.AppField
-          name="CouncilTaxBand"
-          children={(field) => (
-            <field.SelectField
-              label="Council Tax band for property"
-              descriptionBefore="If you are unsure you can select 'don't know' and we'll look it up for you. If you are exempt or disregarded from paying Council Tax you can select 'no CT liability' from the options here."
-              options={COUNCIL_TAX_BAND_OPTIONS}
-            />
-          )}
-        />
+          <Fields.Select
+            required
+            label="Council Tax band for property"
+            name="CouncilTaxBand"
+            options={COUNCIL_TAX_BAND_OPTIONS}
+            descriptionBefore="If you are unsure you can select 'don't know' and we'll look it up for you. If you are exempt or disregarded from paying Council Tax you can select 'no CT liability' from the options here."
+          />
 
-        <form.AppField
-          name="EligibleDisabilityReduction"
-          defaultValue={false}
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Eligible for disability-related reduction?"
-              descriptionBefore="Please select 'yes' if you have already successfully applied for a reduction because you have an extra room or adaptations needed for a disabled person."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Eligible for disability-related reduction?"
+            name="EligibleDisabilityReduction"
+            descriptionBefore="Please select 'yes' if you have already successfully applied for a reduction because you have an extra room or adaptations needed for a disabled person."
+          />
 
-        <form.AppField
-          name="DiscountsApplicable"
-          children={(field) => (
-            <field.SelectField
-              label="Discounts applicable"
-              descriptionBefore="If you are the only adult in the household you normally qualify for a 25% discount. If no adults count for Council Tax purposes a 50% discount could apply. If you qualify as severely mentally impaired you can select the appropriate discount rate here."
-              options={DISCOUNTS_OPTIONS}
-            />
-          )}
-        />
+          <Fields.Select
+            label="Discounts applicable"
+            name="DiscountsApplicable"
+            options={DISCOUNTS_OPTIONS}
+            descriptionBefore="If you are the only adult in the household you normally qualify for a 25% discount. If no adults count for Council Tax purposes a 50% discount could apply. If you qualify as severely mentally impaired you can select the appropriate discount rate here."
+          />
 
-        <form.AppField
-          name="CouncilTaxLiabilitySelector"
-          children={(field) => (
-            <field.SelectField
-              label="Council Tax liability"
-              descriptionBefore={
-                <>
-                  <p>
-                    Based on the information provided we believe this is your Council Tax liability
-                    after any discounts and reductions but before Council Tax Support is taken off.
-                  </p>
+          <Fields.Select
+            label="Council Tax liability"
+            name="CouncilTaxLiabilitySelector"
+            options={PAYMENT_PERIOD_OPTIONS}
+            descriptionBefore={
+              <>
+                <p>
+                  Based on the information provided we believe this is your Council Tax liability
+                  after any discounts and reductions but before Council Tax Support is taken off.
+                </p>
 
-                  <p className="text-2xl">
-                    <span>£</span>
-                    <span>0.00</span>
-                  </p>
-                </>
-              }
-              options={PAYMENT_PERIOD_OPTIONS}
-            />
-          )}
-        />
+                <p className="text-2xl">
+                  <span>£</span>
+                  <span>0.00</span>
+                </p>
+              </>
+            }
+          />
 
-        <form.AppField
-          name="AmountIsCorrect"
-          defaultValue={true}
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Is the amount shown for your Council Tax liability correct?"
-              descriptionBefore="If you are a joint tenant please enter your proportion of the Council Tax here. If your Council Tax liability is different to the amount shown above select 'no' and enter the correct amount."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Is the amount shown for your Council Tax liability correct?"
+            name="AmountIsCorrect"
+            descriptionBefore="If you are a joint tenant please enter your proportion of the Council Tax here. If your Council Tax liability is different to the amount shown above select 'no' and enter the correct amount."
+          />
 
-        <form.AppField
-          name="CouncilTax"
-          children={(field) => (
-            <field.NumberInputField
-              label="Council Tax liability (AFTER any discounts eg, disability, single person)"
-              inputClassName="max-w-[140px]"
-              descriptionBefore="Please tell us your Council Tax liability after any discounts and reductions but before Council Tax Support is taken off."
-            />
-          )}
-        />
+          <Fields.NumberInput
+            label="Council Tax liability (AFTER any discounts eg, disability, single person)"
+            name="CouncilTax"
+            inputClassName="max-w-[140px]"
+            descriptionBefore="Please tell us your Council Tax liability after any discounts and reductions but before Council Tax Support is taken off."
+          />
 
-        <form.AppField
-          name="CouncilTaxPeriod"
-          children={(field) => (
-            <field.SelectField label="Payment period" options={PAYMENT_PERIOD_OPTIONS} />
-          )}
-        />
+          <Fields.Select
+            label="Payment period"
+            name="CouncilTaxPeriod"
+            options={PAYMENT_PERIOD_OPTIONS}
+          />
+        </Page.Main>
 
-        {/* <form.AppForm>
-          <form.FormDebug />
-        </form.AppForm> */}
-      </Page.Main>
-
-      <Page.Footer
-        nextButton={
-          <form.AppForm>
-            <form.SubmitButton>Next →</form.SubmitButton>
-          </form.AppForm>
-        }
-      />
-    </form>
+        <Page.Footer nextButton={<Button type="submit">Next →</Button>} />
+      </Form>
+    </>
   )
 }

@@ -4,6 +4,8 @@ import { useAppForm } from '~/components/Form/use-app-form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
+import { Form, Fields } from '~/components/Informed'
+import { Button } from '~/components/Button'
 
 const WORK_STATUS_OPTIONS = [
   { value: 'NotEmployed', label: 'Not employed' },
@@ -61,130 +63,76 @@ export function AgeAndDisability() {
   })
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit()
-      }}
-      className="contents"
-    >
-      <Page.Main>
-        <h1 className="text-3xl font-bold">Age and disability status</h1>
+    <>
+      <Form
+        onSubmit={(values) => {
+          console.log('onSubmit', { values })
+          goToNextPage()
+        }}
+        className="contents"
+      >
+        <Page.Main>
+          <h1 className="text-3xl font-bold">Age and disability status</h1>
 
-        <form.AppField
-          name="Age"
-          children={(field) => (
-            <field.NumberInputField
-              label="Age"
-              inputClassName="max-w-[140px]"
-              descriptionBefore="Please enter current age. Enter a valid value from 16 to 120."
-            />
-          )}
-        />
+          <Fields.NumberInput
+            required
+            label="Age"
+            name="Age"
+            inputClassName="max-w-[140px]"
+            descriptionBefore="Please enter current age. Enter a valid value from 16 to 120."
+          />
 
-        {/* 
-        <form.AppField
-          name="DOB_Day"
-          children={(field) => (
-            <field.NumberInputField
-              label="Date of birth"
-              inputClassName="max-w-[140px]"
-              descriptionBefore="For example, 31 3 2010"
-            />
-          )}
-        />
+          <Fields.Radio
+            required
+            label="Which best describes your employment status?"
+            name="ClientWorkStatus"
+            options={WORK_STATUS_OPTIONS}
+            descriptionBefore={
+              <>
+                <p>
+                  If you are both employed and self-employed, select 'Self-employed' if more than
+                  half your income is from self-employment. Otherwise select 'Employed'.
+                </p>
 
-        <form.AppField
-          name="Gender"
-          children={(field) => (
-            <field.RadioField
-              label="Sex"
-              options={[
-                { value: 'Female', label: 'Female' },
-                { value: 'Male', label: 'Male' },
-              ]}
-            />
-          )}
-        /> */}
+                <p>
+                  If you are not employed but have worked in the last 2 years we will ask for more
+                  information to see if you could get help based on your national insurance
+                  contributions.
+                </p>
+              </>
+            }
+          />
 
-        <form.AppField
-          name="ClientWorkStatus"
-          children={(field) => (
-            <field.RadioField
-              label="Which best describes your employment status?"
-              descriptionBefore={
-                <>
-                  <p>
-                    If you are both employed and self-employed, select 'Self-employed' if more than
-                    half your income is from self-employment. Otherwise select 'Employed'.
-                  </p>
+          <Fields.NumberInput
+            required
+            label="How many hours a week do you work?"
+            name="WeekWorkHoursAmount"
+            inputClassName="max-w-[140px]"
+            descriptionBefore="Please enter a valid value from 0 to 168."
+          />
 
-                  <p>
-                    If you are not employed but have worked in the last 2 years we will ask for more
-                    information to see if you could get help based on your national insurance
-                    contributions.
-                  </p>
-                </>
-              }
-              options={WORK_STATUS_OPTIONS}
-            />
-          )}
-        />
+          <Fields.Radio
+            required
+            label="Do you receive a disability or sickness benefit?"
+            name="ClientDisbens"
+            options={DISBENS_OPTIONS}
+            descriptionBefore="Common disability benefits are Attendance Allowance, Pension Age Disability Payment, Disability Living Allowance (DLA), Personal Independence Payment (PIP), Adult Disability Payment, Employment and Support Allowance (ESA), Universal Credit limited capability for work element (LCW/RA) and Statutory Sick Pay (SSP)."
+          />
 
-        <form.AppField
-          name="WeekWorkHoursAmount"
-          children={(field) => (
-            <field.NumberInputField
-              label="How many hours a week do you work?"
-              inputClassName="max-w-[140px]"
-              descriptionBefore="Please enter a valid value from 0 to 168."
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Are you ill or disabled but not claiming one of the disability benefits listed below?"
+            name="ClientDisabledNotClaiming"
+            descriptionBefore="Answer 'yes' if you have have a health condition that affects your daily living or mobility and would like to find out more about Personal Independence Payment, Adult Disability Payment or Attendance Allowance."
+          />
 
-        <form.AppField
-          name="ClientDisbens"
-          children={(field) => (
-            <field.RadioField
-              label="Do you receive a disability or sickness benefit?"
-              descriptionBefore="Common disability benefits are Attendance Allowance, Pension Age Disability Payment, Disability Living Allowance (DLA), Personal Independence Payment (PIP), Adult Disability Payment, Employment and Support Allowance (ESA), Universal Credit limited capability for work element (LCW/RA) and Statutory Sick Pay (SSP)."
-              options={DISBENS_OPTIONS}
-            />
-          )}
-        />
+          <Fields.BooleanRadio
+            label="Do you care for someone who is sick or disabled?"
+            name="ClientCareForDisabled"
+          />
+        </Page.Main>
 
-        <form.AppField
-          name="ClientDisabledNotClaiming"
-          defaultValue={false}
-          children={(field) => (
-            <field.BooleanRadioField
-              label="Are you ill or disabled but not claiming one of the disability benefits listed below?"
-              descriptionBefore="Answer 'yes' if you have have a health condition that affects your daily living or mobility and would like to find out more about Personal Independence Payment, Adult Disability Payment or Attendance Allowance."
-            />
-          )}
-        />
-
-        <form.AppField
-          name="ClientCareForDisabled"
-          defaultValue={false}
-          children={(field) => (
-            <field.BooleanRadioField label="Do you care for someone who is sick or disabled?" />
-          )}
-        />
-
-        {/* <form.AppForm>
-          <form.FormDebug />
-        </form.AppForm> */}
-      </Page.Main>
-
-      <Page.Footer
-        nextButton={
-          <form.AppForm>
-            <form.SubmitButton>Next →</form.SubmitButton>
-          </form.AppForm>
-        }
-      />
-    </form>
+        <Page.Footer nextButton={<Button type="submit">Next →</Button>} />
+      </Form>
+    </>
   )
 }
