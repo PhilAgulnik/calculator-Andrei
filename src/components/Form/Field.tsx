@@ -43,10 +43,8 @@ export function Field(props: FieldProps) {
       )}
       {children}
       {descriptionAfter && (
-        <div className="mb-3 text-slate-600 [&>p+p]:mt-3">{descriptionAfter}</div>
+        <div className="mt-3 text-slate-600 [&>p+p]:mt-3">{descriptionAfter}</div>
       )}
-
-      {/* <pre>{JSON.stringify(field.state, null, 2)}</pre> */}
     </Component>
   )
 }
