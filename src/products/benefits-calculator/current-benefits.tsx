@@ -156,8 +156,6 @@ export function CurrentBenefits() {
               ]}
             />
           </Show>
-
-          <Fields.AmountPeriod label="Armed Forces Compensation" name="ArmedForcesCompensation" />
         </Page.Main>
 
         <Page.Footer nextButton={<Button type="submit">Next →</Button>} />

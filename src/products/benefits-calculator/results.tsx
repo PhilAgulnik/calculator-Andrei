@@ -5,6 +5,11 @@ import { useWorkflow } from '../shared/use-workflow'
 export function Results() {
   const { entry } = useWorkflow()
 
+  const data: any = entry?.data
+  const childAges = data?.childrenInfo?.map?.((child: any) => child.age) || []
+  const childDisabilities = data?.childrenInfo?.map?.((child: any) => child.hasDisability) || []
+  const childGenders = data?.childrenInfo?.map?.(() => 'male') || []
+
   return (
     <>
       <Page.Main>
