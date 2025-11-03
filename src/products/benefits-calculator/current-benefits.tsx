@@ -4,24 +4,6 @@ import { useWorkflow } from '../shared/use-workflow'
 import { Form, Fields, Show } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
-const CONTRIBUTORY_BENEFIT_OPTIONS = [
-  { label: 'None', value: 'none' },
-  { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
-  {
-    label: 'Contributory Employment and Support Allowance',
-    value: 'contributory_esa',
-  },
-  { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
-  { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
-]
-
-const PAYMENT_PERIOD_OPTIONS = [
-  { label: 'Weekly', value: 'weekly' },
-  { label: '4 weekly', value: '4weekly' },
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Yearly', value: 'yearly' },
-]
-
 export function CurrentBenefits() {
   const { entry, goToNextPage, updateEntryData } = useWorkflow()
 
@@ -40,28 +22,28 @@ export function CurrentBenefits() {
 
           <Fields.BooleanRadio
             label="Do you get Universal Credit?"
-            name="GetsUniversalCredit"
+            name="getsUniversalCredit"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsUniversalCredit === true}>
             <Fields.NumberInput
               label="Monthly Universal Credit payment received in last assessment period"
-              name="UniversalCreditAmount"
+              name="universalCreditAmount"
               defaultValue="0"
               inputClassName="max-w-[200px]"
             />
 
             <Fields.BooleanRadio
               label="Do you get a transitional element in your Universal Credit award?"
-              name="HasTransitionalElement"
+              name="hasTransitionalElement"
               defaultValue={false}
             />
           </Show>
 
           <Fields.Select
             label="Which contributory benefit, if any, do you currently receive?"
-            name="ContributoryBenefit"
+            name="contributoryBenefit"
             defaultValue="none"
             options={[
               { label: 'Select a contributory benefit', value: '' },
@@ -75,7 +57,7 @@ export function CurrentBenefits() {
 
           <Fields.Select
             label="Which contributory benefit, if any, does your partner currently receive?"
-            name="PartnerContributoryBenefit"
+            name="partnerContributoryBenefit"
             defaultValue="none"
             options={[
               { label: 'Select a contributory benefit', value: '' },
@@ -89,77 +71,77 @@ export function CurrentBenefits() {
 
           <Fields.BooleanRadio
             label="Do you currently receive Carer's Allowance?"
-            name="GetsCarersAllowance"
+            name="getsCarersAllowance"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsCarersAllowance === true}>
-            <Fields.AmountPeriod label="Carer's Allowance income" name="CarersAllowance" />
+            <Fields.AmountPeriod label="Carer's Allowance income" name="carersAllowance" />
           </Show>
 
           <Fields.BooleanRadio
             label="Does your partner currently receive Carer's Allowance?"
-            name="PartnerGetsCarersAllowance"
+            name="partnerGetsCarersAllowance"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.PartnerGetsCarersAllowance === true}>
             <Fields.AmountPeriod
               label="Partner's Carer's Allowance income"
-              name="PartnerCarersAllowance"
+              name="partnerCarersAllowance"
             />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you get Guardian's Allowance?"
-            name="GetsGuardiansAllowance"
+            name="getsGuardiansAllowance"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsGuardiansAllowance === true}>
-            <Fields.AmountPeriod label="Guardian's Allowance income" name="GuardiansAllowance" />
+            <Fields.AmountPeriod label="Guardian's Allowance income" name="guardiansAllowance" />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you get Maternity Allowance?"
-            name="GetsMaternityAllowance"
+            name="getsMaternityAllowance"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsMaternityAllowance === true}>
-            <Fields.AmountPeriod label="Maternity Allowance income" name="MaternityAllowance" />
+            <Fields.AmountPeriod label="Maternity Allowance income" name="maternityAllowance" />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you get Statutory Maternity, Paternity or Adoption pay?"
-            name="GetsStatutoryPay"
+            name="getsStatutoryPay"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsStatutoryPay === true}>
-            <Fields.AmountPeriod label="Statutory pay income" name="StatutoryPay" />
+            <Fields.AmountPeriod label="Statutory pay income" name="statutoryPay" />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you get Occupational Maternity Pay or Occupational Paternity Pay?"
-            name="GetsOccupationalPay"
+            name="getsOccupationalPay"
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.GetsOccupationalPay === true}>
-            <Fields.AmountPeriod label="Occupational pay income" name="OccupationalPay" />
+            <Fields.AmountPeriod label="Occupational pay income" name="occupationalPay" />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you get a War Pension or War Widower's Pension?"
-            name="GetsWarPension"
+            name="getsWarPension"
           />
 
           <Show when={({ formState }) => formState.values.GetsWarPension === true}>
             <Fields.Checkbox
               label="War Pension or War Widower's Pension"
               descriptionBefore="Select all that apply"
-              name="WarPension"
+              name="warPension"
               layout="vertical"
               options={[
                 { label: 'Yes, with Constant Attendance Allowance', value: 'wp_caa' },

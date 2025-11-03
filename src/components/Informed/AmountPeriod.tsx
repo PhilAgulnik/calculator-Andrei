@@ -34,7 +34,7 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
     periodOptions = PERIOD_OPTIONS,
   } = props
 
-  const amountName = props.amountName || `${name}Amount`
+  const amountName = props.amountName || name
   const periodName = props.periodName || `${name}Period`
 
   const amountField = useField({

@@ -63,7 +63,7 @@ export function CouncilTax() {
           <Fields.Select
             required
             label="Council Tax band for property"
-            name="CouncilTaxBand"
+            name="councilTaxBand"
             defaultValue=""
             options={COUNCIL_TAX_BAND_OPTIONS}
             descriptionBefore="If you are unsure you can select 'don't know' and we'll look it up for you. If you are exempt or disregarded from paying Council Tax you can select 'no CT liability' from the options here."
@@ -71,14 +71,14 @@ export function CouncilTax() {
 
           <Fields.BooleanRadio
             label="Eligible for disability-related reduction?"
-            name="EligibleDisabilityReduction"
+            name="eligibleDisabilityReduction"
             defaultValue={false}
             descriptionBefore="Please select 'yes' if you have already successfully applied for a reduction because you have an extra room or adaptations needed for a disabled person."
           />
 
           <Fields.Select
             label="Discounts applicable"
-            name="DiscountsApplicable"
+            name="discountsApplicable"
             defaultValue="25"
             options={DISCOUNTS_OPTIONS}
             descriptionBefore="If you are the only adult in the household you normally qualify for a 25% discount. If no adults count for Council Tax purposes a 50% discount could apply. If you qualify as severely mentally impaired you can select the appropriate discount rate here."
@@ -86,7 +86,7 @@ export function CouncilTax() {
 
           <Fields.Select
             label="Council Tax liability"
-            name="CouncilTaxLiabilitySelector"
+            name="councilTaxLiabilitySelector"
             defaultValue="0"
             options={PAYMENT_PERIOD_OPTIONS}
             descriptionBefore={
@@ -106,14 +106,14 @@ export function CouncilTax() {
 
           <Fields.BooleanRadio
             label="Is the amount shown for your Council Tax liability correct?"
-            name="AmountIsCorrect"
+            name="amountIsCorrect"
             defaultValue={true}
             descriptionBefore="If you are a joint tenant please enter your proportion of the Council Tax here. If your Council Tax liability is different to the amount shown above select 'no' and enter the correct amount."
           />
 
           <Fields.NumberInput
             label="Council Tax liability (AFTER any discounts eg, disability, single person)"
-            name="CouncilTax"
+            name="councilTax"
             defaultValue="0"
             inputClassName="max-w-[140px]"
             descriptionBefore="Please tell us your Council Tax liability after any discounts and reductions but before Council Tax Support is taken off."
@@ -121,7 +121,7 @@ export function CouncilTax() {
 
           <Fields.Select
             label="Payment period"
-            name="CouncilTaxPeriod"
+            name="councilTaxPeriod"
             defaultValue="0"
             options={PAYMENT_PERIOD_OPTIONS}
           />

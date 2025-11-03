@@ -36,8 +36,8 @@ export const PAGES: Page[] = [
     slug: 'children',
     isVisible: false,
     getIsVisible: (entryData: any) => {
-      if (!entryData?.HouseholdChildrenNumber) return false
-      return entryData.HouseholdChildrenNumber > 0
+      if (!entryData?.children) return false
+      return entryData.children > 0
     },
     component: Children,
   },

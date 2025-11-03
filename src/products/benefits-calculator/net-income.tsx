@@ -32,38 +32,47 @@ export function NetIncome() {
 
           <Fields.BooleanRadio
             label="Income from non-state pensions?"
-            name="IsClientIncomeNonStatePensions"
+            name="isClientIncomeNonStatePensions"
             descriptionBefore="Enter the net amount of income received from non-state pensions, after any tax that is deductible. You should include money you get from occupational pensions, annuities, private pensions and any payments you receive from your former employer on account of early retirement."
             defaultValue={false}
           />
 
           <Show when={({ formState }) => formState.values.IsClientIncomeNonStatePensions === true}>
-            <Fields.AmountPeriod label="Income from pension 1" name="IncomeNonStatePension1" />
-            <Fields.AmountPeriod label="Income from pension 2" name="IncomeNonStatePension2" />
-            <Fields.AmountPeriod label="Income from pension 3" name="IncomeNonStatePension3" />
+            <Fields.AmountPeriod label="Income from pension 1" name="incomeNonStatePension1" />
+            <Fields.AmountPeriod label="Income from pension 2" name="incomeNonStatePension2" />
+            <Fields.AmountPeriod label="Income from pension 3" name="incomeNonStatePension3" />
           </Show>
 
           <Fields.BooleanRadio
             label="Income from Fostering Allowance?"
-            name="IsFosteringAllowanceOption"
+            name="isFosteringAllowanceOption"
           />
 
           <Show when={({ formState }) => formState.values.IsFosteringAllowanceOption === true}>
             <Fields.AmountPeriod
               label="Income from Fostering Allowance"
-              name="FosteringAllowance"
+              name="fosteringAllowance"
             />
           </Show>
 
-          <Fields.BooleanRadio
+          <Fields.Radio
             label="Household savings or capital over £6,000?"
-            name="IncomeFromSavingsChk"
+            name="hasSavingsOver6000"
             descriptionBefore="This includes things like cash, bonds, shares and any lump sum payments received as part of equity release."
+            defaultValue="no"
+            options={[
+              { value: 'no', label: 'No' },
+              { value: 'yes', label: 'Yes' },
+            ]}
           />
+
+          <Show when={({ formState }) => formState.values.hasSavingsOver6000 === 'yes'}>
+            <Fields.AmountPeriod label="Savings Amount" name="savings" />
+          </Show>
 
           <Fields.BooleanRadio
             label="Income from spousal maintenance payments"
-            name="IsIncomeFromMaintenancePaymentsOption"
+            name="isIncomeFromMaintenancePaymentsOption"
           />
 
           <Show
@@ -73,13 +82,13 @@ export function NetIncome() {
           >
             <Fields.AmountPeriod
               label="Income from spousal maintenance payments"
-              name="IncomeFromMaintenancePayments"
+              name="incomeFromMaintenancePayments"
             />
           </Show>
 
           <Fields.BooleanRadio
             label="Income from charity or voluntary sources"
-            name="IsIncomeFromVoluntaryCharitablePaymentsOption"
+            name="isIncomeFromVoluntaryCharitablePaymentsOption"
             descriptionBefore="This income is not counted when working out entitlement to benefits."
           />
 
@@ -90,26 +99,26 @@ export function NetIncome() {
           >
             <Fields.AmountPeriod
               label="Income from charity or voluntary sources"
-              name="IncomeFromVoluntaryCharitablePayments"
+              name="incomeFromVoluntaryCharitablePayments"
             />
           </Show>
 
           <Fields.BooleanRadio
             label="Do you own land or property other than your current home?"
-            name="OwnOtherProperty"
+            name="ownOtherProperty"
             descriptionBefore="The net value of property other than your main home counts as savings when means-tested benefits are calculated. We will ask for your valuation on the Savings page."
           />
 
           <Fields.BooleanRadio
             label="Income from sources not already mentioned"
-            name="IsOtherSourcesIncome"
+            name="isOtherSourcesIncome"
             descriptionBefore="If you receive any income that you have not already entered, then you should use the 'i' icon to check if you should enter it here. Please DO NOT INCLUDE income from benefits that we have not asked about (e.g. tax credits, Housing Benefit, Universal Credit, Child Benefit etc.). We calculate means-tested benefits and income from these sources does not need to be entered. Also, do not include income from savings or investments but instead enter the value of these assets as savings."
           />
 
           <Show when={({ formState }) => formState.values.IsOtherSourcesIncome === true}>
             <Fields.AmountPeriod
               label="Income from sources not already mentioned"
-              name="IncomeOtherSources"
+              name="incomeOtherSources"
             />
           </Show>
         </Page.Main>

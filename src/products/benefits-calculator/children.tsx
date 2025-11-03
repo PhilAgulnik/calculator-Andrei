@@ -1,7 +1,7 @@
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
-import { Form, Fields, Show } from '~/components/Informed'
+import { Form, Fields, Show, ArrayField } from '~/components/Informed'
 import { Button } from '~/components/Button'
 
 const CHILDCARE_PERIOD_OPTIONS = [
@@ -12,7 +12,13 @@ const CHILDCARE_PERIOD_OPTIONS = [
 ]
 
 export function Children() {
-  const { entry, goToNextPage, updateEntryData } = useWorkflow()
+  const { entry, goToNextPage, updateEntryData }: any = useWorkflow()
+
+  const childrenCount = entry?.data?.children || 0
+  const initialValue: any = Array.from({ length: childrenCount }, (_, index) => ({
+    name: `Child ${index + 1}`,
+    age: 0,
+  }))
 
   return (
     <>
@@ -27,71 +33,103 @@ export function Children() {
         <Page.Main>
           <h1 className="text-3xl font-bold">About your children</h1>
 
-          <Fields.NumberInput
-            required
-            label="Child's age"
-            name="Age"
-            defaultValue={0}
-            inputClassName="max-w-[140px]"
-            descriptionBefore="If this child is not yet 1 year old, please enter 0 and you will be asked for their date of birth. If this child is not yet born, but you'd like to see your entitlements including them, enter their age as 0 and their date of birth as today."
+          <Fields.AmountPeriod
+            label="Monthly Childcare Costs"
+            name="childcareCosts"
+            defaultAmount={0}
+            defaultPeriod="per_month"
+            descriptionBefore="Enter the total monthly cost of childcare for all your children. Universal Credit can help with up to 85% of childcare costs."
           />
 
-          <Show
-            when={({ formState }) => formState.values.Age === 0 || formState.values.Age === '0'}
-          >
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Please enter child's date of birth</h2>
+          <ArrayField name="childrenInfo" initialValue={initialValue}>
+            {() => {
+              return (
+                <>
+                  <ArrayField.Items>
+                    {({ index }) => {
+                      const childNumber = index + 1
 
-              <div className="flex gap-3">
-                <Fields.NumberInput
-                  label="Day"
-                  name="DOB_Day"
-                  inputClassName="max-w-[80px]"
-                  descriptionAfter="DD"
-                />
-                <Fields.NumberInput
-                  label="Month"
-                  name="DOB_Month"
-                  inputClassName="max-w-[80px]"
-                  descriptionAfter="MM"
-                />
-                <Fields.NumberInput
-                  label="Year"
-                  name="DOB_Year"
-                  inputClassName="max-w-[120px]"
-                  descriptionAfter="YYYY"
-                />
-              </div>
+                      return (
+                        <>
+                          <h2 className="text-2xl font-bold mt-8">Child #{childNumber}</h2>
 
-              <div className="bg-blue-50 border border-blue-200 p-4 rounded">
-                <p>
-                  Please enter the date your child was born in the form above. At the moment we are
-                  unable to calculate benefits for children who are yet to be born. So if you are
-                  pregnant and would like to see your benefits including this child, please enter
-                  today's date as their date of birth.
-                </p>
-              </div>
-            </div>
-          </Show>
+                          <Fields.NumberInput
+                            label="Child's age"
+                            name="age"
+                            inputClassName="max-w-[120px]"
+                            descriptionAfter="If this child is not yet 1 year old, please enter 0 and you will be asked for their date of birth. If this child is not yet born, but you'd like to see your entitlements including them, enter their age as 0 and their date of birth as today."
+                          />
+
+                          <Fields.BooleanRadio
+                            label={`Does Child ${childNumber} have an illness or disability?`}
+                            name="hasDisability"
+                            defaultValue={false}
+                          />
+
+                          <Show
+                            when={({ formState }: any) =>
+                              formState.values.childrenInfo?.[index]?.hasDisability === true
+                            }
+                          >
+                            <Fields.BooleanRadio
+                              label={`Does Child ${childNumber} claim Disability Living Allowance (DLA)?`}
+                              name="claimsDLA"
+                              defaultValue={false}
+                            />
+
+                            <Show
+                              when={({ formState }: any) =>
+                                formState.values.childrenInfo?.[index]?.claimsDLA === true
+                              }
+                            >
+                              <Fields.Radio
+                                label="DLA Care Component Rate"
+                                name="careRate"
+                                options={[
+                                  { value: 'lowest', label: 'Lowest Rate (£26.90)' },
+                                  { value: 'middle', label: 'Middle Rate (£68.10)' },
+                                  { value: 'highest', label: 'Highest Rate (£101.75)' },
+                                ]}
+                              />
+
+                              <Fields.Radio
+                                label="DLA Mobility Component Rate"
+                                name="mobilityRate"
+                                options={[
+                                  { value: 'lowest', label: 'Lowest Rate (£26.90)' },
+                                  { value: 'highest', label: 'Highest Rate (£71.00)' },
+                                ]}
+                              />
+                            </Show>
+                          </Show>
+                        </>
+                      )
+                    }}
+                  </ArrayField.Items>
+                </>
+              )
+            }}
+          </ArrayField>
+
+          {/*  */}
+          {/*  */}
+          {/*  */}
+          {/*  */}
+          {/*  */}
+          {/*  */}
+          {/*  */}
+          {/*  */}
 
           <Fields.BooleanRadio
             label="Do you pay for their childcare?"
-            name="PayForChildcare"
+            name="payForChildcare"
             defaultValue={false}
             descriptionBefore="The childcare must be with a registered childminder or nursery. This can also include childcare such as summer school and after-school clubs."
           />
 
-          <Fields.AmountPeriod
-            required
-            label="Childcare Costs"
-            name="ChildcareCosts"
-            defaultAmount={0}
-            defaultPeriod="per_month"
-          />
-
           <Fields.BooleanRadio
             label="Does your child receive a disability benefit?"
-            name="IsDisabledPerson"
+            name="isDisabledPerson"
             defaultValue={false}
             descriptionBefore="Please answer 'yes' if your child receives Disability Living Allowance, Child Disability Payment or Personal Independence Payment for some aged 16 or over."
           />
@@ -99,7 +137,7 @@ export function Children() {
           <Show when={({ formState }) => formState.values.IsDisabledPerson === false}>
             <Fields.BooleanRadio
               label="Does your child have an illness or disability but you are not claiming a disability benefit for them?"
-              name="IsDisabledNotClaiming"
+              name="isDisabledNotClaiming"
               defaultValue={false}
               descriptionBefore="Please answer 'yes' if your child has an illness, disability or behavioural problem which means they have mobility or care needs but does not receive a disability benefit."
             />

@@ -6,27 +6,17 @@ import { Page } from '~/products/shared/Page'
 import { useWorkflow } from '../shared/use-workflow'
 
 const HOUSING_STATUS_OPTIONS = [
-  {
-    label: 'Council or housing association tenant',
-    value: 'CouncilTenant',
-  },
-  { label: 'Tenant - private sector', value: 'TenantPrivateSector' },
-  { label: 'Mortgage or owned outright', value: 'MortgageOrOwned' },
-  { label: 'Shared ownership', value: 'SharedOwnership' },
-  { label: 'Boarder or lodger', value: 'BoarderOrLodger' },
-  { label: 'Supported accommodation', value: 'SupportedAccommodation' },
-  { label: 'Temporary accommodation', value: 'TemporaryAccommodation' },
-  {
-    label: 'Living rent-free with friends/family',
-    value: 'LivingWithParents',
-  },
-  { label: 'Homeless', value: 'Homeless' },
+  { value: 'no_housing_costs', label: 'Living rent-free', isDefault: true },
+  { value: 'renting', label: 'Renting' },
+  { value: 'homeowner', label: 'Homeowner' },
+  { value: 'other', label: 'Other' },
+  { value: 'in_prison', label: 'In Prison' },
 ]
 
-const CALC_YEARS_OPTIONS = [
-  { label: '2023/24', value: '2023_24' },
-  { label: '2024/25', value: '2024_25' },
-  { label: '2025/26', value: '2025_26' },
+const TAX_YEARS_OPTIONS = [
+  { value: '2025_26', label: '2025/26' },
+  { value: '2024_25', label: '2024/25' },
+  { value: '2023_24', label: '2023/24' },
 ]
 
 export function WhereYouLive() {
@@ -61,98 +51,97 @@ export function WhereYouLive() {
           <Fields.Radio
             required
             label="Which best describes your current housing status?"
-            name="NationalHousingStatus"
+            name="housingStatus"
+            defaultValue="no_housing_costs"
             options={HOUSING_STATUS_OPTIONS}
-            descriptionAfter={
-              <>
-                <Show
-                  when={({ formState }) =>
-                    formState.values.NationalHousingStatus === 'SupportedAccommodation'
-                  }
-                >
-                  <Alert type="info">
-                    If your landlord provides you with support services, supervision or care then
-                    your home may be classified as supported accommodation. Various exemptions from
-                    welfare reforms, such as the benefit cap, apply to people living in supported
-                    accommodation. If you are in doubt about your housing status please read our
-                    information on supported exempt accommodation and/or check with your landlord.
-                  </Alert>
-                </Show>
-
-                <Show
-                  when={({ formState }) =>
-                    formState.values.NationalHousingStatus === 'TemporaryAccommodation'
-                  }
-                >
-                  <Alert type="info">
-                    This is the correct option if your council has placed you in temporary
-                    accommodation while they find alternative accommodation for you. Please enter
-                    the postcode of where you are staying at the moment.
-                  </Alert>
-                </Show>
-
-                <Show
-                  when={({ formState }) =>
-                    formState.values.NationalHousingStatus === 'BoarderOrLodger'
-                  }
-                >
-                  <Alert type="info">
-                    Select this option if you pay rent to someone who also lives in the
-                    accommodation and you are not related to them or staying there as a friend.
-                  </Alert>
-                </Show>
-
-                <Show
-                  when={({ formState }) =>
-                    formState.values.NationalHousingStatus === 'LivingWithParents'
-                  }
-                >
-                  <Alert type="info">
-                    Select this option if you live with a relative or friend on an informal basis,
-                    without a contract to pay rent. You may have an informal arrangement to pay
-                    money to stay there, but you do not have a formal contract to pay rent or
-                    invoices for rent paid.
-                  </Alert>
-                </Show>
-
-                <Show
-                  when={({ formState }) => formState.values.NationalHousingStatus === 'Homeless'}
-                >
-                  <Alert type="info">
-                    You count as homeless if you have no regular place to stay. You may be staying
-                    in different places or on the street. If you don’t have a regular postcode
-                    please instead select the Local Authority area where you stay most often.
-                  </Alert>
-                </Show>
-
-                <Show
-                  when={({ formState }) =>
-                    formState.values.NationalHousingStatus === 'InPrisonOrInHospital'
-                  }
-                >
-                  <Alert type="info">
-                    You have told us you are in prison or in hospital at the moment, but we want to
-                    work out the benefits you will be entitled to when you are back in the
-                    community. If you have nowhere to live back in the community you are most likely
-                    to look for accommodation in the private rented sector. Accordingly, we will ask
-                    you about the rent and Council Tax you expect to pay and will assume that you
-                    are renting privately.
-                  </Alert>
-                </Show>
-              </>
-            }
           />
+
+          <Show when={({ formState }) => formState.values.housingStatus === 'renting'}>
+            <Fields.Radio
+              required
+              label="Tenant Type"
+              name="tenantType"
+              defaultValue="social"
+              options={[
+                { value: 'social', label: 'Social Housing' },
+                { value: 'private', label: 'Private Tenant' },
+              ]}
+              descriptionBefore="Type of rental accommodation"
+            />
+          </Show>
+
+          <Show
+            when={({ formState }) =>
+              formState.values.housingStatus === 'renting' &&
+              formState.values.tenantType === 'private'
+            }
+          >
+            <Fields.Select
+              required
+              label="Please select your Broad Rental Market Area"
+              name="brma"
+              defaultValue=""
+              options={[]}
+              descriptionBefore="We'll use your Broad Rental Market Area (BRMA) to set your Local Housing Allowance (LHA) cap. You can also find out about rent levels and LHA rates in other areas using our affordability map."
+            />
+          </Show>
+
+          <Show when={({ formState }) => formState.values.housingStatus === 'renting'}>
+            <Fields.AmountPeriod label="Monthly Rent" name="rent" defaultValue={0} />
+          </Show>
+
+          <Show when={({ formState }) => formState.values.housingStatus === 'renting'}>
+            <Fields.AmountPeriod label="Service Charges" name="serviceCharges" defaultValue={0} />
+          </Show>
+
+          <Show when={({ formState }) => formState.values.housingStatus !== 'no_housing_costs'}>
+            <Fields.Radio
+              label="Number of Bedrooms"
+              name="bedrooms"
+              defaultValue={1}
+              options={[
+                { value: '0', label: 'Studio' },
+                { value: '1', label: '1 Bedroom' },
+                { value: '2', label: '2 Bedrooms' },
+                { value: '3', label: '3 Bedrooms' },
+                { value: '4', label: '4 Bedrooms' },
+                { value: '5', label: '5+ Bedrooms' },
+              ]}
+            />
+          </Show>
+
+          <Show when={({ formState }) => formState.values.housingStatus !== 'no_housing_costs'}>
+            <Fields.NumberInput
+              label="Number of Non-Dependants"
+              name="nonDependants"
+              defaultValue={0}
+              inputClassName="max-w-[140px]"
+              descriptionBefore="If empty, defaults to 0."
+            />
+          </Show>
 
           <Fields.Select
             label="Work out my entitlements for year"
-            name="CalcYears"
-            options={CALC_YEARS_OPTIONS}
+            name="taxYear"
+            defaultValue="2025_26"
+            options={TAX_YEARS_OPTIONS}
+          />
+
+          <Fields.Radio
+            label="Area"
+            name="area"
+            defaultValue="england"
+            options={[
+              { value: 'england', label: 'England' },
+              { value: 'scotland', label: 'Scotland' },
+              { value: 'wales', label: 'Wales' },
+            ]}
           />
 
           <Fields.TextInput
             required
             label="What is your postcode?"
-            name="Postcode"
+            name="postcode"
             inputClassName="max-w-[150px]"
           />
         </Page.Main>

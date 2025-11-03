@@ -7,7 +7,7 @@ import { SelectField } from './Select'
 import { TextInputField } from './TextInput'
 
 export { Form } from './Form'
-export { Relevant as Show } from 'informed'
+export { Relevant as Show, ArrayField } from 'informed'
 
 export const Fields = {
   AmountPeriod: AmountPeriodField,
