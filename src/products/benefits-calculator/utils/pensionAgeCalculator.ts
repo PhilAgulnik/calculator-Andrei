@@ -28,27 +28,27 @@ export function calculateStatePensionAge(_birthDate: any) {
 
 /**
  * Check if a person is over state pension age
- * @param {number} age - Person's age
+ * @param {number} Age - Person's age
  * @returns {boolean} True if over state pension age
  */
-export function isOverStatePensionAge(age: any) {
+export function isOverStatePensionAge(Age: any) {
   const statePensionAge = 66 // Current state pension age
-  const numericAge = parseInt(age, 10)
+  const numericAge = parseInt(Age, 10)
   return numericAge >= statePensionAge
 }
 
 /**
  * Check if a couple is a "mixed age couple"
  * (one partner over state pension age, one under)
- * @param {number} mainAge - Main person's age
- * @param {number} partnerAge - Partner's age (if applicable)
+ * @param {number} Age - Main person's age
+ * @param {number} PartnerAge - Partner's age (if applicable)
  * @returns {boolean} True if mixed age couple
  */
-export function isMixedAgeCouple(mainAge: any, partnerAge: any) {
-  if (!partnerAge) return false // Not a couple
+export function isMixedAgeCouple(Age: any, PartnerAge: any) {
+  if (!PartnerAge) return false // Not a couple
 
-  const mainOverPensionAge = isOverStatePensionAge(mainAge)
-  const partnerOverPensionAge = isOverStatePensionAge(partnerAge)
+  const mainOverPensionAge = isOverStatePensionAge(Age)
+  const partnerOverPensionAge = isOverStatePensionAge(PartnerAge)
 
   // Mixed age couple: one over pension age, one under
   return (
@@ -58,14 +58,14 @@ export function isMixedAgeCouple(mainAge: any, partnerAge: any) {
 
 /**
  * Check if both partners are over state pension age
- * @param {number} mainAge - Main person's age
- * @param {number} partnerAge - Partner's age (if applicable)
+ * @param {number} Age - Main person's age
+ * @param {number} PartnerAge - Partner's age (if applicable)
  * @returns {boolean} True if both over state pension age
  */
-export function bothOverStatePensionAge(mainAge: any, partnerAge: any) {
-  if (!partnerAge) return isOverStatePensionAge(mainAge) // Single person
+export function bothOverStatePensionAge(Age: any, PartnerAge: any) {
+  if (!PartnerAge) return isOverStatePensionAge(Age) // Single person
 
-  return isOverStatePensionAge(mainAge) && isOverStatePensionAge(partnerAge)
+  return isOverStatePensionAge(Age) && isOverStatePensionAge(PartnerAge)
 }
 
 /**
@@ -73,15 +73,14 @@ export function bothOverStatePensionAge(mainAge: any, partnerAge: any) {
  * Returns: 'over' | 'mixed' | null
  */
 export function getPensionAgeWarningType(formData: any) {
-  const age = formData?.age
-  const partnerAge = formData?.partnerAge
-  const circumstances = formData?.circumstances
-  const isCouple = circumstances === 'couple'
+  const Age = formData?.Age || formData?.age
+  const PartnerAge = formData?.PartnerAge || formData?.partnerAge
+  const HasPartner = formData?.HasPartner !== undefined ? formData.HasPartner : formData?.circumstances === 'couple'
 
-  const mainOver = isOverStatePensionAge(age)
-  const partnerOver = isCouple ? isOverStatePensionAge(partnerAge) : false
+  const mainOver = isOverStatePensionAge(Age)
+  const partnerOver = HasPartner ? isOverStatePensionAge(PartnerAge) : false
 
-  if (!isCouple) {
+  if (!HasPartner) {
     return mainOver ? 'over' : null
   }
 

@@ -134,7 +134,7 @@ export class UniversalCreditCalculator {
 
   calculate(input: any) {
     try {
-      const taxYear = input.taxYear || '2025_26'
+      const taxYear = input.CalcYears || input.taxYear || '2025_26'
       const rates = this.rates[taxYear]
 
       console.log('Calculator received input:', input)
@@ -218,48 +218,53 @@ export class UniversalCreditCalculator {
   }
 
   calculateStandardAllowance(input: any, rates: any) {
-    const { circumstances, age, partnerAge } = input
+    const { HasPartner, Age, PartnerAge } = input
     const standardRates = rates.standardAllowance
 
-    if (circumstances === 'single') {
-      return age < 25 ? standardRates.single.under25 : standardRates.single.over25
+    // HasPartner is boolean: false = single, true = couple
+    if (!HasPartner) {
+      return Age < 25 ? standardRates.single.under25 : standardRates.single.over25
     } else {
-      const maxAge = Math.max(age, partnerAge)
+      const maxAge = Math.max(Age, PartnerAge || 25)
       return maxAge < 25 ? standardRates.couple.under25 : standardRates.couple.over25
     }
   }
 
   calculateHousingElement(input: any, rates: any) {
     const {
-      rent = 0,
-      serviceCharges = 0,
-      tenantType,
-      bedrooms,
-      brma,
-      age = 25,
-      partnerAge = 25,
-      circumstances = 'single',
-      children = 0,
+      Rent = 0,
+      ServiceCharges = 0,
+      NationalHousingStatus,
+      BedroomsCount,
+      Brma,
+      Age = 25,
+      PartnerAge = 25,
+      HasPartner = false,
+      HouseholdChildrenNumber = 0,
       childAges = [],
       childGenders = [],
     } = input
 
+    // Map NationalHousingStatus to tenantType
+    const tenantType = NationalHousingStatus === 'TenantPrivateSector' ? 'private' : 
+                       NationalHousingStatus === 'CouncilTenant' ? 'social' : null
+
     if (tenantType === 'private') {
       // Calculate bedroom entitlement
       const bedroomEntitlement = this.calculateBedroomEntitlement({
-        circumstances,
-        children,
+        HasPartner,
+        HouseholdChildrenNumber,
         childAges,
         childGenders,
-        age,
-        partnerAge,
+        Age,
+        PartnerAge,
       })
 
       // Determine LHA weekly rate and convert to monthly if BRMA provided
       let lhaWeekly = null
       let lhaMonthly = null
-      if (brma) {
-        lhaWeekly = getLHARate(brma, bedroomEntitlement)
+      if (Brma) {
+        lhaWeekly = getLHARate(Brma, bedroomEntitlement)
         lhaMonthly = convertLHAToMonthly(lhaWeekly)
       }
 
@@ -274,13 +279,13 @@ export class UniversalCreditCalculator {
         lhaMonthly = fallback
       }
 
-      const eligibleRent = Math.min(rent + serviceCharges, lhaMonthly)
+      const eligibleRent = Math.min(Rent + ServiceCharges, lhaMonthly)
 
       // Get all LHA rates for the BRMA
       let allRates = {}
-      if (brma) {
+      if (Brma) {
         // Use the new function to get all rates for the BRMA
-        allRates = getAllLHARates(brma)
+        allRates = getAllLHARates(Brma)
       } else {
         // Fallback rates
         allRates = {
@@ -295,41 +300,41 @@ export class UniversalCreditCalculator {
       return {
         amount: eligibleRent,
         lhaDetails: {
-          brma: brma || 'Not selected',
+          brma: Brma || 'Not selected',
           bedroomEntitlement,
           lhaWeekly: lhaWeekly || null,
           lhaMonthly,
-          actualRent: rent + serviceCharges,
+          actualRent: Rent + ServiceCharges,
           eligibleRent,
-          shortfall: Math.max(0, rent + serviceCharges - lhaMonthly),
+          shortfall: Math.max(0, Rent + ServiceCharges - lhaMonthly),
           ...allRates,
         },
       }
     } else {
       // Social housing - simplified calculation
-      return { amount: rent + serviceCharges, lhaDetails: null }
+      return { amount: Rent + ServiceCharges, lhaDetails: null }
     }
   }
 
   calculateBedroomEntitlement(input: any) {
-    const { circumstances, children, childAges, childGenders } = input
+    const { HasPartner, HouseholdChildrenNumber, childAges, childGenders } = input
 
     // Basic entitlement: 1 bedroom for each adult couple or single person
-    let bedrooms = circumstances === 'couple' ? 1 : 1
+    let bedrooms = HasPartner ? 1 : 1
 
-    if (children === 0) {
+    if (HouseholdChildrenNumber === 0) {
       return bedrooms
     }
 
     // For children, we need to consider gender for bedroom sharing rules
-    if (children === 1) {
+    if (HouseholdChildrenNumber === 1) {
       // One child gets their own bedroom
       return bedrooms + 1
     }
 
     // For 2+ children, we need to check if they can share based on gender and age
     const childrenInfo = []
-    for (let i = 0; i < children; i++) {
+    for (let i = 0; i < HouseholdChildrenNumber; i++) {
       childrenInfo.push({
         age: childAges[i] || 0,
         gender: childGenders[i] || 'unknown',
@@ -375,8 +380,8 @@ export class UniversalCreditCalculator {
   }
 
   calculateChildElement(input: any, rates: any) {
-    const { children, childAges, childDisabilities } = input
-    if (children === 0) return 0
+    const { HouseholdChildrenNumber, childAges, childDisabilities } = input
+    if (HouseholdChildrenNumber === 0) return 0
 
     // Two-child limit cutoff date: 6 April 2017
     const twoChildLimitDate = new Date('2017-04-06')
@@ -385,7 +390,7 @@ export class UniversalCreditCalculator {
 
     // If we have specific child ages/birth dates, use them
     if (childAges && childAges.length > 0) {
-      for (let i = 0; i < Math.min(children, childAges.length); i++) {
+      for (let i = 0; i < Math.min(HouseholdChildrenNumber, childAges.length); i++) {
         const childAge = childAges[i]
 
         // Calculate approximate birth date from age
@@ -408,13 +413,13 @@ export class UniversalCreditCalculator {
       // For 1 child: assume they could be pre-2017 (higher rate) for backward compatibility
       // For multiple children: assume eldest is pre-2017, others post-2017
 
-      if (children === 1) {
+      if (HouseholdChildrenNumber === 1) {
         // Single child - use higher rate for backward compatibility with existing calculations
         totalChildElement = rates.childElement.preTwoChildLimit
       } else {
         // Multiple children - assume first is pre-2017, rest are post-2017
         totalChildElement = rates.childElement.preTwoChildLimit // First child
-        totalChildElement += (children - 1) * rates.childElement.postTwoChildLimit // Additional children
+        totalChildElement += (HouseholdChildrenNumber - 1) * rates.childElement.postTwoChildLimit // Additional children
       }
     }
 
@@ -434,23 +439,23 @@ export class UniversalCreditCalculator {
   }
 
   calculateChildcareElement(input: any, rates: any) {
-    const { childcareCosts, children } = input
-    if (children === 0 || childcareCosts === 0) return 0
+    const { ChildcareCosts, HouseholdChildrenNumber } = input
+    if (HouseholdChildrenNumber === 0 || ChildcareCosts === 0) return 0
 
     const maxAmount =
-      children === 1
+      HouseholdChildrenNumber === 1
         ? rates.childcareElement.maxAmountOneChild
         : rates.childcareElement.maxAmountTwoOrMore
     const percentage = rates.childcareElement.maxPercentage / 100
 
-    return Math.min(childcareCosts * percentage, maxAmount)
+    return Math.min(ChildcareCosts * percentage, maxAmount)
   }
 
   calculateCarerElement(input: any, rates: any) {
     const {
-      isCarer,
-      isPartnerCarer,
-      circumstances,
+      ClientCareForDisabled,
+      PartnerCareForDisabled,
+      HasPartner,
       includeCarerElement,
       partnerIncludeCarerElement,
     } = input
@@ -458,14 +463,15 @@ export class UniversalCreditCalculator {
     let carerElement = 0
 
     // Check if client is a carer and wants carer element included
-    if (isCarer === 'yes' && includeCarerElement === 'yes') {
+    // ClientCareForDisabled is boolean, but we also check legacy 'yes' string
+    if ((ClientCareForDisabled === true || ClientCareForDisabled === 'yes') && includeCarerElement === 'yes') {
       carerElement += rates.carerElement
     }
 
     // Check if partner is a carer and wants carer element included
     if (
-      circumstances === 'couple' &&
-      isPartnerCarer === 'yes' &&
+      HasPartner &&
+      (PartnerCareForDisabled === true || PartnerCareForDisabled === 'yes') &&
       partnerIncludeCarerElement === 'yes'
     ) {
       carerElement += rates.carerElement
@@ -475,25 +481,25 @@ export class UniversalCreditCalculator {
   }
 
   calculateLCWRAElement(input: any, rates: any) {
-    const { hasLCWRA, partnerHasLCWRA, circumstances } = input
+    const { HasLCWRA, PartnerHasLCWRA, HasPartner } = input
 
     console.log('LCWRA Debug:', {
-      hasLCWRA,
-      partnerHasLCWRA,
-      circumstances,
+      HasLCWRA,
+      PartnerHasLCWRA,
+      HasPartner,
       rates: rates.lcwraElement,
     })
 
     let lcwraElement = 0
 
     // Check if main person has LCWRA
-    if (hasLCWRA === 'yes') {
+    if (HasLCWRA === 'yes') {
       lcwraElement += rates.lcwraElement
       console.log('Main person LCWRA added:', rates.lcwraElement)
     }
 
     // Check if partner has LCWRA (for couples)
-    if (circumstances === 'couple' && partnerHasLCWRA === 'yes') {
+    if (HasPartner && PartnerHasLCWRA === 'yes') {
       lcwraElement += rates.lcwraElement
       console.log('Partner LCWRA added:', rates.lcwraElement)
     }
@@ -625,26 +631,26 @@ export class UniversalCreditCalculator {
 
   calculateWorkAllowance(input: any, rates: any) {
     const {
-      children,
-      hasLCWRA,
-      partnerHasLCWRA,
-      circumstances,
-      claimsDisabilityBenefits,
-      partnerClaimsDisabilityBenefits,
-      housingStatus,
-      rent,
-      serviceCharges,
+      HouseholdChildrenNumber,
+      HasLCWRA,
+      PartnerHasLCWRA,
+      HasPartner,
+      ClaimsDisabilityBenefits,
+      PartnerClaimsDisabilityBenefits,
+      NationalHousingStatus,
+      Rent,
+      ServiceCharges,
     } = input
 
     // Work allowance only applies if:
     // 1. Have children, OR
     // 2. Main person has LCWRA or claims qualifying disability benefits, OR
     // 3. Partner has LCWRA or claims qualifying disability benefits
-    const hasChildren = children > 0
-    const mainPersonDisabled = hasLCWRA === 'yes' || claimsDisabilityBenefits === 'yes'
+    const hasChildren = HouseholdChildrenNumber > 0
+    const mainPersonDisabled = HasLCWRA === 'yes' || ClaimsDisabilityBenefits === 'yes'
     const partnerDisabled =
-      circumstances === 'couple' &&
-      (partnerHasLCWRA === 'yes' || partnerClaimsDisabilityBenefits === 'yes')
+      HasPartner &&
+      (PartnerHasLCWRA === 'yes' || PartnerClaimsDisabilityBenefits === 'yes')
 
     const eligibleForWorkAllowance = hasChildren || mainPersonDisabled || partnerDisabled
 
@@ -653,7 +659,11 @@ export class UniversalCreditCalculator {
     }
 
     // Determine if has housing costs
-    const hasHousingCosts = housingStatus === 'renting' && (rent > 0 || serviceCharges > 0)
+    const isRenting = NationalHousingStatus === 'TenantPrivateSector' || NationalHousingStatus === 'CouncilTenant'
+    const hasHousingCosts = isRenting && (Rent > 0 || ServiceCharges > 0)
+
+    // Map HasPartner boolean to circumstances string for rates lookup
+    const circumstances = HasPartner ? 'couple' : 'single'
 
     // Return appropriate work allowance
     if (hasHousingCosts) {
@@ -665,11 +675,11 @@ export class UniversalCreditCalculator {
 
   calculateEarningsReduction(input: any, rates: any, _totalElements: any) {
     const {
-      monthlyEarnings,
-      partnerMonthlyEarnings,
-      circumstances,
-      employmentType,
-      partnerEmploymentType,
+      MonthlyEarnings,
+      PartnerMonthlyEarnings,
+      HasPartner,
+      ClientWorkStatus,
+      PartnerEmploymentType,
       netMonthlyEarningsCalculated,
       netMonthlyEarningsOverride,
       partnerNetMonthlyEarningsCalculated,
@@ -680,7 +690,7 @@ export class UniversalCreditCalculator {
     let netEarnings = 0
 
     // Main person net earnings
-    if (employmentType === 'employed' && monthlyEarnings > 0) {
+    if (ClientWorkStatus === 'employed' && MonthlyEarnings > 0) {
       // Use override if provided, otherwise use calculated net earnings
       let mainPersonNet
       if (netMonthlyEarningsOverride !== undefined && netMonthlyEarningsOverride !== '') {
@@ -693,28 +703,28 @@ export class UniversalCreditCalculator {
         console.log('Using calculated net earnings:', netMonthlyEarningsCalculated)
         mainPersonNet = netMonthlyEarningsCalculated
       } else {
-        console.log('Calculating proper net earnings for:', monthlyEarnings)
+        console.log('Calculating proper net earnings for:', MonthlyEarnings)
         // If no net earnings available, calculate proper net earnings (tax, NI, pension)
         mainPersonNet = this.calculateProperNetEarnings(
-          monthlyEarnings,
-          input.pensionType,
-          input.pensionAmount,
-          input.pensionPercentage,
+          MonthlyEarnings,
+          input.PensionType,
+          input.PensionAmount,
+          input.PensionPercentage,
           rates
         )
       }
       console.log('Final mainPersonNet:', mainPersonNet)
       netEarnings += mainPersonNet
-    } else if (employmentType === 'self-employed' && monthlyEarnings > 0) {
+    } else if (ClientWorkStatus === 'self-employed' && MonthlyEarnings > 0) {
       // For self-employed, use gross earnings as no automatic deductions
-      netEarnings += monthlyEarnings
+      netEarnings += MonthlyEarnings
     }
 
     // Partner net earnings
     if (
-      circumstances === 'couple' &&
-      partnerEmploymentType === 'employed' &&
-      partnerMonthlyEarnings > 0
+      HasPartner &&
+      PartnerEmploymentType === 'employed' &&
+      PartnerMonthlyEarnings > 0
     ) {
       // Use override if provided, otherwise use calculated net earnings
       let partnerNet
@@ -731,21 +741,21 @@ export class UniversalCreditCalculator {
       } else {
         // If no net earnings available, calculate proper net earnings (tax, NI, pension)
         partnerNet = this.calculateProperNetEarnings(
-          partnerMonthlyEarnings,
-          input.partnerPensionType,
-          input.partnerPensionAmount,
-          input.partnerPensionPercentage,
+          PartnerMonthlyEarnings,
+          input.PartnerPensionType,
+          input.PartnerPensionAmount,
+          input.PartnerPensionPercentage,
           rates
         )
       }
       netEarnings += partnerNet
     } else if (
-      circumstances === 'couple' &&
-      partnerEmploymentType === 'self-employed' &&
-      partnerMonthlyEarnings > 0
+      HasPartner &&
+      PartnerEmploymentType === 'self-employed' &&
+      PartnerMonthlyEarnings > 0
     ) {
       // For self-employed, use gross earnings as no automatic deductions
-      netEarnings += partnerMonthlyEarnings
+      netEarnings += PartnerMonthlyEarnings
     }
 
     // Calculate work allowance based on eligibility
@@ -753,8 +763,8 @@ export class UniversalCreditCalculator {
     const taperRate = rates.taperRate
 
     console.log('Earnings Reduction Debug:', {
-      employmentType,
-      monthlyEarnings,
+      ClientWorkStatus,
+      MonthlyEarnings,
       netMonthlyEarningsCalculated,
       netMonthlyEarningsOverride,
       finalNetEarnings: netEarnings,
@@ -775,17 +785,17 @@ export class UniversalCreditCalculator {
   }
 
   calculateCapitalDeduction(input: any, totalElements: any, rates: any) {
-    const { savings } = input
+    const { SavingsAmount } = input
 
-    if (savings <= rates.capitalLowerLimit) {
+    if (SavingsAmount <= rates.capitalLowerLimit) {
       return {
         deduction: 0,
         tariffIncome: 0,
         explanation: 'No deduction - savings below £6,000 limit',
       }
-    } else if (savings <= rates.capitalUpperLimit) {
+    } else if (SavingsAmount <= rates.capitalUpperLimit) {
       // Calculate tariff income: for every £250 (or part of £250) over £6,000, £4.35 is treated as monthly income
-      const excessOver6000 = savings - rates.capitalLowerLimit
+      const excessOver6000 = SavingsAmount - rates.capitalLowerLimit
       const tariffUnits = Math.ceil(excessOver6000 / 250) // Round up to nearest £250
       const tariffIncome = tariffUnits * 4.35
 
@@ -828,15 +838,15 @@ export class UniversalCreditCalculator {
   generateWarnings(input: any) {
     const warnings = []
 
-    if (input.monthlyEarnings > 5000) {
+    if (input.MonthlyEarnings > 5000) {
       warnings.push('High earnings may result in no Universal Credit entitlement')
     }
 
-    if (input.savings > 15000) {
+    if (input.SavingsAmount > 15000) {
       warnings.push('High savings may affect Universal Credit entitlement')
     }
 
-    if (input.rent > 2000) {
+    if (input.Rent > 2000) {
       warnings.push('High rent amount - verify this is correct')
     }
 
@@ -863,50 +873,50 @@ export class UniversalCreditCalculator {
       },
       input: {
         // Personal Details
-        taxYear: input.taxYear,
-        circumstances: input.circumstances,
-        age: input.age,
-        partnerAge: input.partnerAge,
-        children: input.children,
+        CalcYears: input.CalcYears,
+        HasPartner: input.HasPartner,
+        Age: input.Age,
+        PartnerAge: input.PartnerAge,
+        HouseholdChildrenNumber: input.HouseholdChildrenNumber,
         childAges: input.childAges || [],
         childDisabilities: input.childDisabilities || [],
         childGenders: input.childGenders || [],
 
         // Housing
-        housingStatus: input.housingStatus,
-        tenantType: input.tenantType,
-        rent: input.rent,
-        serviceCharges: input.serviceCharges,
-        bedrooms: input.bedrooms,
-        area: input.area,
-        nonDependants: input.nonDependants,
+        NationalHousingStatus: input.NationalHousingStatus,
+        Rent: input.Rent,
+        ServiceCharges: input.ServiceCharges,
+        BedroomsCount: input.BedroomsCount,
+        Postcode: input.Postcode,
+        LodgersNumber: input.LodgersNumber,
+        Brma: input.Brma,
 
         // Employment and Disability - Main Person
-        employmentType: input.employmentType,
-        monthlyEarnings: input.monthlyEarnings,
-        childcareCosts: input.childcareCosts,
-        isDisabled: input.isDisabled,
-        claimsDisabilityBenefits: input.claimsDisabilityBenefits,
-        disabilityBenefitType: input.disabilityBenefitType,
-        pipDailyLivingRate: input.pipDailyLivingRate,
-        pipMobilityRate: input.pipMobilityRate,
-        dlaCareRate: input.dlaCareRate,
-        dlaMobilityRate: input.dlaMobilityRate,
-        aaRate: input.aaRate,
-        hasLCWRA: input.hasLCWRA,
+        ClientWorkStatus: input.ClientWorkStatus,
+        MonthlyEarnings: input.MonthlyEarnings,
+        ChildcareCosts: input.ChildcareCosts,
+        ClientDisbens: input.ClientDisbens,
+        ClaimsDisabilityBenefits: input.ClaimsDisabilityBenefits,
+        DisabilityBenefitType: input.DisabilityBenefitType,
+        PipDailyLivingRate: input.PipDailyLivingRate,
+        PipMobilityRate: input.PipMobilityRate,
+        DlaCareRate: input.DlaCareRate,
+        DlaMobilityRate: input.DlaMobilityRate,
+        AaRate: input.AaRate,
+        HasLCWRA: input.HasLCWRA,
 
         // Employment and Disability - Partner
-        partnerEmploymentType: input.partnerEmploymentType,
-        partnerMonthlyEarnings: input.partnerMonthlyEarnings,
-        partnerIsDisabled: input.partnerIsDisabled,
-        partnerClaimsDisabilityBenefits: input.partnerClaimsDisabilityBenefits,
-        partnerDisabilityBenefitType: input.partnerDisabilityBenefitType,
-        partnerPipDailyLivingRate: input.partnerPipDailyLivingRate,
-        partnerPipMobilityRate: input.partnerPipMobilityRate,
-        partnerDlaCareRate: input.partnerDlaCareRate,
-        partnerDlaMobilityRate: input.partnerDlaMobilityRate,
-        partnerAaRate: input.partnerAaRate,
-        partnerHasLCWRA: input.partnerHasLCWRA,
+        PartnerEmploymentType: input.PartnerEmploymentType,
+        PartnerMonthlyEarnings: input.PartnerMonthlyEarnings,
+        PartnerIsDisabled: input.PartnerIsDisabled,
+        PartnerClaimsDisabilityBenefits: input.PartnerClaimsDisabilityBenefits,
+        PartnerDisabilityBenefitType: input.PartnerDisabilityBenefitType,
+        PartnerPipDailyLivingRate: input.PartnerPipDailyLivingRate,
+        PartnerPipMobilityRate: input.PartnerPipMobilityRate,
+        PartnerDlaCareRate: input.PartnerDlaCareRate,
+        PartnerDlaMobilityRate: input.PartnerDlaMobilityRate,
+        PartnerAaRate: input.PartnerAaRate,
+        PartnerHasLCWRA: input.PartnerHasLCWRA,
 
         // Self-employed fields
         businessIncomeBank: input.businessIncomeBank,
@@ -929,8 +939,8 @@ export class UniversalCreditCalculator {
         businessHomeHours: input.businessHomeHours,
 
         // Carer details
-        isCarer: input.isCarer,
-        isPartnerCarer: input.isPartnerCarer,
+        ClientCareForDisabled: input.ClientCareForDisabled,
+        PartnerCareForDisabled: input.PartnerCareForDisabled,
         currentlyReceivingCarersAllowance: input.currentlyReceivingCarersAllowance,
         partnerCurrentlyReceivingCarersAllowance: input.partnerCurrentlyReceivingCarersAllowance,
         caringHours: input.caringHours,
@@ -943,7 +953,7 @@ export class UniversalCreditCalculator {
         partnerIncludeCarerElement: input.partnerIncludeCarerElement,
 
         // Other
-        savings: input.savings,
+        SavingsAmount: input.SavingsAmount,
         otherBenefits: input.otherBenefits,
         otherBenefitsPeriod: input.otherBenefitsPeriod,
       },

@@ -32,7 +32,7 @@ export class ChildBenefitCalculator {
    * @returns {Object} Child Benefit calculation results
    */
   calculateChildBenefit(formData: any, taxYear = '2024_25') {
-    const children = parseInt(formData.children) || 0
+    const children = parseInt(formData.HouseholdChildrenNumber || formData.children) || 0
 
     if (children === 0) {
       return {
@@ -128,15 +128,18 @@ export class ChildBenefitCalculator {
   calculateYearlyEarnings(formData: any) {
     let monthlyEarnings = 0
 
+    // Check employment status (ClientWorkStatus or legacy employmentType)
+    const workStatus = formData.ClientWorkStatus || formData.employmentType
+    const earnings = parseFloat(formData.MonthlyEarnings || formData.monthlyEarnings) || 0
+
     // Check if employed
-    if (formData.employmentType === 'employed' || !formData.employmentType) {
-      const earnings = parseFloat(formData.monthlyEarnings) || 0
+    if (workStatus === 'employed' || !workStatus) {
       const period = formData.monthlyEarningsPeriod || 'per_month'
       monthlyEarnings = this.convertToMonthly(earnings, period)
     }
 
     // Check if self-employed
-    if (formData.employmentType === 'self-employed') {
+    if (workStatus === 'self-employed') {
       const businessIncome =
         (parseFloat(formData.businessIncomeBank) || 0) +
         (parseFloat(formData.businessIncomeCash) || 0)

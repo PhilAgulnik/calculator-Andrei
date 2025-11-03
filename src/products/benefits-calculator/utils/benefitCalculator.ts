@@ -21,7 +21,7 @@ export class BenefitCalculator {
    * @returns {Object} Complete benefit calculation results
    */
   calculateAllBenefits(formData: any) {
-    const taxYear = formData.taxYear || '2024_25'
+    const taxYear = formData.CalcYears || '2024_25'
 
     // Calculate Universal Credit
     const ucResults = this.ucCalculator.calculate(formData)
@@ -58,8 +58,8 @@ export class BenefitCalculator {
         yearly: totalYearlyBenefits,
       },
       summary: {
-        hasChildren: formData.children > 0,
-        isEligibleForChildBenefit: formData.children > 0,
+        hasChildren: (formData.HouseholdChildrenNumber || 0) > 0,
+        isEligibleForChildBenefit: (formData.HouseholdChildrenNumber || 0) > 0,
         isEligibleForUC: ucMonthlyAmount > 0,
         totalBenefits: totalMonthlyBenefits,
       },

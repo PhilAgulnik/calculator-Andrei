@@ -123,29 +123,30 @@ export const getGroupedBRMAs = () => {
 
 // Calculate bedroom entitlement based on circumstances
 export const calculateBedroomEntitlement = (
-  circumstances: any,
-  age: any,
-  _partnerAge: any,
-  children: any,
+  HasPartner: any,
+  Age: any,
+  _PartnerAge: any,
+  HouseholdChildrenNumber: any,
   childAges: any,
   childGenders: any
 ) => {
   let entitlement = 0
 
   // Single person under 35 gets shared accommodation rate
-  if (circumstances === 'single' && age < 35) {
+  // HasPartner is boolean: false = single, true = couple
+  if (!HasPartner && Age < 35) {
     return 'shared'
   }
 
   // Single person 35+ or couple gets 1 bedroom
-  if (circumstances === 'single' && age >= 35) {
+  if (!HasPartner && Age >= 35) {
     entitlement = 1
-  } else if (circumstances === 'couple') {
+  } else if (HasPartner) {
     entitlement = 1
   }
 
   // Add bedrooms for children
-  if (children > 0) {
+  if (HouseholdChildrenNumber > 0) {
     // Children under 10 of same gender share a room
     // Children under 16 of opposite gender need separate rooms
     let childBedrooms = 0
@@ -175,13 +176,13 @@ export const calculateBedroomEntitlement = (
 }
 
 // Get LHA rate for a specific BRMA and bedroom entitlement
-export const getLHARate = (brma: any, bedroomEntitlement: any) => {
+export const getLHARate = (Brma: any, bedroomEntitlement: any) => {
   // Use real data from JSON file if available, otherwise fall back to hardcoded rates
-  const rates: any = (lhaRatesData as any)[brma] || (lhaRates2025_26 as any)[brma] || lhaRates2025_26['Default']
+  const rates: any = (lhaRatesData as any)[Brma] || (lhaRates2025_26 as any)[Brma] || lhaRates2025_26['Default']
 
   // Rates from JSON file are already monthly amounts from GOV.UK CSV data
   // For hardcoded rates (fallback), convert from weekly to monthly
-  const isFromJSON = (lhaRatesData as any)[brma]
+  const isFromJSON = (lhaRatesData as any)[Brma]
 
   switch (bedroomEntitlement) {
     case 'shared':
@@ -200,8 +201,8 @@ export const getLHARate = (brma: any, bedroomEntitlement: any) => {
 }
 
 // Get all LHA rates for a specific BRMA
-export const getAllLHARates = (brma: any) => {
-  const rates: any = (lhaRatesData as any)[brma] || (lhaRates2025_26 as any)[brma] || lhaRates2025_26['Default']
+export const getAllLHARates = (Brma: any) => {
+  const rates: any = (lhaRatesData as any)[Brma] || (lhaRates2025_26 as any)[Brma] || lhaRates2025_26['Default']
 
   // Rates from JSON file are already monthly amounts from GOV.UK CSV data
   // No conversion needed
@@ -241,12 +242,12 @@ export const getBedroomEntitlementDescription = (bedroomEntitlement: any) => {
 
 // Calculate housing element based on LHA
 export const calculateHousingElement = (
-  brma: any,
+  Brma: any,
   bedroomEntitlement: any,
   actualRent: any,
   serviceCharges = 0
 ) => {
-  const weeklyLHARate = getLHARate(brma, bedroomEntitlement)
+  const weeklyLHARate = getLHARate(Brma, bedroomEntitlement)
   const monthlyLHARate = convertLHAToMonthly(weeklyLHARate)
 
   // Housing element is the lower of: actual rent or LHA rate
