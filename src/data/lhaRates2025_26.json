@@ -1,0 +1,877 @@
+{
+  "Birmingham": {
+    "shared": 341.58,
+    "1bed": 695,
+    "2bed": 750,
+    "3bed": 825,
+    "4bed": 1100
+  },
+  "Barrow-in-Furness": {
+    "shared": 395.42,
+    "1bed": 475,
+    "2bed": 500,
+    "3bed": 635,
+    "4bed": 807.5
+  },
+  "Sheffield": {
+    "shared": 350,
+    "1bed": 575,
+    "2bed": 620,
+    "3bed": 680,
+    "4bed": 950
+  },
+  "Bristol": {
+    "shared": 511.33,
+    "1bed": 900,
+    "2bed": 1095,
+    "3bed": 1300,
+    "4bed": 1850
+  },
+  "Bath": {
+    "shared": 540,
+    "1bed": 815,
+    "2bed": 980,
+    "3bed": 1200,
+    "4bed": 1945
+  },
+  "Bournemouth": {
+    "shared": 426.33,
+    "1bed": 695,
+    "2bed": 875,
+    "3bed": 1150,
+    "4bed": 1550
+  },
+  "Canterbury": {
+    "shared": 425,
+    "1bed": 675,
+    "2bed": 895,
+    "3bed": 1100,
+    "4bed": 1315
+  },
+  "Colchester": {
+    "shared": 401.33,
+    "1bed": 625,
+    "2bed": 795,
+    "3bed": 975,
+    "4bed": 1250
+  },
+  "Derby": {
+    "shared": 359.83,
+    "1bed": 450,
+    "2bed": 595,
+    "3bed": 700,
+    "4bed": 935
+  },
+  "Ipswich": {
+    "shared": 366.5,
+    "1bed": 595,
+    "2bed": 717,
+    "3bed": 800,
+    "4bed": 1100
+  },
+  "Leicester": {
+    "shared": 395.42,
+    "1bed": 540,
+    "2bed": 650,
+    "3bed": 775,
+    "4bed": 1050
+  },
+  "Lincoln": {
+    "shared": 354.14,
+    "1bed": 495,
+    "2bed": 600,
+    "3bed": 675,
+    "4bed": 925
+  },
+  "Nottingham": {
+    "shared": 380,
+    "1bed": 550,
+    "2bed": 650,
+    "3bed": 750,
+    "4bed": 970
+  },
+  "Plymouth": {
+    "shared": 400,
+    "1bed": 550,
+    "2bed": 675,
+    "3bed": 800,
+    "4bed": 975
+  },
+  "Reading": {
+    "shared": 391.5,
+    "1bed": 850,
+    "2bed": 1095,
+    "3bed": 1300,
+    "4bed": 1654
+  },
+  "Rotherham": {
+    "shared": 351.33,
+    "1bed": 430,
+    "2bed": 500,
+    "3bed": 550,
+    "4bed": 817.5
+  },
+  "Southampton": {
+    "shared": 425,
+    "1bed": 700,
+    "2bed": 875,
+    "3bed": 1075,
+    "4bed": 1450
+  },
+  "Wigan": {
+    "shared": 339.83,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 595,
+    "4bed": 775
+  },
+  "York": {
+    "shared": 417.67,
+    "1bed": 675,
+    "2bed": 775,
+    "3bed": 825,
+    "4bed": 1200
+  },
+  "Central London": {
+    "shared": 829.83,
+    "1bed": 1439.97,
+    "2bed": 1793.98,
+    "3bed": 2160.02,
+    "4bed": 3060
+  },
+  "Inner East London": {
+    "shared": 699.5,
+    "1bed": 1439.97,
+    "2bed": 1750,
+    "3bed": 2160.02,
+    "4bed": 3000
+  },
+  "Inner South East London": {
+    "shared": 650,
+    "1bed": 1295.5,
+    "2bed": 1550,
+    "3bed": 1950,
+    "4bed": 2625
+  },
+  "Inner South West London": {
+    "shared": 685,
+    "1bed": 1420,
+    "2bed": 1700,
+    "3bed": 2160.02,
+    "4bed": 2900
+  },
+  "Inner West London": {
+    "shared": 760,
+    "1bed": 1350,
+    "2bed": 1625,
+    "3bed": 2050,
+    "4bed": 2550
+  },
+  "Inner North London": {
+    "shared": 708.27,
+    "1bed": 1439.97,
+    "2bed": 1793.98,
+    "3bed": 2160.02,
+    "4bed": 3060
+  },
+  "North West London": {
+    "shared": 621.33,
+    "1bed": 1100,
+    "2bed": 1350,
+    "3bed": 1680,
+    "4bed": 2100
+  },
+  "Outer East London": {
+    "shared": 561.33,
+    "1bed": 1200,
+    "2bed": 1400,
+    "3bed": 1675,
+    "4bed": 1950
+  },
+  "Outer North East London": {
+    "shared": 549.83,
+    "1bed": 1000,
+    "2bed": 1250,
+    "3bed": 1500,
+    "4bed": 1800
+  },
+  "Outer North London": {
+    "shared": 595,
+    "1bed": 1150,
+    "2bed": 1400,
+    "3bed": 1695,
+    "4bed": 2200
+  },
+  "Outer South East London": {
+    "shared": 600,
+    "1bed": 1050,
+    "2bed": 1300,
+    "3bed": 1550,
+    "4bed": 1800
+  },
+  "Outer South West London": {
+    "shared": 591.5,
+    "1bed": 1200,
+    "2bed": 1495,
+    "3bed": 1800,
+    "4bed": 2550
+  },
+  "Outer South London": {
+    "shared": 569.33,
+    "1bed": 950,
+    "2bed": 1200,
+    "3bed": 1500,
+    "4bed": 1950
+  },
+  "Outer West London": {
+    "shared": 576.33,
+    "1bed": 1000,
+    "2bed": 1300,
+    "3bed": 1475,
+    "4bed": 1800
+  },
+  "Walton": {
+    "shared": 620,
+    "1bed": 950,
+    "2bed": 1212,
+    "3bed": 1450,
+    "4bed": 1975
+  },
+  "Brighton": {
+    "shared": 550,
+    "1bed": 900,
+    "2bed": 1200,
+    "3bed": 1400,
+    "4bed": 1800
+  },
+  "Oxford": {
+    "shared": 550.02,
+    "1bed": 899.99,
+    "2bed": 1124.98,
+    "3bed": 1324.99,
+    "4bed": 1750
+  },
+  "Cambridge": {
+    "shared": 500,
+    "1bed": 850,
+    "2bed": 1100,
+    "3bed": 1300,
+    "4bed": 1700
+  },
+  "Coventry": {
+    "shared": 400,
+    "1bed": 600,
+    "2bed": 750,
+    "3bed": 900,
+    "4bed": 1200
+  },
+  "Stoke": {
+    "shared": 350,
+    "1bed": 500,
+    "2bed": 650,
+    "3bed": 800,
+    "4bed": 1000
+  },
+  "Basildon": {
+    "shared": 450,
+    "1bed": 700,
+    "2bed": 850,
+    "3bed": 1000,
+    "4bed": 1300
+  },
+  "Chelmsford": {
+    "shared": 425,
+    "1bed": 650,
+    "2bed": 800,
+    "3bed": 950,
+    "4bed": 1250
+  },
+  "Southend": {
+    "shared": 400,
+    "1bed": 600,
+    "2bed": 750,
+    "3bed": 900,
+    "4bed": 1200
+  },
+  "Harlow": {
+    "shared": 375,
+    "1bed": 550,
+    "2bed": 700,
+    "3bed": 850,
+    "4bed": 1100
+  },
+  "Brentwood": {
+    "shared": 500,
+    "1bed": 800,
+    "2bed": 1000,
+    "3bed": 1200,
+    "4bed": 1500
+  },
+  "West Lothian": {
+    "shared": 410,
+    "1bed": 500,
+    "2bed": 625,
+    "3bed": 750,
+    "4bed": 1112.5
+  },
+  "Scottish Borders": {
+    "shared": 325,
+    "1bed": 375,
+    "2bed": 500,
+    "3bed": 615,
+    "4bed": 985
+  },
+  "Lothian": {
+    "shared": 475,
+    "1bed": 750,
+    "2bed": 970,
+    "3bed": 1375,
+    "4bed": 2180
+  },
+  "Fife": {
+    "shared": 375,
+    "1bed": 450,
+    "2bed": 590,
+    "3bed": 715,
+    "4bed": 1250
+  },
+  "Highland and Islands": {
+    "shared": 380,
+    "1bed": 475,
+    "2bed": 595,
+    "3bed": 695,
+    "4bed": 850
+  },
+  "Aberdeen and Shire": {
+    "shared": 325,
+    "1bed": 475,
+    "2bed": 650,
+    "3bed": 860,
+    "4bed": 1250
+  },
+  "Perth and Kinross": {
+    "shared": 359.17,
+    "1bed": 425,
+    "2bed": 560,
+    "3bed": 750,
+    "4bed": 1250
+  },
+  "Dundee and Angus": {
+    "shared": 375,
+    "1bed": 400,
+    "2bed": 615,
+    "3bed": 795,
+    "4bed": 1100
+  },
+  "Argyll and Bute": {
+    "shared": 350,
+    "1bed": 450,
+    "2bed": 600,
+    "3bed": 695,
+    "4bed": 1200
+  },
+  "West Dunbartonshire": {
+    "shared": 350,
+    "1bed": 475,
+    "2bed": 595,
+    "3bed": 675,
+    "4bed": 950
+  },
+  "East Dunbartonshire": {
+    "shared": 425,
+    "1bed": 550,
+    "2bed": 750,
+    "3bed": 1000,
+    "4bed": 1400
+  },
+  "North Lanarkshire": {
+    "shared": 375,
+    "1bed": 440,
+    "2bed": 550,
+    "3bed": 675,
+    "4bed": 895
+  },
+  "South Lanarkshire": {
+    "shared": 375,
+    "1bed": 450,
+    "2bed": 575,
+    "3bed": 715.84,
+    "4bed": 1107
+  },
+  "Forth Valley": {
+    "shared": 415,
+    "1bed": 460,
+    "2bed": 650,
+    "3bed": 800,
+    "4bed": 1300
+  },
+  "Ayrshires": {
+    "shared": 375,
+    "1bed": 375,
+    "2bed": 475,
+    "3bed": 564.88,
+    "4bed": 800
+  },
+  "Renfrewshire/ Inverclyde": {
+    "shared": 360,
+    "1bed": 400,
+    "2bed": 525,
+    "3bed": 600,
+    "4bed": 1100
+  },
+  "Greater Glasgow": {
+    "shared": 450,
+    "1bed": 695,
+    "2bed": 850,
+    "3bed": 970,
+    "4bed": 1800
+  },
+  "Dumfries and Galloway": {
+    "shared": 335,
+    "1bed": 380,
+    "2bed": 450,
+    "3bed": 500,
+    "4bed": 690
+  },
+  "Anglesey": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Gwynedd": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Conwy": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Denbighshire": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Flintshire": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Wrexham": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Powys": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Ceredigion": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Pembrokeshire": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Carmarthenshire": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Swansea": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Neath Port Talbot": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Bridgend": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Vale of Glamorgan": {
+    "shared": 300,
+    "1bed": 525.77,
+    "2bed": 666,
+    "3bed": 725,
+    "4bed": 1025
+  },
+  "Cardiff": {
+    "shared": 366.1,
+    "1bed": 650,
+    "2bed": 825,
+    "3bed": 925,
+    "4bed": 1300
+  },
+  "Rhondda Cynon Taf": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Merthyr Tydfil": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Caerphilly": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Blaenau Gwent": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Torfaen": {
+    "shared": 325,
+    "1bed": 400,
+    "2bed": 500,
+    "3bed": 600,
+    "4bed": 800
+  },
+  "Monmouthshire": {
+    "shared": 337.41,
+    "1bed": 533.16,
+    "2bed": 700,
+    "3bed": 795,
+    "4bed": 1100
+  },
+  "Newport": {
+    "shared": 337.41,
+    "1bed": 440,
+    "2bed": 600,
+    "3bed": 650,
+    "4bed": 880
+  },
+  "Default": {
+    "shared": 400,
+    "1bed": 600,
+    "2bed": 750,
+    "3bed": 900,
+    "4bed": 1200
+  },
+  "North West Wales": {
+    "shared": 342.41,
+    "1bed": 391.07,
+    "2bed": 550,
+    "3bed": 625,
+    "4bed": 750
+  },
+  "North Clwyd": {
+    "shared": 342.41,
+    "1bed": 395,
+    "2bed": 550,
+    "3bed": 650,
+    "4bed": 855
+  },
+  "Flintshire": {
+    "shared": 380.21,
+    "1bed": 450,
+    "2bed": 595,
+    "3bed": 695,
+    "4bed": 925
+  },
+  "Wrexham": {
+    "shared": 391.31,
+    "1bed": 475,
+    "2bed": 525,
+    "3bed": 600,
+    "4bed": 750
+  },
+  "South Gwynedd": {
+    "shared": 342.41,
+    "1bed": 350,
+    "2bed": 434.52,
+    "3bed": 543.15,
+    "4bed": 675
+  },
+  "North Powys": {
+    "shared": 293.30,
+    "1bed": 325,
+    "2bed": 400,
+    "3bed": 550,
+    "4bed": 675
+  },
+  "Ceredigion": {
+    "shared": 304.17,
+    "1bed": 420,
+    "2bed": 500,
+    "3bed": 550,
+    "4bed": 650
+  },
+  "Brecon & Radnor": {
+    "shared": 332.41,
+    "1bed": 340,
+    "2bed": 440,
+    "3bed": 550,
+    "4bed": 650
+  },
+  "Pembrokeshire": {
+    "shared": 297.41,
+    "1bed": 360,
+    "2bed": 460,
+    "3bed": 575,
+    "4bed": 700
+  },
+  "Carmarthenshire": {
+    "shared": 336.76,
+    "1bed": 400,
+    "2bed": 488.84,
+    "3bed": 535,
+    "4bed": 650
+  },
+  "Swansea": {
+    "shared": 375,
+    "1bed": 525,
+    "2bed": 550,
+    "3bed": 600,
+    "4bed": 820
+  },
+  "Neath Port Talbot": {
+    "shared": 375,
+    "1bed": 411.67,
+    "2bed": 450,
+    "3bed": 500,
+    "4bed": 575
+  },
+  "Bridgend": {
+    "shared": 300,
+    "1bed": 400,
+    "2bed": 525,
+    "3bed": 575,
+    "4bed": 775
+  },
+  "Taff Rhondda": {
+    "shared": 300,
+    "1bed": 375,
+    "2bed": 450,
+    "3bed": 495,
+    "4bed": 650
+  },
+  "Merthyr Cynon": {
+    "shared": 300,
+    "1bed": 434.52,
+    "2bed": 500,
+    "3bed": 550,
+    "4bed": 725
+  },
+  "Caerphilly": {
+    "shared": 337.41,
+    "1bed": 350,
+    "2bed": 495,
+    "3bed": 550,
+    "4bed": 750
+  },
+  "Blaenau Gwent": {
+    "shared": 300,
+    "1bed": 325.89,
+    "2bed": 430,
+    "3bed": 490,
+    "4bed": 650
+  },
+  "Torfaen": {
+    "shared": 300,
+    "1bed": 500,
+    "2bed": 564.88,
+    "3bed": 650,
+    "4bed": 750
+  },
+  "Monmouthshire": {
+    "shared": 337.41,
+    "1bed": 533.16,
+    "2bed": 700,
+    "3bed": 795,
+    "4bed": 1100
+  },
+  "Vale of Glamorgan": {
+    "shared": 300,
+    "1bed": 525.77,
+    "2bed": 666,
+    "3bed": 725,
+    "4bed": 1025
+  },
+  "Cardiff": {
+    "shared": 366.10,
+    "1bed": 650,
+    "2bed": 825,
+    "3bed": 925,
+    "4bed": 1300
+  },
+  "Newport": {
+    "shared": 337.41,
+    "1bed": 440,
+    "2bed": 600,
+    "3bed": 650,
+    "4bed": 880
+  },
+  "West Lothian": {
+    "shared": 410,
+    "1bed": 500,
+    "2bed": 625,
+    "3bed": 750,
+    "4bed": 1112.50
+  },
+  "Scottish Borders": {
+    "shared": 325,
+    "1bed": 375,
+    "2bed": 500,
+    "3bed": 615,
+    "4bed": 985
+  },
+  "Lothian": {
+    "shared": 475,
+    "1bed": 750,
+    "2bed": 970,
+    "3bed": 1375,
+    "4bed": 2180
+  },
+  "Fife": {
+    "shared": 375,
+    "1bed": 450,
+    "2bed": 590,
+    "3bed": 715,
+    "4bed": 1250
+  },
+  "Highland and Islands": {
+    "shared": 380,
+    "1bed": 475,
+    "2bed": 595,
+    "3bed": 695,
+    "4bed": 850
+  },
+  "Aberdeen and Shire": {
+    "shared": 325,
+    "1bed": 475,
+    "2bed": 650,
+    "3bed": 860,
+    "4bed": 1250
+  },
+  "Perth and Kinross": {
+    "shared": 359.17,
+    "1bed": 425,
+    "2bed": 560,
+    "3bed": 750,
+    "4bed": 1250
+  },
+  "Dundee and Angus": {
+    "shared": 375,
+    "1bed": 400,
+    "2bed": 615,
+    "3bed": 795,
+    "4bed": 1100
+  },
+  "Argyll and Bute": {
+    "shared": 350,
+    "1bed": 450,
+    "2bed": 600,
+    "3bed": 695,
+    "4bed": 1200
+  },
+  "West Dunbartonshire": {
+    "shared": 350,
+    "1bed": 475,
+    "2bed": 595,
+    "3bed": 675,
+    "4bed": 950
+  },
+  "East Dunbartonshire": {
+    "shared": 425,
+    "1bed": 550,
+    "2bed": 750,
+    "3bed": 1000,
+    "4bed": 1400
+  },
+  "North Lanarkshire": {
+    "shared": 375,
+    "1bed": 440,
+    "2bed": 550,
+    "3bed": 675,
+    "4bed": 895
+  },
+  "South Lanarkshire": {
+    "shared": 375,
+    "1bed": 450,
+    "2bed": 575,
+    "3bed": 715.84,
+    "4bed": 1107
+  },
+  "Forth Valley": {
+    "shared": 415,
+    "1bed": 460,
+    "2bed": 650,
+    "3bed": 800,
+    "4bed": 1300
+  },
+  "Ayrshires": {
+    "shared": 375,
+    "1bed": 375,
+    "2bed": 475,
+    "3bed": 564.88,
+    "4bed": 800
+  },
+  "Renfrewshire/ Inverclyde": {
+    "shared": 360,
+    "1bed": 400,
+    "2bed": 525,
+    "3bed": 600,
+    "4bed": 1100
+  },
+  "Greater Glasgow": {
+    "shared": 450,
+    "1bed": 695,
+    "2bed": 850,
+    "3bed": 970,
+    "4bed": 1800
+  },
+  "Dumfries and Galloway": {
+    "shared": 335,
+    "1bed": 380,
+    "2bed": 450,
+    "3bed": 500,
+    "4bed": 690
+  }
+}
