@@ -1,6 +1,6 @@
 import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
-import { Form, Fields, Show } from '~/components/Informed'
+import { Form, Fields, Show } from '~/components/Form'
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'

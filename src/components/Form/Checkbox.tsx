@@ -1,8 +1,8 @@
 import clsx from 'clsx'
+import { useField } from 'informed'
 
-import { CommonFieldProps, Field } from './Field'
-import { FieldInfo } from './FieldInfo'
-import { useFieldContext } from './use-app-form'
+import { Field } from './Field'
+import { CommonFieldProps } from './Field'
 
 type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
@@ -52,18 +52,41 @@ type CheckboxFieldProps = CommonFieldProps & {
 }
 
 export function CheckboxField(props: CheckboxFieldProps) {
-  const { label, className, inputClassName, options, descriptionBefore, descriptionAfter, layout } =
-    props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    options,
+    descriptionBefore,
+    descriptionAfter,
+    layout,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<string[]>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    name,
+    defaultValue: defaultValue || [],
+    validate: (value) => {
+      if (required && (!value || (value as string[]).length === 0)) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
       as="div"
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
+      isInvalid={!fieldState.valid}
     >
       <div
         className={clsx(
@@ -77,26 +100,30 @@ export function CheckboxField(props: CheckboxFieldProps) {
         {options.map((option) => (
           <CheckboxInput
             key={option.value}
+            ref={ref}
             value={option.value}
             onChange={(e) => {
-              const currentValue = field.state.value || []
+              const currentValue = value || []
 
               if (e.target.checked) {
-                field.handleChange([...currentValue, option.value])
+                fieldApi.setValue([...currentValue, option.value], e)
               } else {
-                field.handleChange(currentValue.filter((v) => v !== option.value))
+                fieldApi.setValue(
+                  currentValue.filter((v: string) => v !== option.value),
+                  e
+                )
               }
             }}
-            onBlur={field.handleBlur}
-            name={field.name}
+            onBlur={(e) => {
+              fieldApi.setTouched(true, e)
+            }}
+            name={name}
             className={inputClassName}
             label={option.label}
-            checked={field.state.value?.includes(option.value)}
+            checked={value?.includes(option.value)}
           />
         ))}
       </div>
-
-      <FieldInfo field={field} />
     </Field>
   )
 }

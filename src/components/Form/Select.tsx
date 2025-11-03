@@ -1,8 +1,8 @@
 import clsx from 'clsx'
+import { useField } from 'informed'
 
 import { Field } from './Field'
-import { FieldInfo } from './FieldInfo'
-import { useFieldContext } from './use-app-form'
+import { CommonFieldProps } from './Field'
 
 type HTMLSelectProps = React.SelectHTMLAttributes<HTMLSelectElement>
 
@@ -14,10 +14,11 @@ export type SelectInputProps = {
   name: HTMLSelectProps['name']
   className?: string
   options: { value: string; label: string }[]
+  required?: boolean
 }
 
 export function SelectInput(props: SelectInputProps) {
-  const { ref, value, onChange, onBlur, name, className, options } = props
+  const { ref, value, onChange, onBlur, name, className, options, required } = props
 
   return (
     <select
@@ -26,6 +27,7 @@ export function SelectInput(props: SelectInputProps) {
       value={value}
       onChange={onChange}
       onBlur={onBlur}
+      required={required}
       className={clsx(
         'max-w-fit px-3 py-2 border-2 rounded-md',
         'focus:outline-none focus:ring-3 focus:ring-blue-500/30 focus:border-primary',
@@ -44,37 +46,57 @@ export function SelectInput(props: SelectInputProps) {
   )
 }
 
-type SelectFieldProps = {
-  label?: string
-  className?: string
+type SelectFieldProps = CommonFieldProps & {
   inputClassName?: string
   options: { value: string; label: string }[]
-  descriptionBefore?: React.ReactNode
-  descriptionAfter?: React.ReactNode
 }
 
 export function SelectField(props: SelectFieldProps) {
-  const { label, className, inputClassName, options, descriptionBefore, descriptionAfter } = props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    options,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<string>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    name,
+    defaultValue: defaultValue,
+    validate: (value) => {
+      if (required && !value) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
+      isInvalid={!fieldState.valid}
     >
       <SelectInput
-        value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
-        onBlur={field.handleBlur}
-        name={field.name}
+        ref={ref}
+        value={!value && value !== 0 ? '' : value}
+        onChange={(e) => fieldApi.setValue(e.target.value, e)}
+        onBlur={(e) => {
+          fieldApi.setTouched(true, e)
+        }}
+        name={name}
         className={inputClassName}
         options={options}
       />
-
-      <FieldInfo field={field} />
     </Field>
   )
 }

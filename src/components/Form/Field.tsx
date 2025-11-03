@@ -2,27 +2,44 @@ import clsx from 'clsx'
 
 import { Label } from './Label'
 import { useMemo } from 'react'
-import { useFieldContext } from './use-app-form'
+import { FieldInfo } from './FieldInfo'
 
 type FieldProps = {
+  name: string
   children: React.ReactNode
   label?: string
   className?: string
   as?: 'label' | 'div'
   descriptionBefore?: React.ReactNode
   descriptionAfter?: React.ReactNode
+  required?: boolean
+  defaultValue?: any
+  isInvalid?: boolean
 }
 
 export type CommonFieldProps = Pick<
   FieldProps,
-  'label' | 'className' | 'descriptionBefore' | 'descriptionAfter'
+  | 'name'
+  | 'label'
+  | 'className'
+  | 'descriptionBefore'
+  | 'descriptionAfter'
+  | 'required'
+  | 'defaultValue'
 >
 
 export function Field(props: FieldProps) {
-  const { as = 'label', children, label, className, descriptionBefore, descriptionAfter } = props
-
-  const field = useFieldContext()
-  const isInvalid = !field.state.meta.isValid
+  const {
+    name,
+    as = 'label',
+    children,
+    label,
+    className,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    isInvalid,
+  } = props
 
   const Component = useMemo(() => {
     return as
@@ -37,7 +54,7 @@ export function Field(props: FieldProps) {
         className
       )}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label required={required}>{label}</Label>}
       {descriptionBefore && (
         <div className="mb-3 text-slate-600 [&>p+p]:mt-3">{descriptionBefore}</div>
       )}
@@ -45,6 +62,8 @@ export function Field(props: FieldProps) {
       {descriptionAfter && (
         <div className="mt-3 text-slate-600 [&>p+p]:mt-3">{descriptionAfter}</div>
       )}
+
+      <FieldInfo name={name} />
     </Component>
   )
 }

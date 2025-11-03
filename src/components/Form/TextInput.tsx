@@ -1,8 +1,7 @@
 import clsx from 'clsx'
+import { useField } from 'informed'
 
 import { Field } from './Field'
-import { FieldInfo } from './FieldInfo'
-import { useFieldContext } from './use-app-form'
 import { CommonFieldProps } from './Field'
 
 type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>
@@ -15,10 +14,11 @@ export type TextInputProps = {
   name: HTMLInputProps['name']
   style?: React.CSSProperties
   className?: string
+  required?: boolean
 }
 
 export function TextInput(props: TextInputProps) {
-  const { ref, value, onChange, onBlur, name, style, className } = props
+  const { ref, value, onChange, onBlur, name, style, className, required } = props
 
   return (
     <input
@@ -29,6 +29,7 @@ export function TextInput(props: TextInputProps) {
       onChange={onChange}
       onBlur={onBlur}
       style={style}
+      required={required}
       className={clsx(
         'w-full px-3 py-2 border-2 border-slate-400 rounded-md shadow-sm bg-white',
         'focus:outline-none focus:ring-3 focus:ring-blue-500/30 focus:border-primary',
@@ -45,25 +46,52 @@ type TextInputFieldProps = CommonFieldProps & {
 }
 
 export function TextInputField(props: TextInputFieldProps) {
-  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<string>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    type: 'text',
+    name,
+    defaultValue,
+    validate: (value) => {
+      if (required && !value) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
+      isInvalid={!fieldState.valid}
     >
       <TextInput
-        value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
-        onBlur={field.handleBlur}
-        name={field.name}
+        ref={ref}
+        name={name}
         className={inputClassName}
+        value={!value && value !== 0 ? '' : value}
+        onChange={(e) => {
+          fieldApi.setValue(e.target.value, e)
+        }}
+        onBlur={(e) => {
+          fieldApi.setTouched(true, e)
+        }}
       />
-      <FieldInfo field={field} />
     </Field>
   )
 }

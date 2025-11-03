@@ -1,8 +1,8 @@
 import clsx from 'clsx'
+import { useField } from 'informed'
 
-import { CommonFieldProps, Field } from './Field'
-import { FieldInfo } from './FieldInfo'
-import { useFieldContext } from './use-app-form'
+import { Field } from './Field'
+import { CommonFieldProps } from './Field'
 
 type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
@@ -51,17 +51,40 @@ type RadioFieldProps = CommonFieldProps & {
 }
 
 export function RadioField(props: RadioFieldProps) {
-  const { label, className, inputClassName, options, descriptionBefore, descriptionAfter } = props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    options,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<string>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    name,
+    defaultValue,
+    validate: (value) => {
+      if (required && !value) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
       as="div"
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
+      isInvalid={!fieldState.valid}
     >
       <div
         className={clsx(
@@ -73,18 +96,19 @@ export function RadioField(props: RadioFieldProps) {
         {options.map((option) => (
           <RadioInput
             key={option.value}
+            ref={ref}
             value={option.value}
-            onChange={(e) => field.handleChange(e.target.value)}
-            onBlur={field.handleBlur}
-            name={field.name}
+            onChange={(e) => fieldApi.setValue(e.target.value, e)}
+            onBlur={(e) => {
+              fieldApi.setTouched(true, e)
+            }}
+            name={name}
             className={inputClassName}
             label={option.label}
-            checked={field.state.value === option.value}
+            checked={value === option.value}
           />
         ))}
       </div>
-
-      <FieldInfo field={field} />
     </Field>
   )
 }
@@ -92,22 +116,43 @@ export function RadioField(props: RadioFieldProps) {
 type BooleanRadioFieldProps = Omit<RadioFieldProps, 'options'>
 
 const booleanRadioOptions = [
-  { label: 'Yes', value: true },
-  { label: 'No', value: false },
+  { label: 'Yes', value: 'true' },
+  { label: 'No', value: 'false' },
 ]
 
 export function BooleanRadioField(props: BooleanRadioFieldProps) {
-  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<boolean | null>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    name,
+    defaultValue: defaultValue,
+    validate: (value) => {
+      if (required && value == null) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
       as="div"
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
     >
       <div
         className={clsx(
@@ -118,23 +163,25 @@ export function BooleanRadioField(props: BooleanRadioFieldProps) {
       >
         {booleanRadioOptions.map((option) => (
           <RadioInput
-            key={option.value.toString()}
-            value={option.value.toString()}
+            key={option.value}
+            ref={ref}
+            value={option.value}
             onChange={(e) =>
-              field.handleChange(
-                e.target.value === 'true' ? true : e.target.value === 'false' ? false : null
+              fieldApi.setValue(
+                e.target.value === 'true' ? true : e.target.value === 'false' ? false : null,
+                e
               )
             }
-            onBlur={field.handleBlur}
-            name={field.name}
+            onBlur={(e) => {
+              fieldApi.setTouched(true, e)
+            }}
+            name={name}
             className={inputClassName}
             label={option.label}
-            checked={field.state.value === option.value}
+            checked={value === (option.value === 'true')}
           />
         ))}
       </div>
-
-      <FieldInfo field={field} />
     </Field>
   )
 }

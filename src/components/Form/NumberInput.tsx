@@ -1,8 +1,8 @@
 import clsx from 'clsx'
+import { useField } from 'informed'
 
-import { CommonFieldProps, Field } from './Field'
-import { FieldInfo } from './FieldInfo'
-import { useFieldContext } from './use-app-form'
+import { Field } from './Field'
+import { CommonFieldProps } from './Field'
 
 type HTMLInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
@@ -14,10 +14,11 @@ export type NumberInputProps = {
   name: HTMLInputProps['name']
   style?: React.CSSProperties
   className?: string
+  required?: boolean
 }
 
 export function NumberInput(props: NumberInputProps) {
-  const { ref, value, onChange, onBlur, name, style, className } = props
+  const { ref, value, onChange, onBlur, name, style, className, required } = props
 
   return (
     <input
@@ -28,6 +29,7 @@ export function NumberInput(props: NumberInputProps) {
       onChange={onChange}
       onBlur={onBlur}
       style={style}
+      required={required}
       className={clsx(
         'w-full px-3 py-2 border-2 border-slate-400 rounded-md shadow-sm bg-white',
         'focus:outline-none focus:ring-3 focus:ring-blue-500/30 focus:border-primary',
@@ -44,26 +46,52 @@ type NumberInputFieldProps = CommonFieldProps & {
 }
 
 export function NumberInputField(props: NumberInputFieldProps) {
-  const { label, className, inputClassName, descriptionBefore, descriptionAfter } = props
+  const {
+    name,
+    label,
+    className,
+    inputClassName,
+    descriptionBefore,
+    descriptionAfter,
+    required,
+    defaultValue,
+  } = props
 
-  const field = useFieldContext<number>()
+  const { fieldState, fieldApi, render, ref } = useField({
+    type: 'number',
+    name,
+    defaultValue: defaultValue,
+    validate: (value) => {
+      if (required && (value === null || value === undefined || value === '')) {
+        return 'This field is required'
+      }
+      return undefined
+    },
+  })
+  const { value }: any = fieldState
 
-  return (
+  return render(
     <Field
+      name={name}
       label={label}
       className={className}
       descriptionBefore={descriptionBefore}
       descriptionAfter={descriptionAfter}
+      required={required}
+      isInvalid={!fieldState.valid}
     >
       <NumberInput
-        value={field.state.value}
-        onChange={(e) => field.handleChange(Number(e.target.value))}
-        onBlur={field.handleBlur}
-        name={field.name}
+        ref={ref}
+        name={name}
         className={inputClassName}
+        value={!value && value !== 0 ? '' : value}
+        onChange={(e) => {
+          fieldApi.setValue(e.target.value === '' ? '' : Number(e.target.value), e)
+        }}
+        onBlur={(e) => {
+          fieldApi.setTouched(true, e)
+        }}
       />
-
-      <FieldInfo field={field} />
     </Field>
   )
 }

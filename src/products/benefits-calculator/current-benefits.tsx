@@ -1,7 +1,7 @@
 import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
-import { Form, Fields, Show } from '~/components/Informed'
+import { Form, Fields, Show } from '~/components/Form'
 import { Button } from '~/components/Button'
 
 export function CurrentBenefits() {
