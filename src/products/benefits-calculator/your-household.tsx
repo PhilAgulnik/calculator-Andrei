@@ -11,7 +11,7 @@ export function YourHousehold() {
   return (
     <>
       <Form
-        onSubmit={({ values }) => {
+        onSubmit={({ values }: any) => {
           updateEntryData(values)
           goToNextPage()
         }}

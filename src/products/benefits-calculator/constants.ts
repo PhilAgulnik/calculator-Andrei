@@ -1,4 +1,5 @@
 import { AgeAndDisability } from './age-and-disability'
+import { Children } from './children'
 import { CouncilTax } from './council-tax'
 import { CurrentBenefits } from './current-benefits'
 import { HousingCosts } from './housing-costs'
@@ -15,56 +16,58 @@ export const PAGES: Page[] = [
   {
     title: 'Where you live',
     slug: '',
-    glyph: 'chevronRight',
     isVisible: true,
     component: WhereYouLive,
   },
   {
     title: 'Your household',
     slug: 'your-household',
-    glyph: 'chevronRight',
     isVisible: true,
     component: YourHousehold,
   },
   {
     title: 'Age and disability',
     slug: 'age-and-disability',
-    glyph: 'chevronRight',
     isVisible: true,
     component: AgeAndDisability,
   },
   {
+    title: 'About your children',
+    slug: 'children',
+    isVisible: false,
+    getIsVisible: (entryData: any) => {
+      if (!entryData?.HouseholdChildrenNumber) return false
+      return entryData.HouseholdChildrenNumber > 0
+    },
+    component: Children,
+  },
+  {
     title: 'Benefits you currently receive',
     slug: 'current-benefits',
-    glyph: 'chevronRight',
     isVisible: true,
     component: CurrentBenefits,
   },
   {
     title: 'Net income',
     slug: 'net-income',
-    glyph: 'chevronRight',
     isVisible: true,
     component: NetIncome,
   },
   {
     title: 'Housing costs',
     slug: 'housing-costs',
-    glyph: 'chevronRight',
     isVisible: true,
     component: HousingCosts,
   },
   {
     title: 'Council Tax',
     slug: 'council-tax',
-    glyph: 'chevronRight',
     isVisible: true,
     component: CouncilTax,
   },
   {
     title: 'Results',
     slug: 'results',
-    glyph: 'chevronRight',
     isVisible: true,
     component: Results,
   },

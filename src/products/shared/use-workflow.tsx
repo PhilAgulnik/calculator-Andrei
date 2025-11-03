@@ -16,17 +16,34 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
 
   const navigate = useNavigate()
 
+  // Entries
+  const { entries, addEntry, removeEntry, updateEntryData } = useEntries({ basePath })
+
   const [pages, setPages] = useState<Page[]>(initialPages)
 
   const params = useParams({ strict: false })
 
   const id = params?.id || ''
   const slug = params?.slug || ''
+  const entry = entries[id] || null
 
   // Pages
   const visiblePages = useMemo(() => {
-    return pages.filter((page) => page.isVisible)
-  }, [pages])
+    const res: Page[] = []
+
+    for (const page of pages) {
+      if (page.isVisible) {
+        res.push(page)
+        continue
+      }
+
+      if (page.getIsVisible?.(entry?.data)) {
+        res.push(page)
+      }
+    }
+
+    return res
+  }, [pages, entry])
 
   const visiblePagesLength = useMemo(() => {
     return visiblePages.length
@@ -64,8 +81,12 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
     navigate({ to: `${basePath}/$id/$slug`, params: { id, slug: nextPage.slug } })
   }, [basePath, nextPage])
 
-  // Entries
-  const { entries, addEntry, removeEntry, updateEntryData } = useEntries({ basePath })
+  const setPageVisibility = useCallback(
+    (slug: string, isVisible: boolean) => {
+      setPages(pages.map((page) => (page.slug === slug ? { ...page, isVisible } : page)))
+    },
+    [pages]
+  )
 
   const context = useMemo(
     () => ({
@@ -76,11 +97,12 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
       visiblePages,
       basePath,
       goToNextPage,
-      entry: entries[id] || null,
+      entry,
       entries,
       addEntry,
       removeEntry,
       updateEntryData: (data: any) => updateEntryData(id, data),
+      setPageVisibility,
     }),
     [currentPage, nextPage, previousPage, progressPercentage, visiblePages, goToNextPage]
   )

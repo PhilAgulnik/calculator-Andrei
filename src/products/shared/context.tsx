@@ -4,10 +4,10 @@ import { z } from 'zod'
 export type Page = {
   title: string
   slug: string
-  glyph: string
   isVisible: boolean
   component: React.ComponentType<any>
   schema?: z.ZodSchema
+  getIsVisible?: (entryData: any) => boolean
 }
 
 export type WorkflowContext = {
@@ -23,6 +23,7 @@ export type WorkflowContext = {
   addEntry: () => void
   removeEntry: (id: string) => void
   updateEntryData: (data: any) => void
+  setPageVisibility: (slug: string, isVisible: boolean) => void
 }
 
 export const WorkflowContext = createContext<WorkflowContext>({
@@ -38,4 +39,5 @@ export const WorkflowContext = createContext<WorkflowContext>({
   addEntry: () => {},
   removeEntry: () => {},
   updateEntryData: () => {},
+  setPageVisibility: () => {},
 })
