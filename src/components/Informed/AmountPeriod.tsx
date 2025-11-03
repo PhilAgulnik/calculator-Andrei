@@ -15,10 +15,9 @@ type AmountPeriodFieldProps = CommonFieldProps & {
 }
 
 const PERIOD_OPTIONS = [
-  { label: 'Weekly', value: '2' },
-  { label: '4 weeks', value: '3' },
-  { label: 'Monthly', value: '1' },
-  { label: 'Yearly', value: '0' },
+  { label: 'Per Week', value: 'per_week' },
+  { label: 'Per Month', value: 'per_month' },
+  { label: 'Per Year', value: 'per_year' },
 ]
 
 export function AmountPeriodField(props: AmountPeriodFieldProps) {
@@ -31,7 +30,7 @@ export function AmountPeriodField(props: AmountPeriodFieldProps) {
     required,
     defaultValue,
     defaultAmount,
-    defaultPeriod,
+    defaultPeriod = 'per_month',
     periodOptions = PERIOD_OPTIONS,
   } = props
 

@@ -81,26 +81,13 @@ export function Children() {
             descriptionBefore="The childcare must be with a registered childminder or nursery. This can also include childcare such as summer school and after-school clubs."
           />
 
-          <Show when={({ formState }) => formState.values.PayForChildcare === true}>
-            <div className="space-y-4">
-              <Fields.Select
-                label="Over what period do you pay for their childcare?"
-                name="ChildcarePeriod"
-                defaultValue="2"
-                options={CHILDCARE_PERIOD_OPTIONS}
-                descriptionBefore="If your childcare costs vary across the year, how to enter this depends on whether your help with childcare costs will be through Working Tax Credit or Universal Credit."
-              />
-
-              <Fields.NumberInput
-                required
-                label="Amount paid for their childcare"
-                name="ChildcareAmount"
-                defaultValue={0}
-                inputClassName="max-w-[200px]"
-                descriptionBefore="The amount you pay for registered childcare for the period selected"
-              />
-            </div>
-          </Show>
+          <Fields.AmountPeriod
+            required
+            label="Childcare Costs"
+            name="ChildcareCosts"
+            defaultAmount={0}
+            defaultPeriod="per_month"
+          />
 
           <Fields.BooleanRadio
             label="Does your child receive a disability benefit?"
