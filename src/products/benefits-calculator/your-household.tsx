@@ -67,6 +67,17 @@ export function YourHousehold() {
             label="Are you in hospital/residential care, a prisoner, on strike, living abroad or a full-time student?"
             name="ResCare"
           />
+
+          <Show when={({ formState }) => formState.values.HasPartner === true}>
+            <Fields.NumberInput
+              required
+              label="Partner's Age"
+              name="PartnerAge"
+              defaultValue={25}
+              inputClassName="max-w-[140px]"
+              descriptionBefore="Please enter your partner's current age. Enter a valid value from 16 to 120."
+            />
+          </Show>
         </Page.Main>
 
         <Page.Footer nextButton={<Button type="submit">Next →</Button>} />
