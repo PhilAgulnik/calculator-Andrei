@@ -6,6 +6,9 @@ import { getLHARate, convertLHAToMonthly, getAllLHARates, lhaRates2025_26 } from
  */
 
 export class UniversalCreditCalculator {
+  rates: any
+  initialized: any
+
   constructor() {
     this.rates = {
       '2025_26': {
@@ -130,7 +133,7 @@ export class UniversalCreditCalculator {
     return true
   }
 
-  calculate(input) {
+  calculate(input: any) {
     try {
       const taxYear = input.taxYear || '2025_26'
       const rates = this.rates[taxYear]
@@ -160,6 +163,15 @@ export class UniversalCreditCalculator {
 
       // Calculate LCWRA element
       const lcwraElement = this.calculateLCWRAElement(input, rates)
+
+      console.log('✅', {
+        standardAllowance,
+        housingElement,
+        childElement,
+        childcareElement,
+        carerElement,
+        lcwraElement,
+      })
 
       // Calculate total elements
       const totalElements =
@@ -206,7 +218,7 @@ export class UniversalCreditCalculator {
         warnings: this.generateWarnings(input),
         calculatedAt: new Date().toISOString(),
       }
-    } catch (error) {
+    } catch (error: any) {
       return {
         success: false,
         errors: [error.message],
@@ -215,7 +227,7 @@ export class UniversalCreditCalculator {
     }
   }
 
-  calculateStandardAllowance(input, rates) {
+  calculateStandardAllowance(input: any, rates: any) {
     const { circumstances, age, partnerAge } = input
     const standardRates = rates.standardAllowance
 
@@ -227,7 +239,7 @@ export class UniversalCreditCalculator {
     }
   }
 
-  calculateHousingElement(input, rates) {
+  calculateHousingElement(input: any, rates: any) {
     const {
       rent = 0,
       serviceCharges = 0,
@@ -263,8 +275,8 @@ export class UniversalCreditCalculator {
 
       // Fallback to simplified internal rates if BRMA not selected
       if (!lhaMonthly) {
-        let fallback = rates.lhaRates.oneBed // default monthly
-        if (bedroomEntitlement === 'shared' || bedroomEntitlement === 0)
+        let fallback: any = rates.lhaRates.oneBed // default monthly
+        if ((bedroomEntitlement as any) === 'shared' || bedroomEntitlement === 0)
           fallback = rates.lhaRates.shared
         else if (bedroomEntitlement === 2) fallback = rates.lhaRates.twoBed
         else if (bedroomEntitlement === 3) fallback = rates.lhaRates.threeBed
@@ -305,11 +317,11 @@ export class UniversalCreditCalculator {
       }
     } else {
       // Social housing - simplified calculation
-      return { amount: rent + serviceCharges, lhaDetails: null }
+      return { amount: parseFloat(rent) + parseFloat(serviceCharges), lhaDetails: null }
     }
   }
 
-  calculateBedroomEntitlement(input) {
+  calculateBedroomEntitlement(input: any) {
     const { circumstances, children, childAges, childGenders } = input
 
     // Basic entitlement: 1 bedroom for each adult couple or single person
@@ -372,7 +384,7 @@ export class UniversalCreditCalculator {
     return bedrooms + bedroomGroups.length
   }
 
-  calculateChildElement(input, rates) {
+  calculateChildElement(input: any, rates: any) {
     const { children, childAges, childDisabilities } = input
     if (children === 0) return 0
 
@@ -431,7 +443,7 @@ export class UniversalCreditCalculator {
     return totalChildElement
   }
 
-  calculateChildcareElement(input, rates) {
+  calculateChildcareElement(input: any, rates: any) {
     const { childcareCosts, children } = input
     if (children === 0 || childcareCosts === 0) return 0
 
@@ -444,7 +456,7 @@ export class UniversalCreditCalculator {
     return Math.min(childcareCosts * percentage, maxAmount)
   }
 
-  calculateCarerElement(input, rates) {
+  calculateCarerElement(input: any, rates: any) {
     const {
       isCarer,
       isPartnerCarer,
@@ -472,7 +484,7 @@ export class UniversalCreditCalculator {
     return carerElement
   }
 
-  calculateLCWRAElement(input, rates) {
+  calculateLCWRAElement(input: any, rates: any) {
     const { hasLCWRA, partnerHasLCWRA, circumstances } = input
 
     console.log('LCWRA Debug:', {
@@ -501,11 +513,11 @@ export class UniversalCreditCalculator {
   }
 
   calculatePensionContribution(
-    monthlyEarnings,
-    pensionType,
-    pensionAmount,
-    pensionPercentage,
-    rates
+    monthlyEarnings: any,
+    pensionType: any,
+    pensionAmount: any,
+    pensionPercentage: any,
+    rates: any
   ) {
     if (!monthlyEarnings || monthlyEarnings <= 0) {
       return 0
@@ -536,11 +548,11 @@ export class UniversalCreditCalculator {
 
   // Static method for UI to calculate pension contributions with thresholds
   static calculateUIPensionContribution(
-    monthlyEarnings,
-    pensionType,
-    pensionAmount,
-    pensionPercentage,
-    taxYear = '2025_26'
+    monthlyEarnings: any,
+    pensionType: any,
+    pensionAmount: any,
+    pensionPercentage: any,
+    taxYear: any = '2025_26'
   ) {
     // Create temporary calculator instance to access rates
     const tempCalculator = new UniversalCreditCalculator()
@@ -557,11 +569,11 @@ export class UniversalCreditCalculator {
 
   // Static method for UI to calculate proper net earnings (tax, NI, pension)
   static calculateUINetEarnings(
-    monthlyEarnings,
-    pensionType,
-    pensionAmount,
-    pensionPercentage,
-    taxYear = '2025_26'
+    monthlyEarnings: any,
+    pensionType: any,
+    pensionAmount: any,
+    pensionPercentage: any,
+    taxYear: any = '2025_26'
   ) {
     // Create temporary calculator instance to access rates
     const tempCalculator = new UniversalCreditCalculator()
@@ -578,11 +590,11 @@ export class UniversalCreditCalculator {
 
   // Calculate proper net earnings including tax, NI, and pension (matches NetEarningsModule)
   calculateProperNetEarnings(
-    monthlyEarnings,
-    pensionType,
-    pensionAmount,
-    pensionPercentage,
-    rates
+    monthlyEarnings: any,
+    pensionType: any,
+    pensionAmount: any,
+    _pensionPercentage: any,
+    rates: any
   ) {
     // Tax calculation (matches NetEarningsModule logic)
     const personalAllowanceYear = 12570
@@ -621,7 +633,7 @@ export class UniversalCreditCalculator {
     return netEarnings
   }
 
-  calculateWorkAllowance(input, rates) {
+  calculateWorkAllowance(input: any, rates: any) {
     const {
       children,
       hasLCWRA,
@@ -661,7 +673,7 @@ export class UniversalCreditCalculator {
     }
   }
 
-  calculateEarningsReduction(input, rates, totalElements) {
+  calculateEarningsReduction(input: any, rates: any, _totalElements: any) {
     const {
       monthlyEarnings,
       partnerMonthlyEarnings,
@@ -772,7 +784,7 @@ export class UniversalCreditCalculator {
     return reduction
   }
 
-  calculateCapitalDeduction(input, totalElements, rates) {
+  calculateCapitalDeduction(input: any, totalElements: any, rates: any) {
     const { savings } = input
 
     if (savings <= rates.capitalLowerLimit) {
@@ -801,7 +813,7 @@ export class UniversalCreditCalculator {
     }
   }
 
-  calculateBenefitDeduction(input) {
+  calculateBenefitDeduction(input: any) {
     const { otherBenefits, otherBenefitsPeriod } = input
 
     // Convert to monthly if needed
@@ -823,7 +835,7 @@ export class UniversalCreditCalculator {
     return monthlyBenefits
   }
 
-  generateWarnings(input) {
+  generateWarnings(input: any) {
     const warnings = []
 
     if (input.monthlyEarnings > 5000) {
@@ -851,7 +863,7 @@ export class UniversalCreditCalculator {
   }
 
   // New method for testing comparison
-  exportCalculationForTesting(input, results) {
+  exportCalculationForTesting(input: any, results: any) {
     return {
       metadata: {
         calculator: 'Universal Credit Calculator React',

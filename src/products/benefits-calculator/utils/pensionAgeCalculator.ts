@@ -12,7 +12,7 @@
  * @param {Date|string} birthDate - Birth date
  * @returns {number} State pension age in years
  */
-export function calculateStatePensionAge(birthDate) {
+export function calculateStatePensionAge(_birthDate: any) {
   // const date = new Date(birthDate);
   // const birthYear = date.getFullYear();
 
@@ -31,7 +31,7 @@ export function calculateStatePensionAge(birthDate) {
  * @param {number} age - Person's age
  * @returns {boolean} True if over state pension age
  */
-export function isOverStatePensionAge(age) {
+export function isOverStatePensionAge(age: any) {
   const statePensionAge = 66 // Current state pension age
   const numericAge = parseInt(age, 10)
   return numericAge >= statePensionAge
@@ -44,7 +44,7 @@ export function isOverStatePensionAge(age) {
  * @param {number} partnerAge - Partner's age (if applicable)
  * @returns {boolean} True if mixed age couple
  */
-export function isMixedAgeCouple(mainAge, partnerAge) {
+export function isMixedAgeCouple(mainAge: any, partnerAge: any) {
   if (!partnerAge) return false // Not a couple
 
   const mainOverPensionAge = isOverStatePensionAge(mainAge)
@@ -62,7 +62,7 @@ export function isMixedAgeCouple(mainAge, partnerAge) {
  * @param {number} partnerAge - Partner's age (if applicable)
  * @returns {boolean} True if both over state pension age
  */
-export function bothOverStatePensionAge(mainAge, partnerAge) {
+export function bothOverStatePensionAge(mainAge: any, partnerAge: any) {
   if (!partnerAge) return isOverStatePensionAge(mainAge) // Single person
 
   return isOverStatePensionAge(mainAge) && isOverStatePensionAge(partnerAge)
@@ -72,7 +72,7 @@ export function bothOverStatePensionAge(mainAge, partnerAge) {
  * Determine pension-age warning type based on formData
  * Returns: 'over' | 'mixed' | null
  */
-export function getPensionAgeWarningType(formData) {
+export function getPensionAgeWarningType(formData: any) {
   const age = formData?.age
   const partnerAge = formData?.partnerAge
   const circumstances = formData?.circumstances

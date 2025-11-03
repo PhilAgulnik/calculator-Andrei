@@ -3,10 +3,13 @@
  * Handles both Universal Credit and Child Benefit calculations
  */
 
-import { UniversalCreditCalculator } from './calculator.js'
-import { childBenefitCalculator } from './childBenefitCalculator.js'
+import { UniversalCreditCalculator } from './calculator'
+import { childBenefitCalculator } from './childBenefitCalculator'
 
 export class BenefitCalculator {
+  ucCalculator: any
+  childBenefitCalculator: any
+
   constructor() {
     this.ucCalculator = new UniversalCreditCalculator()
     this.childBenefitCalculator = childBenefitCalculator
@@ -17,7 +20,7 @@ export class BenefitCalculator {
    * @param {Object} formData - Form data from the calculator form
    * @returns {Object} Complete benefit calculation results
    */
-  calculateAllBenefits(formData) {
+  calculateAllBenefits(formData: any) {
     const taxYear = formData.taxYear || '2024_25'
 
     // Calculate Universal Credit
@@ -68,7 +71,7 @@ export class BenefitCalculator {
    * @param {Object} formData - Form data from the calculator form
    * @returns {Object} Formatted results for display
    */
-  getCalculationBreakdown(formData) {
+  getCalculationBreakdown(formData: any) {
     const results = this.calculateAllBenefits(formData)
 
     // Format UC breakdown from the calculation details
