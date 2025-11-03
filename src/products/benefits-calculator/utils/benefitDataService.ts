@@ -1,6 +1,6 @@
 // Benefit Data Service - Saves benefit calculator results for use in budgeting tool
 
-export const saveBenefitCalculatorData = (formData, results) => {
+export const saveBenefitCalculatorData = (formData: any, results: any) => {
   try {
     const benefitData = {
       // Form data

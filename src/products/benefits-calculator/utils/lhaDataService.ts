@@ -123,12 +123,12 @@ export const getGroupedBRMAs = () => {
 
 // Calculate bedroom entitlement based on circumstances
 export const calculateBedroomEntitlement = (
-  circumstances,
-  age,
-  partnerAge,
-  children,
-  childAges,
-  childGenders
+  circumstances: any,
+  age: any,
+  _partnerAge: any,
+  children: any,
+  childAges: any,
+  childGenders: any
 ) => {
   let entitlement = 0
 
@@ -153,7 +153,7 @@ export const calculateBedroomEntitlement = (
     let girlsUnder10 = 0
     let children10to15 = 0
 
-    childAges.forEach((childAge, index) => {
+    childAges.forEach((childAge: any, index: any) => {
       if (childAge < 10) {
         if (childGenders[index] === 'male') boysUnder10++
         else girlsUnder10++
@@ -175,13 +175,13 @@ export const calculateBedroomEntitlement = (
 }
 
 // Get LHA rate for a specific BRMA and bedroom entitlement
-export const getLHARate = (brma, bedroomEntitlement) => {
+export const getLHARate = (brma: any, bedroomEntitlement: any) => {
   // Use real data from JSON file if available, otherwise fall back to hardcoded rates
-  const rates = lhaRatesData[brma] || lhaRates2025_26[brma] || lhaRates2025_26['Default']
+  const rates: any = (lhaRatesData as any)[brma] || (lhaRates2025_26 as any)[brma] || lhaRates2025_26['Default']
 
   // Rates from JSON file are already monthly amounts from GOV.UK CSV data
   // For hardcoded rates (fallback), convert from weekly to monthly
-  const isFromJSON = lhaRatesData[brma]
+  const isFromJSON = (lhaRatesData as any)[brma]
 
   switch (bedroomEntitlement) {
     case 'shared':
@@ -200,8 +200,8 @@ export const getLHARate = (brma, bedroomEntitlement) => {
 }
 
 // Get all LHA rates for a specific BRMA
-export const getAllLHARates = (brma) => {
-  const rates = lhaRatesData[brma] || lhaRates2025_26[brma] || lhaRates2025_26['Default']
+export const getAllLHARates = (brma: any) => {
+  const rates: any = (lhaRatesData as any)[brma] || (lhaRates2025_26 as any)[brma] || lhaRates2025_26['Default']
 
   // Rates from JSON file are already monthly amounts from GOV.UK CSV data
   // No conversion needed
@@ -215,14 +215,14 @@ export const getAllLHARates = (brma) => {
 }
 
 // Convert weekly LHA rate to monthly
-export const convertLHAToMonthly = (weeklyRate) => {
+export const convertLHAToMonthly = (weeklyRate: any) => {
   // Note: The LHA rates in our JSON data are already monthly rates
   // This function is kept for compatibility but should not multiply by 4.33
   return weeklyRate // Rates are already monthly
 }
 
 // Get bedroom entitlement description
-export const getBedroomEntitlementDescription = (bedroomEntitlement) => {
+export const getBedroomEntitlementDescription = (bedroomEntitlement: any) => {
   switch (bedroomEntitlement) {
     case 'shared':
       return 'Shared Accommodation Rate (SAR) - for single people under 35'
@@ -241,9 +241,9 @@ export const getBedroomEntitlementDescription = (bedroomEntitlement) => {
 
 // Calculate housing element based on LHA
 export const calculateHousingElement = (
-  brma,
-  bedroomEntitlement,
-  actualRent,
+  brma: any,
+  bedroomEntitlement: any,
+  actualRent: any,
   serviceCharges = 0
 ) => {
   const weeklyLHARate = getLHARate(brma, bedroomEntitlement)

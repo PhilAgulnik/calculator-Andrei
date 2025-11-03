@@ -6,6 +6,8 @@
  */
 
 export class ChildBenefitCalculator {
+  rates: any
+  
   constructor() {
     this.rates = {
       '2025_26': {
@@ -29,7 +31,7 @@ export class ChildBenefitCalculator {
    * @param {string} taxYear - Tax year for rates (e.g., '2024_25')
    * @returns {Object} Child Benefit calculation results
    */
-  calculateChildBenefit(formData, taxYear = '2024_25') {
+  calculateChildBenefit(formData: any, taxYear = '2024_25') {
     const children = parseInt(formData.children) || 0
 
     if (children === 0) {
@@ -90,7 +92,7 @@ export class ChildBenefitCalculator {
    * @param {Object} formData - Form data containing earnings information
    * @returns {Object|null} High income charge message or null
    */
-  getHighIncomeChargeMessage(formData) {
+  getHighIncomeChargeMessage(formData: any) {
     const yearlyEarnings = this.calculateYearlyEarnings(formData)
 
     if (yearlyEarnings < 60000) {
@@ -123,7 +125,7 @@ export class ChildBenefitCalculator {
    * @param {Object} formData - Form data containing earnings information
    * @returns {number} Yearly earnings amount
    */
-  calculateYearlyEarnings(formData) {
+  calculateYearlyEarnings(formData: any) {
     let monthlyEarnings = 0
 
     // Check if employed
@@ -160,7 +162,7 @@ export class ChildBenefitCalculator {
    * @param {Object} formData - Form data containing business expense information
    * @returns {number} Total monthly business expenses
    */
-  calculateTotalBusinessExpenses(formData) {
+  calculateTotalBusinessExpenses(formData: any) {
     const expenses = [
       'businessExpensesRent',
       'businessExpensesRates',
@@ -195,7 +197,7 @@ export class ChildBenefitCalculator {
    * @param {string} period - Period (weekly, fortnightly, monthly, yearly)
    * @returns {number} Monthly amount
    */
-  convertToMonthly(amount, period) {
+  convertToMonthly(amount: any, period: any) {
     switch (period) {
       case 'weekly':
       case 'per_week':
@@ -219,7 +221,7 @@ export class ChildBenefitCalculator {
    * @param {string} taxYear - Tax year (e.g., '2024_25')
    * @returns {Object} Rates for the tax year
    */
-  getRates(taxYear) {
+  getRates(taxYear: any) {
     return this.rates[taxYear] || this.rates['2024_25']
   }
 
