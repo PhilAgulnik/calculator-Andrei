@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/better-off-calculator-test/static/css/main.bbab5188.css",
+    "main.js": "/better-off-calculator-test/static/js/main.9039c981.js",
+    "static/js/239.82cd0f4d.chunk.js": "/better-off-calculator-test/static/js/239.82cd0f4d.chunk.js",
+    "static/js/977.6422bed6.chunk.js": "/better-off-calculator-test/static/js/977.6422bed6.chunk.js",
+    "static/js/455.546136ac.chunk.js": "/better-off-calculator-test/static/js/455.546136ac.chunk.js",
+    "index.html": "/better-off-calculator-test/index.html",
+    "main.bbab5188.css.map": "/better-off-calculator-test/static/css/main.bbab5188.css.map",
+    "main.9039c981.js.map": "/better-off-calculator-test/static/js/main.9039c981.js.map",
+    "239.82cd0f4d.chunk.js.map": "/better-off-calculator-test/static/js/239.82cd0f4d.chunk.js.map",
+    "977.6422bed6.chunk.js.map": "/better-off-calculator-test/static/js/977.6422bed6.chunk.js.map",
+    "455.546136ac.chunk.js.map": "/better-off-calculator-test/static/js/455.546136ac.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bbab5188.css",
+    "static/js/main.9039c981.js"
+  ]
+}
