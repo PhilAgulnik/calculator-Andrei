@@ -294,7 +294,7 @@ export function Results() {
                 onToggle={setShowChildBenefitWeekly}
                 title={`${showChildBenefitWeekly ? 'Hide' : 'See'} weekly amount`}
               >
-                <div className="space-y-2">
+                <div className="space-y-2 mt-4">
                   <div className="flex justify-between py-2 border-t border-slate-200">
                     <span>Child Benefit (Monthly)</span>
                     <span className="font-medium">
