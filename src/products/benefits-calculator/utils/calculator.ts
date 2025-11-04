@@ -164,15 +164,6 @@ export class UniversalCreditCalculator {
       // Calculate LCWRA element
       const lcwraElement = this.calculateLCWRAElement(input, rates)
 
-      console.log('✅', {
-        standardAllowance,
-        housingElement,
-        childElement,
-        childcareElement,
-        carerElement,
-        lcwraElement,
-      })
-
       // Calculate total elements
       const totalElements =
         standardAllowance +
