@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 
 import { Glyph } from './Glyph'
@@ -8,18 +8,26 @@ type AccordionProps = {
   title: string
   open: boolean
   className?: string
+  onToggle?: (isOpen: boolean) => void
 }
 
 export function Accordion(props: AccordionProps) {
-  const { children, title, open, className } = props
+  const { children, title, open, onToggle, className } = props
 
   const [isOpen, setIsOpen] = useState(open)
+
+  useEffect(() => {
+    if (!onToggle) return
+    onToggle(isOpen)
+  }, [isOpen, onToggle])
 
   return (
     <div className={className}>
       <button
         className="flex items-center gap-1 border-none bg-transparent p-0 cursor-pointer text-primary font-[500]"
-        onClick={() => setIsOpen((c) => !c)}
+        onClick={() => {
+          setIsOpen((c) => !c)
+        }}
       >
         <Glyph
           name="chevronRight"

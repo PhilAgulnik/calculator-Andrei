@@ -10,6 +10,7 @@ import { UniversalCreditCalculator } from './utils/calculator'
 import { useWorkflow } from '../shared/use-workflow'
 
 import { DEFAULT_VALUES } from './constants'
+import { Accordion } from '~/components/Accordion'
 
 export function Results() {
   const { entry } = useWorkflow()
@@ -177,73 +178,65 @@ export function Results() {
     <Page.Main>
       <h1 className="text-3xl font-bold mb-6">Calculation Results</h1>
 
-      {/* Calculation Breakdown */}
-      <div className="bg-white border border-slate-300 rounded-lg overflow-hidden">
-        <div className="bg-blue-50 border-b border-blue-200 p-6">
-          <h2 className="text-2xl font-semibold mb-2">Your Universal Credit Entitlement</h2>
-          <p className="text-4xl font-bold text-slate-800">
-            £{calc.finalAmount.toFixed(2)} <span className="text-lg">per month</span>
-          </p>
-          <p className="text-slate-600 mt-2">
-            Tax Year: {results.taxYear?.replace('_', '/') || '2025/26'}
-          </p>
-        </div>
-
-        <div className="space-y-3 p-6">
-          <h2 className="text-2xl font-semibold mb-4">Breakdown</h2>
-
-          <div className="grid">
-            <div className="flex justify-between py-2 border-t border-slate-200">
-              <span>Standard Allowance</span>
-              <span className="font-medium">£{calc.standardAllowance.toFixed(2)}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-t border-slate-200">
-              <span>Housing Element</span>
-              <span className="font-medium">£{calc.housingElement.toFixed(2)}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-t border-slate-200">
-              <span>Child Element</span>
-              <span className="font-medium">£{calc.childElement.toFixed(2)}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-t border-slate-200">
-              <span>Childcare Element</span>
-              <span className="font-medium">£{calc.childcareElement.toFixed(2)}</span>
-            </div>
-
-            {calc.carerElement > 0 && (
-              <div className="flex justify-between py-2 border-t border-slate-200">
-                <span>Carer Element</span>
-                <span className="font-medium">£{calc.carerElement.toFixed(2)}</span>
-              </div>
-            )}
-            {calc.lcwraElement > 0 && (
-              <div className="flex justify-between py-2 border-t border-slate-200">
-                <span>LCWRA Element</span>
-                <span className="font-medium">£{calc.lcwraElement.toFixed(2)}</span>
-              </div>
-            )}
-            <div className="flex justify-between py-2 border-t border-slate-200 font-[600]">
-              <span>Total Elements</span>
-              <span>£{calc.totalElements.toFixed(2)}</span>
-            </div>
+      <div className="grid gap-6">
+        {/* Calculation Breakdown */}
+        <div className="bg-white border border-slate-300 rounded-lg overflow-hidden">
+          <div className="bg-blue-50 border-b border-blue-200 p-6">
+            <h2 className="text-2xl font-semibold mb-2">Your Universal Credit Entitlement</h2>
+            <p className="text-4xl font-bold text-slate-800">
+              £{calc.finalAmount.toFixed(2)} <span className="text-lg">per month</span>
+            </p>
+            <p className="text-slate-600 mt-2">
+              Tax Year: {results.taxYear?.replace('_', '/') || '2025/26'}
+            </p>
           </div>
 
-          {/* Deductions */}
-          <div className="pt-5 mt-5">
-            <h3 className="text-xl font-semibold mb-2">Deductions</h3>
+          <div className="space-y-3 p-6">
+            <h2 className="text-2xl font-semibold mb-4">Breakdown</h2>
 
             <div className="grid">
               <div className="flex justify-between py-2 border-t border-slate-200">
+                <span>Standard Allowance</span>
+                <span className="font-medium">£{calc.standardAllowance.toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between py-2 border-t border-slate-200">
+                <span>Housing Element</span>
+                <span className="font-medium">£{calc.housingElement.toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between py-2 border-t border-slate-200">
+                <span>Child Element</span>
+                <span className="font-medium">£{calc.childElement.toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between py-2 border-t border-slate-200">
+                <span>Childcare Element</span>
+                <span className="font-medium">£{calc.childcareElement.toFixed(2)}</span>
+              </div>
+
+              {calc.carerElement > 0 && (
+                <div className="flex justify-between py-2 border-t border-slate-200">
+                  <span>Carer Element</span>
+                  <span className="font-medium">£{calc.carerElement.toFixed(2)}</span>
+                </div>
+              )}
+              {calc.lcwraElement > 0 && (
+                <div className="flex justify-between py-2 border-t border-slate-200">
+                  <span>LCWRA Element</span>
+                  <span className="font-medium">£{calc.lcwraElement.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between py-2 border-t border-slate-200 font-[600]">
+                <span>Total Elements</span>
+                <span>£{calc.totalElements.toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>
-                  Earnings Reduction
-                  {calc.workAllowance > 0 && (
-                    <span className="text-sm text-gray-600 ml-2">
-                      (after work allowance of -{formatCurrency(calc.workAllowance.toFixed(2))})
-                    </span>
-                  )}
+                  {calc.workAllowance > 0
+                    ? `Earnings Reduction after work allowance of ${formatCurrency(calc.workAllowance)}`
+                    : 'Earnings Reduction'}
                 </span>
                 <span className="font-medium text-red-600">
                   -{formatCurrency(calc.earningsReduction.toFixed(2))}
@@ -256,352 +249,316 @@ export function Results() {
                   -{formatCurrency(calc.capitalDeduction + calc.benefitDeduction)}
                 </span>
               </div>
-            </div>
-          </div>
 
-          {/* Final Amount */}
-          <div className="border-t pt-4 mt-4">
-            <div className="flex justify-between text-xl font-bold">
-              <span>Final Universal Credit</span>
-              <span className="text-blue-700">£{calc.finalAmount.toFixed(2)}</span>
+              {/* Show tariff income details if applicable */}
+              {calc.capitalDeductionDetails && calc.capitalDeductionDetails.tariffIncome > 0 && (
+                <div className="border-t border-slate-200 py-2">
+                  <div className="flex justify-between">
+                    <span>Tariff Income from Savings</span>
+                    <span className="font-medium text-red-600">
+                      -{formatCurrency(calc.capitalDeductionDetails.tariffIncome)}
+                    </span>
+                  </div>
+                  {calc.capitalDeductionDetails.explanation && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">
+                        {calc.capitalDeductionDetails.explanation}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex justify-between py-2 border-t-2 border-slate-300 text-xl font-bold">
+                <span>Final Universal Credit</span>
+                <span className="text-blue-700">£{calc.finalAmount.toFixed(2)}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Tariff Income Details */}
-      {calc.capitalDeductionDetails && calc.capitalDeductionDetails.tariffIncome > 0 && (
-        <div className="bg-white border border-slate-300 rounded-lg p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <span className="font-medium">Tariff Income from Savings</span>
-            <span className="font-medium text-red-600">
-              -{formatCurrency(calc.capitalDeductionDetails.tariffIncome)}
-            </span>
-          </div>
-          {calc.capitalDeductionDetails.explanation && (
-            <p className="text-sm text-gray-600 mt-2">{calc.capitalDeductionDetails.explanation}</p>
-          )}
-        </div>
-      )}
+        {/* Child Benefit Section */}
+        {data && data.children > 0 && (
+          <div className="bg-white border border-slate-300 rounded-lg overflow-hidden">
+            <div className="bg-blue-50 border-b border-blue-200 p-6">
+              <h2 className="text-2xl font-semibold mb-2">Child Benefit</h2>
+              <p className="text-4xl font-bold text-slate-800">
+                £{childBenefitResults.monthlyAmount.toFixed(2)}{' '}
+                <span className="text-lg">per month</span>
+              </p>
+            </div>
 
-      {/* Capital Deduction Details (other cases) */}
-      {calc.capitalDeductionDetails &&
-        calc.capitalDeductionDetails.explanation &&
-        calc.capitalDeductionDetails.tariffIncome === 0 && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-yellow-800">{calc.capitalDeductionDetails.explanation}</p>
+            <div className="p-6">
+              <Accordion
+                open={showChildBenefitWeekly}
+                onToggle={setShowChildBenefitWeekly}
+                title={`${showChildBenefitWeekly ? 'Hide' : 'See'} weekly amount`}
+              >
+                <div className="space-y-2">
+                  <div className="flex justify-between py-2 border-t border-slate-200">
+                    <span>Child Benefit (Monthly)</span>
+                    <span className="font-medium">
+                      {formatCurrency(childBenefitResults.monthlyAmount)}
+                    </span>
+                  </div>
+
+                  {showChildBenefitWeekly && (
+                    <>
+                      <div className="flex justify-between py-2 border-t border-slate-200">
+                        <span>Child Benefit (Weekly)</span>
+                        <span className="font-medium">
+                          {formatCurrency(childBenefitResults.weeklyAmount)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-t border-slate-200">
+                        <span>Child Benefit (Yearly)</span>
+                        <span className="font-medium">
+                          {formatCurrency(childBenefitResults.yearlyAmount)}
+                        </span>
+                      </div>
+                      {childBenefitResults.breakdown &&
+                        childBenefitResults.breakdown.length > 0 && (
+                          <>
+                            {childBenefitResults.breakdown.map((child: any, index: number) => (
+                              <div
+                                key={index}
+                                className="flex justify-between py-2 border-t border-slate-200 text-sm"
+                              >
+                                <span className="text-gray-600">{child.description}</span>
+                                <span>{formatCurrency(child.rate)} per week</span>
+                              </div>
+                            ))}
+                          </>
+                        )}
+                    </>
+                  )}
+                </div>
+              </Accordion>
+
+              <div className="mt-4 pt-4 border-t text-sm text-gray-600">
+                <p>
+                  <strong>Note:</strong> Child Benefit is not means-tested but may be subject to the
+                  High Income Child Benefit Charge if you or your partner earn over £60,000 per
+                  year.
+                </p>
+                <p className="mt-2">
+                  Rates based on official government rates from{' '}
+                  <a
+                    href="https://www.gov.uk/government/publications/rates-and-allowances-tax-credits-child-benefit-and-guardians-allowance/tax-credits-child-benefit-and-guardians-allowance"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    GOV.UK
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
-      {/* Child Benefit Section */}
-      {data && data.children > 0 && (
-        <div className="bg-white border border-slate-300 rounded-lg p-6 mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">Child Benefit</h3>
-            <button
-              type="button"
-              onClick={() => setShowChildBenefitWeekly(!showChildBenefitWeekly)}
-              className="text-blue-600 hover:text-blue-800 text-sm underline"
+        {/* Local Housing Allowance Panel for Private Tenants */}
+        {data && data.tenantType === 'private' && calc.lhaDetails && (
+          <div className="bg-white border border-slate-300 rounded-lg overflow-hidden mb-6">
+            <div
+              className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center cursor-pointer hover:bg-gray-100"
+              onClick={() => setShowLhaPanel(!showLhaPanel)}
             >
-              {showChildBenefitWeekly ? 'Hide' : 'See'} weekly amount
-            </button>
-          </div>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Child Benefit (Monthly)</span>
-              <span className="font-medium">
-                {formatCurrency(childBenefitResults.monthlyAmount)}
-              </span>
+              <h3 className="font-semibold">Local Housing Allowance</h3>
+              <button type="button" className="text-xl font-bold text-gray-600">
+                {showLhaPanel ? '−' : '+'}
+              </button>
             </div>
-            {showChildBenefitWeekly && (
-              <>
+            {showLhaPanel && (
+              <div className="p-6 space-y-3">
                 <div className="flex justify-between">
-                  <span>Child Benefit (Weekly)</span>
-                  <span className="font-medium">
-                    {formatCurrency(childBenefitResults.weeklyAmount)}
-                  </span>
+                  <span className="font-medium">Broad Rental Market Area:</span>
+                  <span>{calc.lhaDetails.brma || 'Not selected'}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Child Benefit (Yearly)</span>
-                  <span className="font-medium">
-                    {formatCurrency(childBenefitResults.yearlyAmount)}
-                  </span>
+                <div
+                  className={`flex justify-between ${
+                    calc.lhaDetails.bedroomEntitlement === 'shared' ? 'bg-blue-50 p-2 rounded' : ''
+                  }`}
+                >
+                  <span className="font-medium">Shared room LHA rate:</span>
+                  <span>{formatCurrency(calc.lhaDetails.sharedRate || 0)}</span>
                 </div>
-                {childBenefitResults.breakdown && childBenefitResults.breakdown.length > 0 && (
-                  <div className="border-t pt-3 mt-3 space-y-1">
-                    {childBenefitResults.breakdown.map((child: any, index: number) => (
-                      <div key={index} className="flex justify-between text-sm">
-                        <span className="text-gray-600">{child.description}</span>
-                        <span>{formatCurrency(child.rate)} per week</span>
-                      </div>
-                    ))}
+                <div
+                  className={`flex justify-between ${
+                    calc.lhaDetails.bedroomEntitlement === 1 ? 'bg-blue-50 p-2 rounded' : ''
+                  }`}
+                >
+                  <span className="font-medium">1 bedroom LHA rate:</span>
+                  <span>{formatCurrency(calc.lhaDetails.oneBedRate || 0)}</span>
+                </div>
+                <div
+                  className={`flex justify-between ${
+                    calc.lhaDetails.bedroomEntitlement === 2 ? 'bg-blue-50 p-2 rounded' : ''
+                  }`}
+                >
+                  <span className="font-medium">2 bedroom LHA rate:</span>
+                  <span>{formatCurrency(calc.lhaDetails.twoBedRate || 0)}</span>
+                </div>
+                <div
+                  className={`flex justify-between ${
+                    calc.lhaDetails.bedroomEntitlement === 3 ? 'bg-blue-50 p-2 rounded' : ''
+                  }`}
+                >
+                  <span className="font-medium">3 bedroom LHA rate:</span>
+                  <span>{formatCurrency(calc.lhaDetails.threeBedRate || 0)}</span>
+                </div>
+                <div
+                  className={`flex justify-between ${
+                    calc.lhaDetails.bedroomEntitlement === 4 ? 'bg-blue-50 p-2 rounded' : ''
+                  }`}
+                >
+                  <span className="font-medium">4 bedroom LHA rate:</span>
+                  <span>{formatCurrency(calc.lhaDetails.fourBedRate || 0)}</span>
+                </div>
+                <div className="border-t pt-3 mt-3">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Your bedroom entitlement:</span>
+                    <span>{calc.lhaDetails.bedroomEntitlement}</span>
                   </div>
-                )}
-              </>
+                  <div className="flex justify-between mt-2">
+                    <span className="font-medium">Relevant LHA rate:</span>
+                    <span>{formatCurrency(calc.lhaDetails.lhaMonthly || 0)}</span>
+                  </div>
+                  <div className="flex justify-between mt-2">
+                    <span className="font-medium">Current rent amount:</span>
+                    <span>{formatCurrency(calc.lhaDetails.actualRent || 0)} / Monthly</span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          <div className="mt-4 pt-4 border-t text-sm text-gray-600">
-            <p>
-              <strong>Note:</strong> Child Benefit is not means-tested but may be subject to the
-              High Income Child Benefit Charge if you or your partner earn over £60,000 per year.
-            </p>
-            <p className="mt-2">
-              Rates based on official government rates from{' '}
-              <a
-                href="https://www.gov.uk/government/publications/rates-and-allowances-tax-credits-child-benefit-and-guardians-allowance/tax-credits-child-benefit-and-guardians-allowance"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                GOV.UK
-              </a>
-            </p>
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Local Housing Allowance Panel for Private Tenants */}
-      {data && data.tenantType === 'private' && calc.lhaDetails && (
-        <div className="bg-white border border-slate-300 rounded-lg overflow-hidden mb-6">
-          <div
-            className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center cursor-pointer hover:bg-gray-100"
-            onClick={() => setShowLhaPanel(!showLhaPanel)}
-          >
-            <h3 className="font-semibold">Local Housing Allowance</h3>
-            <button type="button" className="text-xl font-bold text-gray-600">
-              {showLhaPanel ? '−' : '+'}
-            </button>
-          </div>
-          {showLhaPanel && (
-            <div className="p-6 space-y-3">
-              <div className="flex justify-between">
-                <span className="font-medium">Broad Rental Market Area:</span>
-                <span>{calc.lhaDetails.brma || 'Not selected'}</span>
-              </div>
-              <div
-                className={`flex justify-between ${
-                  calc.lhaDetails.bedroomEntitlement === 'shared' ? 'bg-blue-50 p-2 rounded' : ''
-                }`}
-              >
-                <span className="font-medium">Shared room LHA rate:</span>
-                <span>{formatCurrency(calc.lhaDetails.sharedRate || 0)}</span>
-              </div>
-              <div
-                className={`flex justify-between ${
-                  calc.lhaDetails.bedroomEntitlement === 1 ? 'bg-blue-50 p-2 rounded' : ''
-                }`}
-              >
-                <span className="font-medium">1 bedroom LHA rate:</span>
-                <span>{formatCurrency(calc.lhaDetails.oneBedRate || 0)}</span>
-              </div>
-              <div
-                className={`flex justify-between ${
-                  calc.lhaDetails.bedroomEntitlement === 2 ? 'bg-blue-50 p-2 rounded' : ''
-                }`}
-              >
-                <span className="font-medium">2 bedroom LHA rate:</span>
-                <span>{formatCurrency(calc.lhaDetails.twoBedRate || 0)}</span>
-              </div>
-              <div
-                className={`flex justify-between ${
-                  calc.lhaDetails.bedroomEntitlement === 3 ? 'bg-blue-50 p-2 rounded' : ''
-                }`}
-              >
-                <span className="font-medium">3 bedroom LHA rate:</span>
-                <span>{formatCurrency(calc.lhaDetails.threeBedRate || 0)}</span>
-              </div>
-              <div
-                className={`flex justify-between ${
-                  calc.lhaDetails.bedroomEntitlement === 4 ? 'bg-blue-50 p-2 rounded' : ''
-                }`}
-              >
-                <span className="font-medium">4 bedroom LHA rate:</span>
-                <span>{formatCurrency(calc.lhaDetails.fourBedRate || 0)}</span>
-              </div>
-              <div className="border-t pt-3 mt-3">
-                <div className="flex justify-between">
-                  <span className="font-medium">Your bedroom entitlement:</span>
-                  <span>{calc.lhaDetails.bedroomEntitlement}</span>
-                </div>
-                <div className="flex justify-between mt-2">
-                  <span className="font-medium">Relevant LHA rate:</span>
-                  <span>{formatCurrency(calc.lhaDetails.lhaMonthly || 0)}</span>
-                </div>
-                <div className="flex justify-between mt-2">
-                  <span className="font-medium">Current rent amount:</span>
-                  <span>{formatCurrency(calc.lhaDetails.actualRent || 0)} / Monthly</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Earnings Breakdown with Pension Contributions */}
-      {(data.employmentType === 'employed' ||
-        (data.circumstances === 'couple' && data.partnerEmploymentType === 'employed')) && (
-        <div className="bg-white border border-slate-300 rounded-lg p-6 mb-6">
-          <h3 className="text-xl font-semibold mb-4">Earnings Breakdown</h3>
-          <div className="space-y-3">
-            {/* Main person earnings */}
-            {data.employmentType === 'employed' &&
-              convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod) > 0 && (
-                <>
-                  <div className="flex justify-between">
-                    <span>Your Gross Earnings</span>
-                    <span className="font-medium">
-                      {formatCurrency(
-                        convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod)
-                      )}
-                    </span>
-                  </div>
-                  {data.pensionType === 'amount' &&
-                    convertToMonthly(data.pensionAmount, data.pensionAmountPeriod) > 0 && (
-                      <div className="flex justify-between text-red-600">
-                        <span>Your Pension Contribution (Fixed)</span>
-                        <span className="font-medium">
-                          -
-                          {formatCurrency(
-                            convertToMonthly(data.pensionAmount, data.pensionAmountPeriod)
-                          )}
-                        </span>
-                      </div>
-                    )}
-                  {data.pensionType === 'percentage' && data.pensionPercentage > 0 && (
-                    <div className="flex justify-between text-red-600">
-                      <span>Your Pension Contribution ({data.pensionPercentage}%)</span>
+        {/* Earnings Breakdown with Pension Contributions */}
+        {(data.employmentType === 'employed' ||
+          (data.circumstances === 'couple' && data.partnerEmploymentType === 'employed')) && (
+          <div className="bg-white border border-slate-300 rounded-lg overflow-hidden">
+            <h3 className="text-xl font-semibold mb-4">Earnings Breakdown</h3>
+            <div className="grid">
+              {/* Main person earnings */}
+              {data.employmentType === 'employed' &&
+                convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod) > 0 && (
+                  <>
+                    <div className="flex justify-between py-2 border-t border-slate-200">
+                      <span>Your Gross Earnings</span>
                       <span className="font-medium">
-                        -
                         {formatCurrency(
-                          UniversalCreditCalculator.calculateUIPensionContribution(
-                            convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
-                            'percentage',
-                            0,
-                            data.pensionPercentage,
-                            taxYear
-                          )
+                          convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod)
                         )}
                       </span>
                     </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span>Your Net Earnings</span>
-                    <span className="font-medium">
-                      {formatCurrency(
-                        UniversalCreditCalculator.calculateUINetEarnings(
-                          convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
-                          data.pensionType,
-                          convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
-                          data.pensionPercentage,
-                          taxYear
-                        )
+                    {data.pensionType === 'amount' &&
+                      convertToMonthly(data.pensionAmount, data.pensionAmountPeriod) > 0 && (
+                        <div className="flex justify-between py-2 border-t border-slate-200">
+                          <span>Your Pension Contribution (Fixed)</span>
+                          <span className="font-medium text-red-600">
+                            -
+                            {formatCurrency(
+                              convertToMonthly(data.pensionAmount, data.pensionAmountPeriod)
+                            )}
+                          </span>
+                        </div>
                       )}
-                    </span>
-                  </div>
-                </>
-              )}
-
-            {/* Partner earnings */}
-            {data.circumstances === 'couple' &&
-              data.partnerEmploymentType === 'employed' &&
-              convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod) >
-                0 && (
-                <>
-                  <div className="flex justify-between border-t pt-3 mt-3">
-                    <span>Partner's Gross Earnings</span>
-                    <span className="font-medium">
-                      {formatCurrency(
-                        convertToMonthly(
-                          data.partnerMonthlyEarnings,
-                          data.partnerMonthlyEarningsPeriod
-                        )
-                      )}
-                    </span>
-                  </div>
-                  {data.partnerPensionType === 'amount' &&
-                    convertToMonthly(data.partnerPensionAmount, data.partnerPensionAmountPeriod) >
-                      0 && (
-                      <div className="flex justify-between text-red-600">
-                        <span>Partner's Pension Contribution (Fixed)</span>
-                        <span className="font-medium">
-                          -
-                          {formatCurrency(
-                            convertToMonthly(
-                              data.partnerPensionAmount,
-                              data.partnerPensionAmountPeriod
-                            )
-                          )}
-                        </span>
-                      </div>
-                    )}
-                  {data.partnerPensionType === 'percentage' &&
-                    data.partnerPensionPercentage > 0 && (
-                      <div className="flex justify-between text-red-600">
-                        <span>
-                          Partner's Pension Contribution ({data.partnerPensionPercentage}%)
-                        </span>
-                        <span className="font-medium">
+                    {data.pensionType === 'percentage' && data.pensionPercentage > 0 && (
+                      <div className="flex justify-between py-2 border-t border-slate-200">
+                        <span>Your Pension Contribution ({data.pensionPercentage}%)</span>
+                        <span className="font-medium text-red-600">
                           -
                           {formatCurrency(
                             UniversalCreditCalculator.calculateUIPensionContribution(
-                              convertToMonthly(
-                                data.partnerMonthlyEarnings,
-                                data.partnerMonthlyEarningsPeriod
-                              ),
+                              convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
                               'percentage',
                               0,
-                              data.partnerPensionPercentage,
+                              data.pensionPercentage,
                               taxYear
                             )
                           )}
                         </span>
                       </div>
                     )}
-                  <div className="flex justify-between">
-                    <span>Partner's Net Earnings</span>
-                    <span className="font-medium">
-                      {formatCurrency(
-                        UniversalCreditCalculator.calculateUINetEarnings(
+                    <div className="flex justify-between py-2 border-t border-slate-200">
+                      <span>Your Net Earnings</span>
+                      <span className="font-medium">
+                        {formatCurrency(
+                          UniversalCreditCalculator.calculateUINetEarnings(
+                            convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
+                            data.pensionType,
+                            convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
+                            data.pensionPercentage,
+                            taxYear
+                          )
+                        )}
+                      </span>
+                    </div>
+                  </>
+                )}
+
+              {/* Partner earnings */}
+              {data.circumstances === 'couple' &&
+                data.partnerEmploymentType === 'employed' &&
+                convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod) >
+                  0 && (
+                  <>
+                    <div className="flex justify-between py-2 border-t border-slate-200">
+                      <span>Partner's Gross Earnings</span>
+                      <span className="font-medium">
+                        {formatCurrency(
                           convertToMonthly(
                             data.partnerMonthlyEarnings,
                             data.partnerMonthlyEarningsPeriod
-                          ),
-                          data.partnerPensionType,
-                          convertToMonthly(
-                            data.partnerPensionAmount,
-                            data.partnerPensionAmountPeriod
-                          ),
-                          data.partnerPensionPercentage,
-                          taxYear
-                        )
+                          )
+                        )}
+                      </span>
+                    </div>
+                    {data.partnerPensionType === 'amount' &&
+                      convertToMonthly(data.partnerPensionAmount, data.partnerPensionAmountPeriod) >
+                        0 && (
+                        <div className="flex justify-between py-2 border-t border-slate-200">
+                          <span>Partner's Pension Contribution (Fixed)</span>
+                          <span className="font-medium text-red-600">
+                            -
+                            {formatCurrency(
+                              convertToMonthly(
+                                data.partnerPensionAmount,
+                                data.partnerPensionAmountPeriod
+                              )
+                            )}
+                          </span>
+                        </div>
                       )}
-                    </span>
-                  </div>
-                </>
-              )}
-
-            {/* Total household earnings */}
-            {((data.employmentType === 'employed' &&
-              convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod) > 0) ||
-              (data.circumstances === 'couple' &&
-                data.partnerEmploymentType === 'employed' &&
-                convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod) >
-                  0)) && (
-              <div className="flex justify-between border-t pt-3 mt-3 font-semibold">
-                <span>Total Net Earnings (after pension)</span>
-                <span>
-                  {formatCurrency(
-                    (data.employmentType === 'employed'
-                      ? UniversalCreditCalculator.calculateUINetEarnings(
-                          convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
-                          data.pensionType,
-                          convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
-                          data.pensionPercentage,
-                          taxYear
-                        )
-                      : 0) +
-                      (data.circumstances === 'couple' && data.partnerEmploymentType === 'employed'
-                        ? UniversalCreditCalculator.calculateUINetEarnings(
+                    {data.partnerPensionType === 'percentage' &&
+                      data.partnerPensionPercentage > 0 && (
+                        <div className="flex justify-between py-2 border-t border-slate-200">
+                          <span>
+                            Partner's Pension Contribution ({data.partnerPensionPercentage}%)
+                          </span>
+                          <span className="font-medium text-red-600">
+                            -
+                            {formatCurrency(
+                              UniversalCreditCalculator.calculateUIPensionContribution(
+                                convertToMonthly(
+                                  data.partnerMonthlyEarnings,
+                                  data.partnerMonthlyEarningsPeriod
+                                ),
+                                'percentage',
+                                0,
+                                data.partnerPensionPercentage,
+                                taxYear
+                              )
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    <div className="flex justify-between py-2 border-t border-slate-200">
+                      <span>Partner's Net Earnings</span>
+                      <span className="font-medium">
+                        {formatCurrency(
+                          UniversalCreditCalculator.calculateUINetEarnings(
                             convertToMonthly(
                               data.partnerMonthlyEarnings,
                               data.partnerMonthlyEarningsPeriod
@@ -614,26 +571,77 @@ export function Results() {
                             data.partnerPensionPercentage,
                             taxYear
                           )
-                        : 0)
-                  )}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+                        )}
+                      </span>
+                    </div>
+                  </>
+                )}
 
-      {/* Warnings */}
-      {results.warnings && results.warnings.length > 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold mb-2 text-yellow-800">Warnings</h3>
-          <ul className="list-disc list-inside text-sm text-yellow-800 space-y-1">
-            {results.warnings.map((warning: any, index: number) => (
-              <li key={index}>{warning}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+              {/* Total household earnings */}
+              {((data.employmentType === 'employed' &&
+                convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod) > 0) ||
+                (data.circumstances === 'couple' &&
+                  data.partnerEmploymentType === 'employed' &&
+                  convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod) >
+                    0)) && (
+                <div className="flex justify-between py-2 border-t border-slate-200 font-[600]">
+                  <span>Total Net Earnings (after pension)</span>
+                  <span>
+                    {formatCurrency(
+                      (data.employmentType === 'employed'
+                        ? UniversalCreditCalculator.calculateUINetEarnings(
+                            convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
+                            data.pensionType,
+                            convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
+                            data.pensionPercentage,
+                            taxYear
+                          )
+                        : 0) +
+                        (data.circumstances === 'couple' &&
+                        data.partnerEmploymentType === 'employed'
+                          ? UniversalCreditCalculator.calculateUINetEarnings(
+                              convertToMonthly(
+                                data.partnerMonthlyEarnings,
+                                data.partnerMonthlyEarningsPeriod
+                              ),
+                              data.partnerPensionType,
+                              convertToMonthly(
+                                data.partnerPensionAmount,
+                                data.partnerPensionAmountPeriod
+                              ),
+                              data.partnerPensionPercentage,
+                              taxYear
+                            )
+                          : 0)
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Capital Deduction Details (other cases) */}
+        {calc.capitalDeductionDetails &&
+          calc.capitalDeductionDetails.explanation &&
+          calc.capitalDeductionDetails.tariffIncome === 0 && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-yellow-800">{calc.capitalDeductionDetails.explanation}</p>
+            </div>
+          )}
+
+        {/* Warnings */}
+        {results.warnings && results.warnings.length > 0 && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold mb-2 text-yellow-800">Warnings</h3>
+            <ul className="list-disc list-inside text-sm text-yellow-800 space-y-1">
+              {results.warnings.map((warning: any, index: number) => (
+                <li key={index}>{warning}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </Page.Main>
   )
 }
