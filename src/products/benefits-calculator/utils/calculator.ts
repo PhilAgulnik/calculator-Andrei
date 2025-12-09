@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { getLHARate, convertLHAToMonthly, getAllLHARates, lhaRates2025_26 } from './lhaDataService'
+import { calculateCombinedMinimumIncomeFloor, type WorkHoursConditionality } from './minimumIncomeFloor'
 /**
  * Universal Credit Calculator - React Version
  * Simplified calculator that provides basic Universal Credit calculations
@@ -11,6 +12,47 @@ export class UniversalCreditCalculator {
 
   constructor() {
     this.rates = {
+      '2026_27': {
+        standardAllowance: {
+          single: { under25: 338.58, over25: 424.90 },
+          couple: { under25: 528.34, over25: 666.97 },
+        },
+        childElement: {
+          preTwoChildLimit: 351.88,
+          postTwoChildLimit: 303.94,
+        },
+        disabledChildElement: {
+          lowerRate: 164.79,
+          higherRate: 514.71,
+        },
+        childcareElement: {
+          maxPercentage: 85,
+          maxAmountOneChild: 1071.09,
+          maxAmountTwoOrMore: 1836.16,
+        },
+        workAllowance: {
+          single: { withHousing: 427, withoutHousing: 710 },
+          couple: { withHousing: 427, withoutHousing: 710 },
+        },
+        taperRate: 0.55,
+        carerElement: 209.34,
+        lcwraElement: 429.80, // Pre-April 26 claimants (protected rate)
+        lcwraElementNew: 217.26, // Post-April 26 new claimants
+        capitalLowerLimit: 6000,
+        capitalUpperLimit: 16000,
+        capitalDeductionRate: 0.04,
+        pensionThresholds: {
+          lowerEarningsLimit: 6240,
+          upperEarningsLimit: 50270,
+        },
+        lhaRates: {
+          shared: 300,
+          oneBed: 400,
+          twoBed: 500,
+          threeBed: 600,
+          fourBed: 700,
+        },
+      },
       '2025_26': {
         standardAllowance: {
           single: { under25: 316.98, over25: 400.14 },
@@ -35,7 +77,8 @@ export class UniversalCreditCalculator {
         },
         taperRate: 0.55,
         carerElement: 201.68,
-        lcwraElement: 423.27,
+        lcwraElement: 423.27, // All claimants get this rate in 2025/26
+        lcwraElementNew: 423.27, // Same rate - split only applies from April 2026
         // Capital limits
         capitalLowerLimit: 6000,
         capitalUpperLimit: 16000,
@@ -175,7 +218,8 @@ export class UniversalCreditCalculator {
 
       // Calculate work allowance and earnings reduction
       const workAllowance = this.calculateWorkAllowance(input, rates)
-      const earningsReduction = this.calculateEarningsReduction(input, rates, totalElements)
+      const earningsReductionResult = this.calculateEarningsReduction(input, rates, totalElements)
+      const earningsReduction = earningsReductionResult.reduction
 
       // Calculate other deductions
       const capitalDeductionResult = this.calculateCapitalDeduction(input, totalElements, rates)
@@ -205,6 +249,7 @@ export class UniversalCreditCalculator {
           benefitDeduction,
           finalAmount,
           lhaDetails,
+          mifDetails: earningsReductionResult.mifDetails,
         },
         warnings: this.generateWarnings(input),
         calculatedAt: new Date().toISOString(),
@@ -476,27 +521,55 @@ export class UniversalCreditCalculator {
   }
 
   calculateLCWRAElement(input: any, rates: any) {
-    const { hasLCWRA, partnerHasLCWRA, circumstances } = input
+    const {
+      hasLCWRA,
+      lcwraClaimantType,
+      lcwraProtectedGroup,
+      partnerHasLCWRA,
+      partnerLcwraClaimantType,
+      partnerLcwraProtectedGroup,
+      circumstances
+    } = input
 
     console.log('LCWRA Debug:', {
       hasLCWRA,
+      lcwraClaimantType,
+      lcwraProtectedGroup,
       partnerHasLCWRA,
+      partnerLcwraClaimantType,
+      partnerLcwraProtectedGroup,
       circumstances,
-      rates: rates.lcwraElement,
+      rates: { protected: rates.lcwraElement, new: rates.lcwraElementNew },
     })
 
     let lcwraElement = 0
 
     // Check if main person has LCWRA
     if (hasLCWRA === 'yes') {
-      lcwraElement += rates.lcwraElement
-      console.log('Main person LCWRA added:', rates.lcwraElement)
+      // Determine which rate to use based on claimant type and protected group status
+      // Post-April 26 claimants get lower rate UNLESS they're in a protected group
+      // Default to protected rate if not specified (for backwards compatibility)
+      const isPostApril26 = lcwraClaimantType === 'post-april-26'
+      const isInProtectedGroup = lcwraProtectedGroup === 'yes'
+      const useNewRate = isPostApril26 && !isInProtectedGroup
+      const rate = useNewRate ? rates.lcwraElementNew : rates.lcwraElement
+      lcwraElement += rate
+      const rateType = isInProtectedGroup ? 'protected group' : (lcwraClaimantType || 'pre-april-26')
+      console.log(`Main person LCWRA added (${rateType}):`, rate)
     }
 
     // Check if partner has LCWRA (for couples)
     if (circumstances === 'couple' && partnerHasLCWRA === 'yes') {
-      lcwraElement += rates.lcwraElement
-      console.log('Partner LCWRA added:', rates.lcwraElement)
+      // Determine which rate to use based on partner's claimant type and protected group status
+      // Post-April 26 claimants get lower rate UNLESS they're in a protected group
+      // Default to protected rate if not specified (for backwards compatibility)
+      const isPostApril26 = partnerLcwraClaimantType === 'post-april-26'
+      const isInProtectedGroup = partnerLcwraProtectedGroup === 'yes'
+      const useNewRate = isPostApril26 && !isInProtectedGroup
+      const rate = useNewRate ? rates.lcwraElementNew : rates.lcwraElement
+      lcwraElement += rate
+      const rateType = isInProtectedGroup ? 'protected group' : (partnerLcwraClaimantType || 'pre-april-26')
+      console.log(`Partner LCWRA added (${rateType}):`, rate)
     }
 
     console.log('Total LCWRA element:', lcwraElement)
@@ -675,10 +748,18 @@ export class UniversalCreditCalculator {
       netMonthlyEarningsOverride,
       partnerNetMonthlyEarningsCalculated,
       partnerNetMonthlyEarningsOverride,
+      age,
+      partnerAge,
+      mifApplies,
+      partnerMifApplies,
+      workHoursConditionality,
+      partnerWorkHoursConditionality,
+      taxYear,
     } = input
 
     // Calculate net earnings properly (after tax, NI, and pension)
     let netEarnings = 0
+    let mifDetails = null
 
     // Main person net earnings
     if (employmentType === 'employed' && monthlyEarnings > 0) {
@@ -749,6 +830,35 @@ export class UniversalCreditCalculator {
       netEarnings += partnerMonthlyEarnings
     }
 
+    // Apply Minimum Income Floor if applicable
+    const hasSelfEmployed = employmentType === 'self-employed' || partnerEmploymentType === 'self-employed'
+    if (hasSelfEmployed) {
+      const person1 = {
+        workHours: (Number(workHoursConditionality) || 35) as WorkHoursConditionality,
+        age: age || 25,
+        actualEarnings: employmentType === 'self-employed' ? (monthlyEarnings || 0) : 0,
+        isEmployed: employmentType === 'employed',
+        isSelfEmployed: employmentType === 'self-employed',
+      }
+
+      const person2 = circumstances === 'couple' ? {
+        workHours: (Number(partnerWorkHoursConditionality) || 35) as WorkHoursConditionality,
+        age: partnerAge || 25,
+        actualEarnings: partnerEmploymentType === 'self-employed' ? (partnerMonthlyEarnings || 0) : 0,
+        isEmployed: partnerEmploymentType === 'employed',
+        isSelfEmployed: partnerEmploymentType === 'self-employed',
+      } : null
+
+      mifDetails = calculateCombinedMinimumIncomeFloor(person1, person2, taxYear || '2025_26')
+
+      // Apply MIF if user confirmed it applies
+      if (mifApplies === 'yes' || partnerMifApplies === 'yes') {
+        // If MIF applies, use the higher of actual earnings or MIF
+        netEarnings = mifDetails.combined.incomeUsedForUC
+        console.log('MIF applied - using income:', netEarnings, 'instead of actual:', mifDetails.combined.actualEarnings)
+      }
+    }
+
     // Calculate work allowance based on eligibility
     const workAllowance = this.calculateWorkAllowance(input, rates)
     const taperRate = rates.taperRate
@@ -766,13 +876,19 @@ export class UniversalCreditCalculator {
 
     if (netEarnings <= workAllowance) {
       console.log('No earnings reduction - netEarnings <= workAllowance')
-      return 0
+      return {
+        reduction: 0,
+        mifDetails,
+      }
     }
 
     const excessEarnings = netEarnings - workAllowance
     const reduction = excessEarnings * taperRate
     console.log('Earnings reduction calculated:', reduction)
-    return reduction
+    return {
+      reduction,
+      mifDetails,
+    }
   }
 
   calculateCapitalDeduction(input: any, totalElements: any, rates: any) {
