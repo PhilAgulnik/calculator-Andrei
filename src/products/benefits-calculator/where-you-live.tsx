@@ -14,6 +14,7 @@ const HOUSING_STATUS_OPTIONS = [
 ]
 
 const TAX_YEARS_OPTIONS = [
+  { value: '2026_27', label: '2026/27' },
   { value: '2025_26', label: '2025/26' },
   { value: '2024_25', label: '2024/25' },
   { value: '2023_24', label: '2023/24' },
@@ -135,11 +136,11 @@ export function WhereYouLive() {
               { value: 'england', label: 'England' },
               { value: 'scotland', label: 'Scotland' },
               { value: 'wales', label: 'Wales' },
+              { value: 'northern_ireland', label: 'Northern Ireland' },
             ]}
           />
 
           <Fields.TextInput
-            required
             label="What is your postcode?"
             name="postcode"
             inputClassName="max-w-[150px]"

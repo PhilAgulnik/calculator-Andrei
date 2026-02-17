@@ -1,8 +1,10 @@
 import { Page } from '~/products/shared/Page'
 
+import { Link } from '@tanstack/react-router'
 import { useWorkflow } from '../shared/use-workflow'
 import { Form, Fields, Show } from '~/components/Form'
 import { Button } from '~/components/Button'
+import { AgeWarningWrapper } from './components/AgeWarningWrapper'
 
 const WORK_STATUS_OPTIONS = [
   { value: 'NotEmployed', label: 'Not employed' },
@@ -54,6 +56,9 @@ export function AgeAndDisability() {
             />
           )}
 
+          {/* State Pension Age Warning */}
+          <AgeWarningWrapper circumstances={entry.data?.circumstances || 'single'} />
+
           <h2 className="text-2xl font-bold mt-8">Employment and disability</h2>
 
           <Fields.Radio
@@ -81,57 +86,16 @@ export function AgeAndDisability() {
             }
           />
 
-          <Show
-            when={({ formState }) =>
-              formState.values.employmentType === 'employed' ||
-              formState.values.employmentType === 'self-employed'
-            }
-          >
-            <Fields.AmountPeriod
-              label="Monthly gross earnings"
-              name="monthlyEarnings"
-              defaultValue={0}
-            />
-          </Show>
-
-          <Show when={({ formState }) => formState.values.employmentType === 'employed'}>
-            <Fields.Radio
-              label="Pension Contribution Type"
-              name="pensionType"
-              defaultValue="amount"
-              options={[
-                { value: 'amount', label: 'Fixed Amount' },
-                { value: 'percentage', label: 'Percentage of Gross Earnings' },
-              ]}
-            />
-          </Show>
-
-          <Show
-            when={({ formState }) =>
-              formState.values.employmentType === 'employed' &&
-              formState.values.pensionType === 'amount'
-            }
-          >
-            <Fields.AmountPeriod
-              label="Pension Contributions (per month)"
-              name="pensionAmount"
-              defaultValue={0}
-            />
-          </Show>
-
-          <Show
-            when={({ formState }) =>
-              formState.values.employmentType === 'employed' &&
-              formState.values.pensionType === 'percentage'
-            }
-          >
-            <Fields.NumberInput
-              label="Pension Percentage"
-              name="pensionPercentage"
-              defaultValue={3}
-              inputClassName="max-w-[140px]"
-              descriptionBefore="Percentage of gross earnings. Defaults to 3% if empty."
-            />
+          <Show when={({ formState }) => formState.values.employmentType === 'self-employed'}>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                We have a range of{' '}
+                <Link to="/self-employment-accounts" className="font-semibold underline hover:text-blue-600">
+                  self-employment tools
+                </Link>{' '}
+                to help you manage your business finances and understand how self-employment affects your Universal Credit.
+              </p>
+            </div>
           </Show>
 
           <Fields.Radio
@@ -280,6 +244,32 @@ export function AgeAndDisability() {
             />
           </Show>
 
+          <Show when={({ formState }) => formState.values.hasLCWRA === 'yes'}>
+            <Fields.Radio
+              label="When did you start claiming LCWRA?"
+              name="lcwraClaimantType"
+              defaultValue="pre-april-26"
+              descriptionBefore="From April 2026, new LCWRA claimants receive different rates depending on when they started claiming."
+              options={[
+                { value: 'pre-april-26', label: 'Before April 6, 2026' },
+                { value: 'post-april-26', label: 'On or after April 6, 2026' },
+              ]}
+            />
+          </Show>
+
+          <Show when={({ formState }) => formState.values.lcwraClaimantType === 'post-april-26'}>
+            <Fields.Radio
+              label="Are you terminally ill or do you have a severe lifelong condition?"
+              name="lcwraProtectedGroup"
+              defaultValue="no"
+              descriptionBefore="Post-April 2026 claimants who are terminally ill or have severe lifelong conditions continue to receive the higher protected rate (£429.80/month). Otherwise, new claimants receive £217.26/month."
+              options={[
+                { value: 'no', label: 'No' },
+                { value: 'yes', label: 'Yes - terminally ill or severe lifelong condition' },
+              ]}
+            />
+          </Show>
+
           <Fields.Radio
             label="Do you care for someone who is sick or disabled?"
             name="isCarer"
@@ -293,6 +283,17 @@ export function AgeAndDisability() {
           {entry.data?.circumstances === 'couple' && (
             <>
               <h2 className="text-2xl font-bold mt-8">Employment and disability – partner</h2>
+
+              <Fields.Radio
+                label="Which best describes your partner's employment status?"
+                name="partnerEmploymentType"
+                defaultValue="not_working"
+                options={[
+                  { value: 'not_working', label: 'Not Working' },
+                  { value: 'employed', label: 'Employed' },
+                  { value: 'self-employed', label: 'Self-employed' },
+                ]}
+              />
 
               <Fields.Radio
                 label="Is your partner sick or disabled?"
@@ -435,6 +436,32 @@ export function AgeAndDisability() {
                     { value: 'no', label: 'No' },
                     { value: 'yes', label: 'Yes' },
                     { value: 'waiting', label: 'Waiting for assessment' },
+                  ]}
+                />
+              </Show>
+
+              <Show when={({ formState }) => formState.values.partnerHasLCWRA === 'yes'}>
+                <Fields.Radio
+                  label="When did your partner start claiming LCWRA?"
+                  name="partnerLcwraClaimantType"
+                  defaultValue="pre-april-26"
+                  descriptionBefore="From April 2026, new LCWRA claimants receive different rates depending on when they started claiming."
+                  options={[
+                    { value: 'pre-april-26', label: 'Before April 6, 2026' },
+                    { value: 'post-april-26', label: 'On or after April 6, 2026' },
+                  ]}
+                />
+              </Show>
+
+              <Show when={({ formState }) => formState.values.partnerLcwraClaimantType === 'post-april-26'}>
+                <Fields.Radio
+                  label="Is your partner terminally ill or do they have a severe lifelong condition?"
+                  name="partnerLcwraProtectedGroup"
+                  defaultValue="no"
+                  descriptionBefore="Post-April 2026 claimants who are terminally ill or have severe lifelong conditions continue to receive the higher protected rate (£429.80/month). Otherwise, new claimants receive £217.26/month."
+                  options={[
+                    { value: 'no', label: 'No' },
+                    { value: 'yes', label: 'Yes - terminally ill or severe lifelong condition' },
                   ]}
                 />
               </Show>

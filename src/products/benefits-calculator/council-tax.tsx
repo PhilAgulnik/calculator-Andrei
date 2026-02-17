@@ -61,7 +61,6 @@ export function CouncilTax() {
           </Alert>
 
           <Fields.Select
-            required
             label="Council Tax band for property"
             name="councilTaxBand"
             defaultValue=""

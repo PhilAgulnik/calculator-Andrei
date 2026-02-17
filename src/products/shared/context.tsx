@@ -10,6 +10,12 @@ export type Page = {
   getIsVisible?: (entryData: any) => boolean
 }
 
+export type Entry = {
+  id: string
+  data: Record<string, any>
+  createdAt: string
+}
+
 export type WorkflowContext = {
   currentPage: Page | null
   nextPage: Page | null
@@ -18,8 +24,8 @@ export type WorkflowContext = {
   visiblePages: Page[]
   basePath: '/benefits-calculator' | null
   goToNextPage: () => void
-  entry: Record<string, unknown> | null
-  entries: Record<string, unknown>[]
+  entry: Entry | null
+  entries: Record<string, Entry>
   addEntry: () => void
   removeEntry: (id: string) => void
   updateEntryData: (data: any) => void
@@ -35,7 +41,7 @@ export const WorkflowContext = createContext<WorkflowContext>({
   basePath: null,
   goToNextPage: () => {},
   entry: null,
-  entries: [],
+  entries: {},
   addEntry: () => {},
   removeEntry: () => {},
   updateEntryData: () => {},

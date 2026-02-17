@@ -55,19 +55,21 @@ export function CurrentBenefits() {
             ]}
           />
 
-          <Fields.Select
-            label="Which contributory benefit, if any, does your partner currently receive?"
-            name="partnerContributoryBenefit"
-            defaultValue="none"
-            options={[
-              { label: 'Select a contributory benefit', value: '' },
-              { label: 'None', value: 'none' },
-              { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
-              { label: 'Contributory Employment and Support Allowance', value: 'contributory_esa' },
-              { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
-              { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
-            ]}
-          />
+          <Show when={() => entry?.data?.circumstances === 'couple'}>
+            <Fields.Select
+              label="Which contributory benefit, if any, does your partner currently receive?"
+              name="partnerContributoryBenefit"
+              defaultValue="none"
+              options={[
+                { label: 'Select a contributory benefit', value: '' },
+                { label: 'None', value: 'none' },
+                { label: "Contributory Jobseeker's Allowance", value: 'contributory_jsa' },
+                { label: 'Contributory Employment and Support Allowance', value: 'contributory_esa' },
+                { label: "New-style Jobseeker's Allowance", value: 'newstyle_jsa' },
+                { label: 'New-style Employment and Support Allowance', value: 'newstyle_esa' },
+              ]}
+            />
+          </Show>
 
           <Fields.BooleanRadio
             label="Do you currently receive Carer's Allowance?"
@@ -79,17 +81,19 @@ export function CurrentBenefits() {
             <Fields.AmountPeriod label="Carer's Allowance income" name="carersAllowance" />
           </Show>
 
-          <Fields.BooleanRadio
-            label="Does your partner currently receive Carer's Allowance?"
-            name="partnerGetsCarersAllowance"
-            defaultValue={false}
-          />
-
-          <Show when={({ formState }) => formState.values.PartnerGetsCarersAllowance === true}>
-            <Fields.AmountPeriod
-              label="Partner's Carer's Allowance income"
-              name="partnerCarersAllowance"
+          <Show when={() => entry?.data?.circumstances === 'couple'}>
+            <Fields.BooleanRadio
+              label="Does your partner currently receive Carer's Allowance?"
+              name="partnerGetsCarersAllowance"
+              defaultValue={false}
             />
+
+            <Show when={({ formState }) => formState.values.PartnerGetsCarersAllowance === true}>
+              <Fields.AmountPeriod
+                label="Partner's Carer's Allowance income"
+                name="partnerCarersAllowance"
+              />
+            </Show>
           </Show>
 
           <Fields.BooleanRadio

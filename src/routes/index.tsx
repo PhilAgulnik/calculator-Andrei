@@ -6,6 +6,7 @@ import { BASE_PATH as BenefitsCalculatorBasePath } from '~/products/benefits-cal
 import { useEntries } from '~/products/shared/use-entries'
 import { Glyph } from '~/components/Glyph'
 import { EntitledtoLogo } from '~/components/EntitledtoLogo'
+import { ExampleScenarios } from '~/shared/components/ExampleScenarios'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -15,12 +16,29 @@ function HomeComponent() {
   const navigate = useNavigate()
   const benefitsCalculator = useEntries({ basePath: BenefitsCalculatorBasePath })
 
+
+  const handleLoadExample = (exampleData: Record<string, any>) => {
+    // Create a new entry with the example data pre-filled
+    const newEntry = benefitsCalculator.addEntry(exampleData)
+
+    // Navigate directly to the results page with the pre-filled data
+    navigate({ to: '/benefits-calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
+  }
+
   return (
     <>
       <header className="p-4">
-        <div className="w-full max-w-layout-max-width mx-auto flex justify-center items-center">
+        <div className="w-full max-w-layout-max-width mx-auto flex justify-between items-center">
           <Link to="/">
             <EntitledtoLogo className="w-auto block h-[42px]" />
+          </Link>
+
+          <Link
+            to="/admin"
+            className="text-sm text-gray-600 hover:text-blue-600 flex items-center gap-1"
+          >
+            <Glyph name="settings" className="w-4 h-4 fill-current" />
+            Admin
           </Link>
         </div>
       </header>
@@ -73,6 +91,13 @@ function HomeComponent() {
                 ))}
             </Accordion>
           )}
+
+          {/* Example Scenarios Section */}
+          <Accordion title="Example Scenarios" open={false} className="mt-4">
+            <div className="py-4">
+              <ExampleScenarios onLoadExample={handleLoadExample} compact={false} />
+            </div>
+          </Accordion>
         </div>
       </div>
     </>

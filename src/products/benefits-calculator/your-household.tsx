@@ -64,12 +64,14 @@ export function YourHousehold() {
             descriptionBefore="For instance, a grown up child, elderly parent, joint tenant, sub-tenant or lodger."
           />
 
-          <Fields.NumberInput
-            label="How many other adults live with you?"
-            name="lodgersNumber"
-            inputClassName="max-w-[140px]"
-            descriptionBefore="Please enter a valid value from 1 to 10."
-          />
+          <Show when={({ formState }) => formState.values.hasUCNumNonDeps === true}>
+            <Fields.NumberInput
+              label="How many other adults live with you?"
+              name="lodgersNumber"
+              inputClassName="max-w-[140px]"
+              descriptionBefore="Please enter a valid value from 1 to 10."
+            />
+          </Show>
 
           <Fields.BooleanRadio
             label="Are you a British or Irish citizen living in the UK?"

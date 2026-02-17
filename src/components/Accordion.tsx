@@ -24,6 +24,7 @@ export function Accordion(props: AccordionProps) {
   return (
     <div className={className}>
       <button
+        type="button"
         className="flex items-center gap-1 border-none bg-transparent p-0 cursor-pointer text-primary font-[500]"
         onClick={() => {
           setIsOpen((c) => !c)

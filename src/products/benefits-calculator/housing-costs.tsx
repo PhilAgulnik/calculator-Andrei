@@ -29,7 +29,7 @@ export function HousingCosts() {
             rent as defined under Housing Benefit rent rules and Universal Credit rent rules.
           </p>
 
-          <Fields.AmountPeriod required label="How much is your eligible rent?" name="rent" />
+          <Fields.AmountPeriod label="How much is your eligible rent?" name="rent" />
 
           <Fields.BooleanRadio
             label="Is help with housing costs paid directly to your landlord by the DWP?"

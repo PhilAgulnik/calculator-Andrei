@@ -10,6 +10,10 @@ export class ChildBenefitCalculator {
 
   constructor() {
     this.rates = {
+      '2026_27': {
+        eldestChild: 27.05, // per week - Official GOV.UK rate
+        additionalChildren: 17.90, // per week - Official GOV.UK rate
+      },
       '2025_26': {
         eldestChild: 26.05, // per week - Official GOV.UK rate
         additionalChildren: 17.25, // per week - Official GOV.UK rate

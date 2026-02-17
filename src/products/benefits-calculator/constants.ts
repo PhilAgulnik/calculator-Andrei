@@ -7,6 +7,8 @@ import { NetIncome } from './net-income'
 import { Results } from './results'
 import { WhereYouLive } from './where-you-live'
 import { YourHousehold } from './your-household'
+import { YourEarnings } from './your-earnings'
+import { PartnerEarnings } from './partner-earnings'
 
 import { type Page } from '../shared/context'
 
@@ -30,6 +32,27 @@ export const PAGES: Page[] = [
     slug: 'age-and-disability',
     isVisible: true,
     component: AgeAndDisability,
+  },
+  {
+    title: 'Your earnings',
+    slug: 'your-earnings',
+    isVisible: false,
+    getIsVisible: (entryData: any) => {
+      return entryData?.employmentType === 'employed' || entryData?.employmentType === 'self-employed'
+    },
+    component: YourEarnings,
+  },
+  {
+    title: 'Partner earnings',
+    slug: 'partner-earnings',
+    isVisible: false,
+    getIsVisible: (entryData: any) => {
+      return (
+        entryData?.circumstances === 'couple' &&
+        (entryData?.partnerEmploymentType === 'employed' || entryData?.partnerEmploymentType === 'self-employed')
+      )
+    },
+    component: PartnerEarnings,
   },
   {
     title: 'About your children',

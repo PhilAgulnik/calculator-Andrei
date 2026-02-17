@@ -10,13 +10,17 @@ export function useEntries({ basePath }: { basePath: string }) {
 
   const [entries, setEntries] = useState<any>(localEntries)
 
-  const addEntry = useCallback(() => {
-    const newEntry = { id: generateId(), data: {}, createdAt: new Date().toISOString() }
-    const newEntries = { ...entries, [newEntry.id]: newEntry }
-    localStorage.setItem(basePath, JSON.stringify(newEntries))
+  const addEntry = useCallback((initialData?: Record<string, unknown>) => {
+    const newEntry = { id: generateId(), data: initialData || {}, createdAt: new Date().toISOString() }
+
+    setEntries((prevEntries: any) => {
+      const newEntries = { ...prevEntries, [newEntry.id]: newEntry }
+      localStorage.setItem(basePath, JSON.stringify(newEntries))
+      return newEntries
+    })
 
     return newEntry
-  }, [basePath, entries])
+  }, [basePath])
 
   const removeEntry = useCallback(
     (id: string) => {

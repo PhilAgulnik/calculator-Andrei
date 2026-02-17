@@ -1,0 +1,70 @@
+/**
+ * Theme CSS Variables
+ * These variables are set by the theme manager and can be used throughout the app
+ */
+
+:root {
+  /* Default theme colors (EntitledTo) */
+  --color-primary: #1e40af;
+  --color-secondary: #3b82f6;
+  --color-accent: #10b981;
+  --color-background: #ffffff;
+  --color-text: #111827;
+}
+
+/* Theme-specific utility classes */
+.theme-primary {
+  color: var(--color-primary);
+}
+
+.theme-bg-primary {
+  background-color: var(--color-primary);
+}
+
+.theme-secondary {
+  color: var(--color-secondary);
+}
+
+.theme-bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.theme-accent {
+  color: var(--color-accent);
+}
+
+.theme-bg-accent {
+  background-color: var(--color-accent);
+}
+
+.theme-text {
+  color: var(--color-text);
+}
+
+.theme-bg {
+  background-color: var(--color-background);
+}
+
+/* Button variants using theme colors */
+.btn-theme-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-theme-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-theme-secondary {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+.btn-theme-secondary:hover {
+  opacity: 0.9;
+}
+
+/* Theme transition for smooth color changes */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}

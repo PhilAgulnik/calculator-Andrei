@@ -21,6 +21,7 @@ import { CarerModule } from './components/CarerModule'
 import { NetEarningsModule } from './components/NetEarningsModule'
 import { StatePensionAgeWarning } from './components/StatePensionAgeWarning'
 import { ChildBenefitChargeCalculator } from './components/ChildBenefitChargeCalculator'
+import { FreeSchoolMealsModule } from './components/FreeSchoolMealsModule'
 import { addScenario, generateScenarioName, generateScenarioId } from './utils/scenarioStorage'
 import type { SavedScenario } from './types/saved-scenarios'
 import type { CarerAssessment } from './types/carer-module'
@@ -615,6 +616,44 @@ export function Results() {
             </div>
           </div>
         )}
+
+        {/* Free School Meals Eligibility */}
+        {data && data.children > 0 && (() => {
+          // Calculate net earnings (after tax, NI, pension) to match Earnings Breakdown
+          const mainMonthlyNet = data.employmentType === 'employed' || data.employmentType === 'self-employed'
+            ? UniversalCreditCalculator.calculateUINetEarnings(
+                convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
+                data.pensionType,
+                convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
+                data.pensionPercentage,
+                taxYear
+              )
+            : 0
+
+          const partnerMonthlyNet = data.circumstances === 'couple' &&
+            (data.partnerEmploymentType === 'employed' || data.partnerEmploymentType === 'self-employed')
+            ? UniversalCreditCalculator.calculateUINetEarnings(
+                convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod),
+                data.partnerPensionType,
+                convertToMonthly(data.partnerPensionAmount, data.partnerPensionAmountPeriod),
+                data.partnerPensionPercentage,
+                taxYear
+              )
+            : 0
+
+          return (
+            <FreeSchoolMealsModule
+              data={{
+                area: data.area || 'england',
+                children: data.children,
+                childrenInfo: data.childrenInfo,
+                monthlyEarnings: mainMonthlyNet,
+                partnerMonthlyEarnings: partnerMonthlyNet,
+              }}
+              ucResults={results}
+            />
+          )
+        })()}
 
         {/* Local Housing Allowance Panel for Private Tenants */}
         {data && data.tenantType === 'private' && calc.lhaDetails && (

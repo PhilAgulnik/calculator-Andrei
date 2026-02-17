@@ -15,10 +15,15 @@ export function Children() {
   const { entry, goToNextPage, updateEntryData }: any = useWorkflow()
 
   const childrenCount = entry?.data?.children || 0
-  const initialValue: any = Array.from({ length: childrenCount }, (_, index) => ({
-    name: `Child ${index + 1}`,
-    age: 0,
-  }))
+  const existingChildrenInfo = entry?.data?.childrenInfo
+
+  // Only create default values if there's no existing data
+  const initialValue: any = existingChildrenInfo && existingChildrenInfo.length > 0
+    ? existingChildrenInfo
+    : Array.from({ length: childrenCount }, (_, index) => ({
+        name: `Child ${index + 1}`,
+        age: 0,
+      }))
 
   return (
     <>
