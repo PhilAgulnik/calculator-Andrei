@@ -30,7 +30,7 @@ export function AgeAndDisability() {
       <Form
         onSubmit={({ values }) => {
           updateEntryData(values)
-          goToNextPage()
+          goToNextPage(values)
         }}
         className="contents"
         initialValues={!!entry ? entry?.data : {}}

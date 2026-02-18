@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { getLHARate, convertLHAToMonthly, getAllLHARates, lhaRates2025_26 } from './lhaDataService'
 import { calculateCombinedMinimumIncomeFloor, type WorkHoursConditionality } from './minimumIncomeFloor'
+import { calculateStudentIncome } from './studentIncomeCalculator'
+import type { StudentIncomeResult } from '../types/student-income'
 /**
  * Universal Credit Calculator - React Version
  * Simplified calculator that provides basic Universal Credit calculations
@@ -225,10 +227,14 @@ export class UniversalCreditCalculator {
       const capitalDeductionResult = this.calculateCapitalDeduction(input, totalElements, rates)
       const benefitDeduction = this.calculateBenefitDeduction(input)
 
+      // Calculate student income deduction (unearned income, deducted £1 for £1)
+      const studentIncomeResult = this.calculateStudentIncomeDeduction(input)
+      const studentIncomeDeduction = studentIncomeResult.monthlyStudentIncome
+
       // Calculate final amount
       const finalAmount = Math.max(
         0,
-        totalElements - earningsReduction - capitalDeductionResult.deduction - benefitDeduction
+        totalElements - earningsReduction - capitalDeductionResult.deduction - benefitDeduction - studentIncomeDeduction
       )
 
       return {
@@ -247,6 +253,8 @@ export class UniversalCreditCalculator {
           capitalDeduction: capitalDeductionResult.deduction,
           capitalDeductionDetails: capitalDeductionResult,
           benefitDeduction,
+          studentIncomeDeduction,
+          studentIncomeDetails: studentIncomeResult,
           finalAmount,
           lhaDetails,
           mifDetails: earningsReductionResult.mifDetails,
@@ -942,6 +950,46 @@ export class UniversalCreditCalculator {
     return monthlyBenefits
   }
 
+  calculateStudentIncomeDeduction(input: any): StudentIncomeResult {
+    if (!input.isFullTimeStudent) {
+      return {
+        monthlyStudentIncome: 0,
+        loanComponent: 0,
+        grantComponent: 0,
+        postgraduateLoanComponent: 0,
+        disregard: 0,
+        assessmentPeriods: 0,
+        breakdown: {
+          annualLoanAmount: 0,
+          annualGrantAmount: 0,
+          annualPostgraduateLoanAmount: 0,
+          postgraduateLoanIncluded: 0,
+          totalAnnualIncome: 0,
+          dividedByPeriods: 0,
+          lessDisregard: 0,
+          monthlyStudentIncome: 0,
+        },
+        warnings: [],
+        meetsException: false,
+        exceptions: [],
+      }
+    }
+
+    return calculateStudentIncome({
+      isFullTimeStudent: input.isFullTimeStudent,
+      studentExceptions: input.studentExceptions || [],
+      studentType: input.studentType || 'undergraduate',
+      hasStudentLoan: input.hasStudentLoan || false,
+      studentLoanAnnualAmount: input.studentLoanAnnualAmount || 0,
+      hasPostgraduateLoan: input.hasPostgraduateLoan || false,
+      postgraduateLoanAnnualAmount: input.postgraduateLoanAnnualAmount || 0,
+      hasStudentGrant: input.hasStudentGrant || false,
+      studentGrantAnnualAmount: input.studentGrantAnnualAmount || 0,
+      courseAssessmentPeriods: input.courseAssessmentPeriods || 9,
+      isInSummerHoliday: input.isInSummerHoliday || false,
+    })
+  }
+
   generateWarnings(input: any) {
     const warnings = []
 
@@ -955,6 +1003,10 @@ export class UniversalCreditCalculator {
 
     if (input.rent > 2000) {
       warnings.push('High rent amount - verify this is correct')
+    }
+
+    if (input.isFullTimeStudent && (!input.studentExceptions || input.studentExceptions.length === 0)) {
+      warnings.push('Full-time students are generally not eligible for UC without meeting specific exceptions')
     }
 
     return warnings
@@ -1063,6 +1115,19 @@ export class UniversalCreditCalculator {
         savings: input.savings,
         otherBenefits: input.otherBenefits,
         otherBenefitsPeriod: input.otherBenefitsPeriod,
+
+        // Student
+        isFullTimeStudent: input.isFullTimeStudent,
+        studentExceptions: input.studentExceptions || [],
+        studentType: input.studentType,
+        hasStudentLoan: input.hasStudentLoan,
+        studentLoanAnnualAmount: input.studentLoanAnnualAmount,
+        hasPostgraduateLoan: input.hasPostgraduateLoan,
+        postgraduateLoanAnnualAmount: input.postgraduateLoanAnnualAmount,
+        hasStudentGrant: input.hasStudentGrant,
+        studentGrantAnnualAmount: input.studentGrantAnnualAmount,
+        courseAssessmentPeriods: input.courseAssessmentPeriods,
+        isInSummerHoliday: input.isInSummerHoliday,
       },
       output: {
         standardAllowance: results.calculation.standardAllowance,
@@ -1074,6 +1139,7 @@ export class UniversalCreditCalculator {
         earningsReduction: results.calculation.earningsReduction,
         capitalDeduction: results.calculation.capitalDeduction,
         benefitDeduction: results.calculation.benefitDeduction,
+        studentIncomeDeduction: results.calculation.studentIncomeDeduction || 0,
         finalAmount: results.calculation.finalAmount,
         warnings: results.warnings || [],
         lhaDetails: results.calculation.lhaDetails || null,
