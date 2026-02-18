@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams } from '@tanstack/react-router'
 import { useWorkflow } from './use-workflow'
 
@@ -16,6 +17,21 @@ export function Footer(props: FooterProps) {
   const { nextButton } = props
   const { basePath, nextPage, previousPage, progressPercentage } = useWorkflow()
   const { id } = useParams({ from: '/benefits-calculator/$id' })
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && e.key.toLowerCase() === 'n') {
+        e.preventDefault()
+        const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement | null
+        if (submitButton) {
+          submitButton.click()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   if (!basePath) return null
 

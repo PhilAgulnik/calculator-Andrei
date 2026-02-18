@@ -9,6 +9,7 @@ import { WhereYouLive } from './where-you-live'
 import { YourHousehold } from './your-household'
 import { YourEarnings } from './your-earnings'
 import { PartnerEarnings } from './partner-earnings'
+import { StudentDetails } from './student-details'
 
 import { type Page } from '../shared/context'
 
@@ -26,6 +27,15 @@ export const PAGES: Page[] = [
     slug: 'your-household',
     isVisible: true,
     component: YourHousehold,
+  },
+  {
+    title: 'Student details',
+    slug: 'student-details',
+    isVisible: false,
+    getIsVisible: (entryData: any) => {
+      return entryData?.isFullTimeStudent === true
+    },
+    component: StudentDetails,
   },
   {
     title: 'Age and disability',
@@ -176,4 +186,17 @@ export const DEFAULT_VALUES = {
 
   // Area
   area: 'england',
+
+  // Student Information
+  isFullTimeStudent: false,
+  studentExceptions: [],
+  studentType: 'undergraduate',
+  hasStudentLoan: false,
+  studentLoanAnnualAmount: 0,
+  hasPostgraduateLoan: false,
+  postgraduateLoanAnnualAmount: 0,
+  hasStudentGrant: false,
+  studentGrantAnnualAmount: 0,
+  courseAssessmentPeriods: 9,
+  isInSummerHoliday: false,
 }

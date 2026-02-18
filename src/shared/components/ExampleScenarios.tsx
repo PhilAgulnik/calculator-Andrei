@@ -4,12 +4,13 @@
  */
 
 import { Button } from '~/components/Button'
+import { Accordion } from '~/components/Accordion'
 
 export interface ExampleScenario {
   id: string
   name: string
   description: string
-  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test'
+  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student'
   data: Record<string, any>
 }
 
@@ -191,6 +192,300 @@ const examples: ExampleScenario[] = [
       numberOfChildren: 0,
       hasHousingCosts: false,
       hasEarnings: false,
+    },
+  },
+  // ============================================
+  // STUDENT SCENARIOS
+  // ============================================
+  {
+    id: 'student-parent-loan',
+    name: 'Student parent with maintenance loan',
+    description: 'Single parent studying undergraduate degree, qualifies via responsible for child exception',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'M1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 29,
+      children: 1,
+      childrenInfo: [{ age: 4, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 750,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-postgrad-pip',
+    name: 'Postgraduate student with PIP',
+    description: 'Postgraduate student receiving PIP, qualifies via disability exception. 30% rule applies to postgrad loan',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'LS1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 34,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isDisabled: 'yes',
+      claimsDisabilityBenefits: 'yes',
+      disabilityBenefitType: 'pip',
+      pipDailyLivingRate: 'standard',
+      pipMobilityRate: 'none',
+      isFullTimeStudent: true,
+      studentExceptions: ['receiving_pip_dla_aa_with_work_limitation'],
+      studentType: 'postgraduate',
+      hasStudentLoan: false,
+      studentLoanAnnualAmount: 0,
+      hasPostgraduateLoan: true,
+      postgraduateLoanAnnualAmount: 12167,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 12,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-loan-and-grant',
+    name: 'Student with loan and grant',
+    description: 'Single parent with both maintenance loan and grant. Combined income spread over 9 months less £110 disregard',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'B1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 26,
+      children: 2,
+      childrenInfo: [
+        { age: 3, hasDisability: 'no' },
+        { age: 6, hasDisability: 'no' },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 700,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: true,
+      studentGrantAnnualAmount: 3000,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-summer-holiday',
+    name: 'Student in summer holiday',
+    description: 'Student currently in summer vacation after course ended. Student income is NOT counted during summer holidays',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'SW1A 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 24,
+      children: 1,
+      childrenInfo: [{ age: 2, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 850,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: true,
+    },
+  },
+  {
+    id: 'student-under-21',
+    name: 'Under 21 student without parental support',
+    description: 'Young student under 21 in non-advanced education with no parental support, small maintenance loan',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'NE1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 19,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 450,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['under21_non_advanced_no_parental_support'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 4500,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-couple-both-studying',
+    name: 'Couple both studying',
+    description: 'Both partners are students with partner caring for child. Both have maintenance loans',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'OX1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 27,
+      partnerAge: 26,
+      children: 1,
+      childrenInfo: [{ age: 1, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 950,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['couple_both_studying_partner_cares_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-foster-parent',
+    name: 'Student foster parent',
+    description: 'Single foster parent studying with a child placed with them. Qualifies via foster parent exception, loan only',
+    category: 'student',
+    data: {
+      area: 'wales',
+      postcode: 'CF10 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 38,
+      children: 1,
+      childrenInfo: [{ age: 7, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 550,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['single_foster_parent'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 7610,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-grant-only',
+    name: 'Student with grant only (no loan)',
+    description: 'Student with a bursary/grant but no maintenance loan. Qualifies via responsible for child',
+    category: 'student',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 31,
+      children: 1,
+      childrenInfo: [{ age: 5, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 620,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: false,
+      studentLoanAnnualAmount: 0,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: true,
+      studentGrantAnnualAmount: 5400,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-pension-age',
+    name: 'Student at pension age with younger partner',
+    description: 'Older student who has reached state pension age with a younger partner. 12-month postgraduate course with grant',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'CB2 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 67,
+      partnerAge: 55,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 700,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['reached_state_pension_age_younger_partner'],
+      studentType: 'postgraduate',
+      hasStudentLoan: false,
+      studentLoanAnnualAmount: 0,
+      hasPostgraduateLoan: true,
+      postgraduateLoanAnnualAmount: 12167,
+      hasStudentGrant: true,
+      studentGrantAnnualAmount: 2000,
+      courseAssessmentPeriods: 12,
+      isInSummerHoliday: false,
     },
   },
   // ============================================
@@ -497,6 +792,15 @@ const examples: ExampleScenario[] = [
   },
 ]
 
+const EXCEPTION_SHORT_LABELS: Record<string, string> = {
+  responsible_for_child: 'Responsible for child',
+  receiving_pip_dla_aa_with_work_limitation: 'PIP/DLA/AA',
+  under21_non_advanced_no_parental_support: 'Under 21, no parental support',
+  single_foster_parent: 'Foster parent',
+  couple_both_studying_partner_cares_for_child: 'Couple both studying',
+  reached_state_pension_age_younger_partner: 'State pension age',
+}
+
 interface ExampleScenariosProps {
   onLoadExample: (data: Record<string, any>) => void
   compact?: boolean
@@ -504,35 +808,13 @@ interface ExampleScenariosProps {
 
 export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScenariosProps) {
   const categories = [
+    { id: 'student', label: 'Students', color: 'teal' },
     { id: 'fsm-test', label: 'FSM Tests', color: 'orange' },
     { id: 'simple', label: 'Simple', color: 'green' },
     { id: 'real-world', label: 'Real World', color: 'blue' },
     { id: 'complex', label: 'Complex', color: 'purple' },
     { id: 'edge-case', label: 'Edge Cases', color: 'red' },
   ]
-
-  const getCategoryColor = (category: string) => {
-    const cat = categories.find((c) => c.id === category)
-    return cat?.color || 'gray'
-  }
-
-  const getCategoryBadge = (category: string) => {
-    const color = getCategoryColor(category)
-    const colorClasses = {
-      green: 'bg-green-100 text-green-800',
-      blue: 'bg-blue-100 text-blue-800',
-      purple: 'bg-purple-100 text-purple-800',
-      red: 'bg-red-100 text-red-800',
-      orange: 'bg-orange-100 text-orange-800',
-      gray: 'bg-gray-100 text-gray-800',
-    }
-
-    return (
-      <span className={`text-xs px-2 py-0.5 rounded ${colorClasses[color as keyof typeof colorClasses]}`}>
-        {categories.find((c) => c.id === category)?.label || category}
-      </span>
-    )
-  }
 
   if (compact) {
     return (
@@ -549,36 +831,46 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
           defaultValue=""
         >
           <option value="">Select an example...</option>
-          {examples.map((example) => (
-            <option key={example.id} value={example.id}>
-              {example.name}
-            </option>
-          ))}
+          {categories.map((cat) => {
+            const catExamples = examples.filter((ex) => ex.category === cat.id)
+            if (catExamples.length === 0) return null
+            return (
+              <optgroup key={cat.id} label={cat.label}>
+                {catExamples.map((example) => (
+                  <option key={example.id} value={example.id}>
+                    {example.name}
+                  </option>
+                ))}
+              </optgroup>
+            )
+          })}
         </select>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
         <h2 className="text-xl font-bold mb-2">Example Scenarios</h2>
-        <p className="text-gray-600">
-          Click any example below to quickly fill the calculator with test data
+        <p className="text-gray-600 text-sm">
+          Click any example below to quickly fill the calculator with test data.
+          Expand a category to see its examples.
         </p>
       </div>
 
-      {/* Examples grouped by category */}
       {categories.map((cat) => {
         const categoryExamples = examples.filter((ex) => ex.category === cat.id)
         if (categoryExamples.length === 0) return null
+
         return (
-          <div key={cat.id}>
-            <div className="flex items-center gap-2 mb-3">
-              {getCategoryBadge(cat.id)}
-              <span className="text-sm text-gray-500">({categoryExamples.length})</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <Accordion
+            key={cat.id}
+            title={`${cat.label} (${categoryExamples.length})`}
+            open={false}
+            className="border border-gray-200 rounded-lg p-3"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
               {categoryExamples.map((example) => (
                 <div
                   key={example.id}
@@ -589,7 +881,6 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                     <p className="text-sm text-gray-600">{example.description}</p>
                   </div>
 
-                  {/* Key details */}
                   <div className="mb-4 bg-gray-50 rounded p-3">
                     <dl className="text-xs space-y-1">
                       {example.data.area && (
@@ -644,6 +935,61 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                           <dd className="font-medium text-gray-900">Yes</dd>
                         </div>
                       )}
+                      {/* Student-specific details */}
+                      {example.data.isFullTimeStudent && (
+                        <>
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Student type:</dt>
+                            <dd className="font-medium text-gray-900">
+                              {example.data.studentType === 'postgraduate' ? 'Postgraduate' : 'Undergraduate'}
+                            </dd>
+                          </div>
+                          {example.data.studentExceptions?.length > 0 && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Exception:</dt>
+                              <dd className="font-medium text-gray-900">
+                                {example.data.studentExceptions
+                                  .map((e: string) => EXCEPTION_SHORT_LABELS[e] || e)
+                                  .join(', ')}
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.hasStudentLoan && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Annual loan:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.studentLoanAnnualAmount?.toLocaleString()}
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.hasPostgraduateLoan && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Postgrad loan:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.postgraduateLoanAnnualAmount?.toLocaleString()} (30% counted)
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.hasStudentGrant && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Annual grant:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.studentGrantAnnualAmount?.toLocaleString()}
+                              </dd>
+                            </div>
+                          )}
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Course months:</dt>
+                            <dd className="font-medium text-gray-900">{example.data.courseAssessmentPeriods}</dd>
+                          </div>
+                          {example.data.isInSummerHoliday && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Summer holiday:</dt>
+                              <dd className="font-medium text-teal-700">Yes (no deduction)</dd>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </dl>
                   </div>
 
@@ -656,11 +1002,10 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                 </div>
               ))}
             </div>
-          </div>
+          </Accordion>
         )
       })}
 
-      {/* Help text */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="font-semibold text-blue-900 mb-2">Using Examples</h3>
         <p className="text-sm text-blue-700">

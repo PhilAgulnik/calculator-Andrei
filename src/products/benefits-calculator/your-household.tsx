@@ -2,6 +2,7 @@ import { Page } from '~/products/shared/Page'
 
 import { useWorkflow } from '../shared/use-workflow'
 import { Alert } from '~/components/Alert'
+import { Accordion } from '~/components/Accordion'
 import { Form, Fields, Show } from '~/components/Form'
 import { Button } from '~/components/Button'
 
@@ -13,7 +14,7 @@ export function YourHousehold() {
       <Form
         onSubmit={({ values }: any) => {
           updateEntryData(values)
-          goToNextPage()
+          goToNextPage(values)
         }}
         className="contents"
         initialValues={!!entry ? entry?.data : {}}
@@ -79,9 +80,74 @@ export function YourHousehold() {
           />
 
           <Fields.BooleanRadio
-            label="Are you in hospital/residential care, a prisoner, on strike, living abroad or a full-time student?"
+            label="Are you in hospital/residential care, a prisoner, on strike or living abroad?"
             name="resCare"
           />
+
+          <Fields.BooleanRadio
+            label="Are you a full-time student?"
+            name="isFullTimeStudent"
+            defaultValue={false}
+            descriptionBefore="A full-time student is someone undertaking a full-time course of advanced education, or any other full-time course where a student loan or grant is available."
+          />
+
+          <Show when={({ formState }) => formState.values.isFullTimeStudent === true}>
+            <Alert type="info" className="!items-start">
+              <div className="space-y-3 text-sm">
+                <p className="font-semibold text-base">Full-time students and Universal Credit</p>
+                <p>
+                  Full-time students are generally not eligible for Universal Credit. However,
+                  there are important exceptions. You will be asked about these on the next page.
+                </p>
+                <Accordion title="What counts as a full-time student?" open={false}>
+                  <div className="mt-3 space-y-4">
+                    <div>
+                      <p className="font-medium mb-1">Definition (Regulation 12)</p>
+                      <p className="mb-2">You are "receiving education" if you are undertaking:</p>
+                      <ul className="list-disc ml-5 space-y-1">
+                        <li>A full-time course of advanced education, OR</li>
+                        <li>Any other full-time course of study or training where a student loan or grant is available</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="font-medium mb-1">Advanced education includes:</p>
+                      <ul className="list-disc ml-5 space-y-1">
+                        <li>Postgraduate courses and degrees</li>
+                        <li>First degree courses</li>
+                        <li>Higher National Diplomas (HND)</li>
+                        <li>Diplomas of higher education</li>
+                        <li>Any course above A-level or Scottish Higher standard</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="font-medium mb-1">Exceptions that allow students to claim UC (Regulation 14):</p>
+                      <ul className="list-disc ml-5 space-y-1">
+                        <li>Under 21 in non-advanced education without parental support</li>
+                        <li>Receiving PIP, DLA or AA with documented limited capability for work</li>
+                        <li>Responsible for a child or qualifying young person</li>
+                        <li>Single foster parent with a child placed with you</li>
+                        <li>Both members of a couple are students, and the partner cares for a child</li>
+                        <li>Reached state pension age with a younger partner</li>
+                      </ul>
+                    </div>
+
+                    <div className="border-t border-blue-200 pt-3 space-y-2">
+                      <p>
+                        Under Regulation 13, the course period includes vacation periods within the course
+                        (e.g. Christmas and Easter breaks), but not the summer vacation after the course ends.
+                      </p>
+                      <p>
+                        If you qualify, your student income (loans and grants) will be taken into account
+                        when calculating your UC. You will be asked for details on the next page.
+                      </p>
+                    </div>
+                  </div>
+                </Accordion>
+              </div>
+            </Alert>
+          </Show>
 
           <Show when={({ formState }) => formState.values.HasPartner === true}>
             <Fields.NumberInput

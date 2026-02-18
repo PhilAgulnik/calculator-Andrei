@@ -74,12 +74,39 @@ export function WorkflowProvider(props: WorkflowProviderProps) {
     return Math.round(((index + 1) / visiblePagesLength) * 100)
   }, [visiblePagesLength, slug])
 
-  const goToNextPage = useCallback(() => {
-    if (!nextPage) return
+  const goToNextPage = useCallback(
+    (newData?: Record<string, unknown>) => {
+      let targetPage = nextPage
 
-    navigate({ to: `${basePath}/$id`, params: { id, slug: nextPage.slug } })
-    navigate({ to: `${basePath}/$id/$slug`, params: { id, slug: nextPage.slug } })
-  }, [basePath, nextPage])
+      // When new data is provided, recompute visible pages with the merged data
+      // so that pages whose visibility depends on just-submitted values are included
+      if (newData) {
+        const mergedData = { ...entry?.data, ...newData }
+        const recomputedPages: Page[] = []
+
+        for (const page of pages) {
+          if (page.isVisible) {
+            recomputedPages.push(page)
+            continue
+          }
+          if (page.getIsVisible?.(mergedData)) {
+            recomputedPages.push(page)
+          }
+        }
+
+        const currentIndex = recomputedPages.findIndex((p) => p.slug === slug)
+        if (currentIndex >= 0) {
+          targetPage = recomputedPages[currentIndex + 1] ?? null
+        }
+      }
+
+      if (!targetPage) return
+
+      navigate({ to: `${basePath}/$id`, params: { id, slug: targetPage.slug } })
+      navigate({ to: `${basePath}/$id/$slug`, params: { id, slug: targetPage.slug } })
+    },
+    [basePath, nextPage, pages, entry, slug]
+  )
 
   const setPageVisibility = useCallback(
     (slug: string, isVisible: boolean) => {
