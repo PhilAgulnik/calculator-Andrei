@@ -22,6 +22,7 @@ import { NetEarningsModule } from './components/NetEarningsModule'
 import { StatePensionAgeWarning } from './components/StatePensionAgeWarning'
 import { ChildBenefitChargeCalculator } from './components/ChildBenefitChargeCalculator'
 import { FreeSchoolMealsModule } from './components/FreeSchoolMealsModule'
+import { ScottishChildPaymentModule } from './components/ScottishChildPaymentModule'
 import { addScenario, generateScenarioName, generateScenarioId } from './utils/scenarioStorage'
 import type { SavedScenario } from './types/saved-scenarios'
 import type { CarerAssessment } from './types/carer-module'
@@ -384,7 +385,7 @@ export function Results() {
                     : 'Earnings Reduction'}
                 </span>
                 <span className="font-medium text-red-600">
-                  -{formatCurrency(calc.earningsReduction.toFixed(2))}
+                  -{formatCurrency(calc.earningsReduction)}
                 </span>
               </div>
 
@@ -633,6 +634,19 @@ export function Results() {
             </div>
           </div>
         </div>
+
+        {/* Scottish Child Payment */}
+        {data && data.children > 0 && (data.area || '').toLowerCase() === 'scotland' && (
+          <ScottishChildPaymentModule
+            data={{
+              area: data.area || 'england',
+              children: data.children,
+              childrenInfo: data.childrenInfo,
+              taxYear: taxYear,
+            }}
+            ucResults={results}
+          />
+        )}
 
         {/* Child Benefit Section */}
         {data && data.children > 0 && (
