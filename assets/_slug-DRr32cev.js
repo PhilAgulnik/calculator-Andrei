@@ -1,0 +1,1 @@
+import{n as e,r,j as u}from"./index-CWl1fF4O.js";import{a}from"./use-workflow-DeYWYdWm.js";function i(){const{slug:o}=e.useParams(),{visiblePages:n}=a(),s=r.useMemo(()=>n.find(t=>t.slug===o)?.component??null,[n,o]);return s?u.jsx(s,{}):null}export{i as component};

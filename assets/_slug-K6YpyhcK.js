@@ -1,1 +1,0 @@
-import{m as e,r,j as u}from"./index-DT1gvnU5.js";import{a as m}from"./use-workflow-BNrGNEXl.js";function i(){const{slug:o}=e.useParams(),{visiblePages:n}=m(),s=r.useMemo(()=>n.find(t=>t.slug===o)?.component??null,[n,o]);return s?u.jsx(s,{}):null}export{i as component};
