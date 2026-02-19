@@ -1,0 +1,44 @@
+Universal Credit and self-employment
+
+To calculate UC correctly for self-employed people need to calculate the Minimum Income Floor (MIF). For this we need to add extra variables:
+- ‘UCWorkHoursConditionality’
+- ‘UCEarningsThreshold’
+- ‘UCMinimumIncomeFloor’
+Where: 
+‘UCEarningsThreshold’ if single = UCWorkHoursConditionality * minimum wage for their age (deduction for tax and NI allowed)
+‘UCEarningsThreshold’  if couple = client (UCWorkHoursConditionality * minimum wage for their age) + partner (UCWorkHoursConditionality * minimum wage for their age)
+
+‘UCMinimumIncomeFloor’ if single = ‘UCEarningsThreshold’ – net earnings 
+
+
+This needs to be displayed the in accordion section  ‘how we worked out your UC’ when case is self-employed.
+
+Add a new section ‘Minimum Income Floor’ if select self-employed and earnings entered are less than UCEarningsThrehold:
+-	Message = “You might be affected by the minimum income floor. The minimum income floor affects people claiming Universal Credit who are self-employed.” 
+-	Question = “Does the Minimum Income Floor apply to you?” no/yes (default to no)
+
+Single people
+Aim – 
+When a single person enters self-employed income (on the net earnings page) that is below their appropriate minimum income floor we will show them a message and use the appropriate MIF figure as their income in the UC calculation instead of the self-employed income they have entered.
+What is the minimum income floor -
+A person’s minimum income floor is their individual threshold multiplied by the national minimum wage.
+What is the individual threshold -
+•	0 hours per week if person would otherwise be subject to no work-related requirements (child under 1, carer, PC age, adopted within 12 months, pregnant (usual circs), some young people)
+•	16 hours if person would otherwise be subject to work-preparation or work-focused interview requirement only (people assessed as LCW, child aged 1-5 currently, foster parents with child aged up to 16 or 18 in some circs)
+•	35 hours if person would otherwise be subject to all work related requirements – though can be reduced in some circs around caring responsibilities or health
+Working out the individual threshold -
+We could either intelligently use what we have gathered leading up to the net earnings screen in order for the calculator to determine the appropriate individual threshold and offer this up to the user with messaging for confirmation – much like is done with bedroom entitlement; or
+We offer the individual thresholds as a question along with messaging and the user selects the appropriate threshold as determined by them.
+*I don’t know enough about the back end of the calculator to say what is possible or the best way to approach this.
+Working out the minimum income floor - 
+The individual threshold (0, 16 or 35) is then multiplied by the NMW at that time to give us the person’s MIF.
+Deciding which figure to use as income –
+The MIF needs to be compared to the amount the person entered as self-employed income.
+If the MIF is greater than the self-employed income entered by the user then the MIF should be used as income in the UC calculation instead of the self-employed income entered by the user.
+If the MIF is less than the self-employed income entered by the user then the self-employed income entered by the user should be used in the UC calculation.
+*Again I don’t know enough about the back end of the calculator. Can this comparison be done by the calculator and then the greatest value used as the appropriate income in the UC calculation? 
+Couples 
+If one or both members of a couple are self-employed then each member’s MIF will be worked out separately and then added together to provide a combined MIF.
+Each member’s income from self-employment (or earnings from employment if one is employed and one self-employed) will be added together to provide a combined income.
+If the combined MIF is greater than the combined income then the combined MIF is used as income in the UC calculation instead of the self-employed income and/or employed earnings entered by the user.
+If the combined MIF is less than the combined income, then the self-employed income and/or employed earnings entered by the user are used in the UC calculation.

@@ -4,3 +4,10 @@ dist
 dist-ssr
 *.local
 .env*
+build/
+.tanstack/
+.claude/
+.vscode/
+nul
+fetched-index.css
+85293ab5-a8dd-4195-a5d4-991d4bf2cccf.json
