@@ -2,6 +2,7 @@ import { Alert } from '~/components/Alert'
 import { Button } from '~/components/Button'
 import { Form, Fields, Show } from '~/components/Form'
 import { Page } from '~/products/shared/Page'
+import { getGroupedBRMAs } from './utils/lhaDataService'
 
 import { useWorkflow } from '../shared/use-workflow'
 
@@ -12,6 +13,11 @@ const HOUSING_STATUS_OPTIONS = [
   { value: 'other', label: 'Other' },
   { value: 'in_prison', label: 'In Prison' },
 ]
+
+const BRMA_OPTIONS = getGroupedBRMAs().flatMap(
+  (group: { label: string; options: string[] }) =>
+    group.options.map((name: string) => ({ value: name, label: name }))
+)
 
 const TAX_YEARS_OPTIONS = [
   { value: '2026_27', label: '2026/27' },
@@ -82,7 +88,7 @@ export function WhereYouLive() {
               label="Please select your Broad Rental Market Area"
               name="brma"
               defaultValue=""
-              options={[]}
+              options={BRMA_OPTIONS}
               descriptionBefore="We'll use your Broad Rental Market Area (BRMA) to set your Local Housing Allowance (LHA) cap. You can also find out about rent levels and LHA rates in other areas using our affordability map."
             />
           </Show>
@@ -95,7 +101,7 @@ export function WhereYouLive() {
             <Fields.AmountPeriod label="Service Charges" name="serviceCharges" defaultValue={0} />
           </Show>
 
-          <Show when={({ formState }) => formState.values.housingStatus !== 'no_housing_costs'}>
+          <Show when={({ formState }) => formState.values.housingStatus === 'renting'}>
             <Fields.Radio
               label="Number of Bedrooms"
               name="bedrooms"

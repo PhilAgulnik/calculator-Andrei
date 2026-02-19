@@ -10,7 +10,7 @@ export interface ExampleScenario {
   id: string
   name: string
   description: string
-  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student'
+  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student' | 'scp-test'
   data: Record<string, any>
 }
 
@@ -790,6 +790,109 @@ const examples: ExampleScenario[] = [
       monthlyEarningsPeriod: 'per_month',
     },
   },
+
+  // --- Scottish Child Payment (SCP) Test Scenarios ---
+  {
+    id: 'scp-eligible-basic',
+    name: 'Scotland: SCP Eligible (2 children)',
+    description: 'Single parent in Scotland with 2 children under 16, no earnings. Receives UC so qualifies for SCP at £27.15/week per child.',
+    category: 'scp-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 30,
+      children: 2,
+      childrenInfo: [
+        { age: 5, hasDisability: 'no' },
+        { age: 10, hasDisability: 'no' },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 650,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+    },
+  },
+  {
+    id: 'scp-eligible-low-earnings',
+    name: 'Scotland: SCP with Low Earnings',
+    description: 'Single parent in Scotland with 1 child, earning £800/month. UC still positive so qualifies for SCP.',
+    category: 'scp-test',
+    data: {
+      area: 'scotland',
+      postcode: 'G1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 28,
+      children: 1,
+      childrenInfo: [{ age: 3, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 800,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'scp-mixed-ages',
+    name: 'Scotland: SCP Mixed Ages (2 of 3 eligible)',
+    description: 'Couple in Scotland with 3 children (ages 5, 12, 16). Only 2 children under 16 are eligible for SCP.',
+    category: 'scp-test',
+    data: {
+      area: 'scotland',
+      postcode: 'AB1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 38,
+      partnerAge: 36,
+      children: 3,
+      childrenInfo: [
+        { age: 5, hasDisability: 'no' },
+        { age: 12, hasDisability: 'no' },
+        { age: 16, hasDisability: 'no' },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 800,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+    },
+  },
+  {
+    id: 'scp-not-eligible-earnings',
+    name: 'Scotland: SCP Not Eligible (UC = 0)',
+    description: 'Couple in Scotland with 1 child but high combined earnings (£4,000 + £3,000/month) reducing UC to zero. Shows earnings threshold message.',
+    category: 'scp-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 35,
+      partnerAge: 33,
+      children: 1,
+      childrenInfo: [{ age: 8, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 700,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 4000,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'employed',
+      partnerMonthlyEarnings: 3000,
+      partnerMonthlyEarningsPeriod: 'per_month',
+    },
+  },
 ]
 
 const EXCEPTION_SHORT_LABELS: Record<string, string> = {
@@ -808,6 +911,7 @@ interface ExampleScenariosProps {
 
 export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScenariosProps) {
   const categories = [
+    { id: 'scp-test', label: 'Scottish Child Payment', color: 'indigo' },
     { id: 'student', label: 'Students', color: 'teal' },
     { id: 'fsm-test', label: 'FSM Tests', color: 'orange' },
     { id: 'simple', label: 'Simple', color: 'green' },

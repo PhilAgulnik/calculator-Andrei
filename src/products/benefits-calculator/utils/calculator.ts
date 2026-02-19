@@ -778,7 +778,8 @@ export class UniversalCreditCalculator {
         mainPersonNet = parseFloat(netMonthlyEarningsOverride) || 0
       } else if (
         netMonthlyEarningsCalculated !== undefined &&
-        netMonthlyEarningsCalculated !== null
+        netMonthlyEarningsCalculated !== null &&
+        netMonthlyEarningsCalculated > 0
       ) {
         console.log('Using calculated net earnings:', netMonthlyEarningsCalculated)
         mainPersonNet = netMonthlyEarningsCalculated
@@ -815,7 +816,8 @@ export class UniversalCreditCalculator {
         partnerNet = parseFloat(partnerNetMonthlyEarningsOverride) || 0
       } else if (
         partnerNetMonthlyEarningsCalculated !== undefined &&
-        partnerNetMonthlyEarningsCalculated !== null
+        partnerNetMonthlyEarningsCalculated !== null &&
+        partnerNetMonthlyEarningsCalculated > 0
       ) {
         partnerNet = partnerNetMonthlyEarningsCalculated
       } else {
