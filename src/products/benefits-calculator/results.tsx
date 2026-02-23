@@ -769,6 +769,7 @@ export function Results() {
                 childrenInfo: data.childrenInfo,
                 monthlyEarnings: mainMonthlyNet,
                 partnerMonthlyEarnings: partnerMonthlyNet,
+                postcode: data.postcode,
               }}
               ucResults={results}
             />
