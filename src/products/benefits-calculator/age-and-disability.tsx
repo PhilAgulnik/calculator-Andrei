@@ -86,17 +86,6 @@ export function AgeAndDisability() {
             }
           />
 
-          <Show when={({ formState }) => formState.values.employmentType === 'self-employed'}>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
-                We have a range of{' '}
-                <Link to="/self-employment-accounts" className="font-semibold underline hover:text-blue-600">
-                  self-employment tools
-                </Link>{' '}
-                to help you manage your business finances and understand how self-employment affects your Universal Credit.
-              </p>
-            </div>
-          </Show>
 
           <Fields.Radio
             label="Are you sick or disabled?"
