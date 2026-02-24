@@ -73,6 +73,14 @@ export function BetterOffCalculator({
   hasChildren = false,
   hasLCWRA = false,
   onCalculationComplete,
+  childBenefitMonthly = 0,
+  scpMonthly = 0,
+  fsmUniversalMonthly = null,
+  fsmMeansTestedMonthly = null,
+  fsmEligibleOutOfWork = false,
+  fsmAnnualEarningsThreshold,
+  fsmValueIncluded = false,
+  onFsmValueIncludedChange,
 }: BetterOffCalculatorProps) {
   // State for work details
   const [workData, setWorkData] = useState<WorkData>({
@@ -222,9 +230,31 @@ export function BetterOffCalculator({
     const ucReduction = excessEarnings * 0.55 // 55% taper rate
     const newUCAmount = Math.max(0, currentUCAmount - ucReduction)
 
-    // Calculate income comparison
-    const totalIncomeInWork = monthlyNet + newUCAmount
-    const currentTotalIncome = currentUCAmount
+    // Additional benefits — Child Benefit is unchanged by employment
+    const cbCurrent = childBenefitMonthly
+    const cbInWork = childBenefitMonthly
+
+    // SCP in work: only paid when UC > 0
+    const scpCurrent = scpMonthly
+    const scpInWork = scpMonthly > 0 && newUCAmount > 0 ? scpMonthly : 0
+
+    // Universal FSM: always eligible in work — no income or UC test applies
+    const universalFsmCurrent = fsmUniversalMonthly ?? 0
+    const universalFsmInWork = fsmUniversalMonthly ?? 0
+
+    // Means-tested FSM: eligible in work only if UC > 0 AND annual earnings <= threshold
+    const inWorkMeansTestedFsmEligible =
+      fsmAnnualEarningsThreshold !== undefined
+        ? newUCAmount > 0 && monthlyNet * 12 <= fsmAnnualEarningsThreshold
+        : false
+    const meansTestedFsmCurrent = fsmMeansTestedMonthly ?? 0
+    const meansTestedFsmInWork = fsmMeansTestedMonthly !== null
+      ? (inWorkMeansTestedFsmEligible ? fsmMeansTestedMonthly : 0)
+      : 0
+
+    // Calculate income comparison including all benefits
+    const currentTotalIncome = currentUCAmount + cbCurrent + scpCurrent + universalFsmCurrent + meansTestedFsmCurrent
+    const totalIncomeInWork = monthlyNet + newUCAmount + cbInWork + scpInWork + universalFsmInWork + meansTestedFsmInWork
 
     // Calculate work costs
     const monthlyWorkCosts = calculateMonthlyCosts()
@@ -251,6 +281,43 @@ export function BetterOffCalculator({
         inWork: newUCAmount,
         impact: newUCAmount - currentUCAmount,
       },
+      ...(cbCurrent > 0 || cbInWork > 0
+        ? {
+            childBenefit: {
+              current: cbCurrent,
+              inWork: cbInWork,
+              impact: cbInWork - cbCurrent,
+            },
+          }
+        : {}),
+      ...(scpCurrent > 0 || scpInWork > 0
+        ? {
+            scottishChildPayment: {
+              current: scpCurrent,
+              inWork: scpInWork,
+              impact: scpInWork - scpCurrent,
+            },
+          }
+        : {}),
+      ...(fsmUniversalMonthly !== null
+        ? {
+            freeSchoolMealsUniversal: {
+              current: universalFsmCurrent,
+              inWork: universalFsmInWork,
+              impact: 0, // universal never changes with work
+            },
+          }
+        : {}),
+      ...(fsmMeansTestedMonthly !== null
+        ? {
+            freeSchoolMealsMeansTested: {
+              current: meansTestedFsmCurrent,
+              inWork: meansTestedFsmInWork,
+              impact: meansTestedFsmInWork - meansTestedFsmCurrent,
+            },
+          }
+        : {}),
+      inWorkMeansTestedFsmEligible,
       totalIncome: {
         current: currentTotalIncome,
         inWork: totalIncomeInWork,
@@ -353,6 +420,23 @@ export function BetterOffCalculator({
             into account the costs of working.
           </p>
         </div>
+
+        {/* FSM include checkbox — shown when FSM is relevant, synced with FSM panel */}
+        {(fsmUniversalMonthly !== null || fsmMeansTestedMonthly !== null) && (
+          <div className="mt-4">
+            <label className="flex items-center gap-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={fsmValueIncluded}
+                onChange={e => onFsmValueIncludedChange?.(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 accent-blue-600"
+              />
+              <span className="font-medium text-gray-800">
+                Include estimated value of free school meals
+              </span>
+            </label>
+          </div>
+        )}
 
         {/* Next Steps Panel */}
         {showNextSteps && (
@@ -546,6 +630,77 @@ export function BetterOffCalculator({
                       {formatCurrency(calculation.universalCredit.impact)}
                     </td>
                   </tr>
+                  {calculation.childBenefit && (
+                    <tr className="border-b border-gray-200">
+                      <td className="p-3 text-sm">Child Benefit</td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.childBenefit.current)}
+                      </td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.childBenefit.inWork)}
+                      </td>
+                      <td
+                        className={`p-3 text-sm text-right font-mono font-semibold ${
+                          calculation.childBenefit.impact >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
+                        {calculation.childBenefit.impact > 0 ? '+' : ''}
+                        {formatCurrency(calculation.childBenefit.impact)}
+                      </td>
+                    </tr>
+                  )}
+                  {calculation.scottishChildPayment && (
+                    <tr className="border-b border-gray-200">
+                      <td className="p-3 text-sm">Scottish Child Payment</td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.scottishChildPayment.current)}
+                      </td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.scottishChildPayment.inWork)}
+                      </td>
+                      <td
+                        className={`p-3 text-sm text-right font-mono font-semibold ${
+                          calculation.scottishChildPayment.impact >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
+                        {calculation.scottishChildPayment.impact > 0 ? '+' : ''}
+                        {formatCurrency(calculation.scottishChildPayment.impact)}
+                      </td>
+                    </tr>
+                  )}
+                  {calculation.freeSchoolMealsUniversal && (
+                    <tr className="border-b border-gray-200">
+                      <td className="p-3 text-sm">Free School Meals – universal (estimated)</td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.freeSchoolMealsUniversal.current)}
+                      </td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.freeSchoolMealsUniversal.inWork)}
+                      </td>
+                      <td className="p-3 text-sm text-right font-mono font-semibold text-gray-500">
+                        no change
+                      </td>
+                    </tr>
+                  )}
+                  {calculation.freeSchoolMealsMeansTested && (
+                    <tr className="border-b border-gray-200">
+                      <td className="p-3 text-sm">Free School Meals – means-tested (estimated)</td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.freeSchoolMealsMeansTested.current)}
+                      </td>
+                      <td className="p-3 text-sm text-right font-mono">
+                        {formatCurrency(calculation.freeSchoolMealsMeansTested.inWork)}
+                      </td>
+                      <td
+                        className={`p-3 text-sm text-right font-mono font-semibold ${
+                          calculation.freeSchoolMealsMeansTested.impact >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}
+                      >
+                        {calculation.freeSchoolMealsMeansTested.impact > 0 ? '+' : ''}
+                        {formatCurrency(calculation.freeSchoolMealsMeansTested.impact)}
+                      </td>
+                    </tr>
+                  )}
                   <tr className="bg-gray-50 font-semibold">
                     <td className="p-3 text-sm">Total Income</td>
                     <td className="p-3 text-sm text-right font-mono">
@@ -567,6 +722,17 @@ export function BetterOffCalculator({
               </table>
             </div>
           </div>
+
+          {/* FSM note — shown when means-tested FSM eligible out of work but no value opted in */}
+          {fsmEligibleOutOfWork && fsmMeansTestedMonthly === null && (
+            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+              <strong>Means-tested Free School Meals:</strong> You currently qualify for means-tested Free School Meals while out of work.{' '}
+              {calculation.inWorkMeansTestedFsmEligible
+                ? 'Based on the earnings above, you would remain eligible in work.'
+                : 'Based on the earnings above, you would no longer be eligible in work — your earnings would exceed the income threshold.'}
+              {' '}You can include an estimated FSM value in the comparison by ticking the checkbox in the Free School Meals section above.
+            </div>
+          )}
 
           {/* Costs Section Toggle */}
           <div className="mb-6">
@@ -594,7 +760,7 @@ export function BetterOffCalculator({
           </div>
 
           <div className="space-y-4">
-            {COST_CATEGORIES.map((meta) => (
+            {COST_CATEGORIES.filter(meta => !(fsmValueIncluded && meta.key === 'schoolMeals')).map((meta) => (
               <CostInput
                 key={meta.key}
                 meta={meta}

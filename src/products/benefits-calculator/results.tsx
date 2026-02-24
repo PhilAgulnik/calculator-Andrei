@@ -9,6 +9,7 @@ import { childBenefitCalculator } from './utils/childBenefitCalculator'
 import { getPensionAgeWarningType } from './utils/pensionAgeCalculator'
 import { UniversalCreditCalculator } from './utils/calculator'
 import { calculateNetEarnings } from './utils/netEarningsCalculator'
+import { calculateScottishChildPayment } from './utils/scottishChildPaymentCalculator'
 import { useWorkflow } from '../shared/use-workflow'
 
 import { DEFAULT_VALUES } from './constants'
@@ -23,11 +24,39 @@ import { StatePensionAgeWarning } from './components/StatePensionAgeWarning'
 import { ChildBenefitChargeCalculator } from './components/ChildBenefitChargeCalculator'
 import { FreeSchoolMealsModule } from './components/FreeSchoolMealsModule'
 import { ScottishChildPaymentModule } from './components/ScottishChildPaymentModule'
+import { assessFreeSchoolMealsEligibility } from './utils/freeSchoolMealsEligibility'
 import { addScenario, generateScenarioName, generateScenarioId } from './utils/scenarioStorage'
 import type { SavedScenario } from './types/saved-scenarios'
 import type { CarerAssessment } from './types/carer-module'
 import type { NetEarningsCalculation } from './types/net-earnings'
 import type { ChildBenefitChargeCalculation } from './types/child-benefit-charge'
+
+const PERIODS = [
+  { value: 'per_week', label: 'Per week' },
+  { value: 'per_2_weeks', label: 'Per 2 weeks' },
+  { value: 'per_4_weeks', label: 'Per 4 weeks' },
+  { value: 'per_month', label: 'Per month' },
+  { value: 'per_year', label: 'Per year' },
+]
+
+const PERIOD_LABELS: Record<string, string> = {
+  per_week: 'per week',
+  per_2_weeks: 'per 2 weeks',
+  per_4_weeks: 'per 4 weeks',
+  per_month: 'per month',
+  per_year: 'per year',
+}
+
+function convertFromMonthly(monthlyAmount: number, period: string): number {
+  switch (period) {
+    case 'per_week': return monthlyAmount * 12 / 52
+    case 'per_2_weeks': return monthlyAmount * 12 / 26
+    case 'per_4_weeks': return monthlyAmount * 12 / 13
+    case 'per_month': return monthlyAmount
+    case 'per_year': return monthlyAmount * 12
+    default: return monthlyAmount
+  }
+}
 
 export function Results() {
   const workflow = useWorkflow()
@@ -35,6 +64,7 @@ export function Results() {
   const [results, setResults] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [selectedPeriod, setSelectedPeriod] = useState('per_month')
   const [showChildBenefitWeekly, setShowChildBenefitWeekly] = useState(false)
   const [showLhaPanel, setShowLhaPanel] = useState(false)
   const [showSaveDialog, setShowSaveDialog] = useState(false)
@@ -46,6 +76,9 @@ export function Results() {
   const [showNetEarnings, setShowNetEarnings] = useState(false)
   const [netEarningsResult, setNetEarningsResult] = useState<NetEarningsCalculation | null>(null)
   const [childBenefitChargeResult, setChildBenefitChargeResult] = useState<ChildBenefitChargeCalculation | null>(null)
+  const [fsmUniversalMonthly, setFsmUniversalMonthly] = useState<number | null>(null)
+  const [fsmMeansTestedMonthly, setFsmMeansTestedMonthly] = useState<number | null>(null)
+  const [fsmValueIncluded, setFsmValueIncluded] = useState(false)
 
   const data: any = entry?.data || {}
 
@@ -270,6 +303,30 @@ export function Results() {
   // Calculate Child Benefit
   const childBenefitResults = childBenefitCalculator.calculateChildBenefit(data, taxYear)
 
+  // Calculate SCP for total benefits summary
+  const scpResult = data.children > 0 && (data.area || '').toLowerCase() === 'scotland'
+    ? calculateScottishChildPayment(
+        { area: data.area, children: data.children, childrenInfo: data.childrenInfo, taxYear },
+        results
+      )
+    : null
+
+  // Determine which benefits have non-zero entitlement (for total box)
+  const ucMonthly = calc.finalAmount > 0 ? calc.finalAmount : 0
+  const cbMonthly = data.children > 0 ? (childBenefitResults.monthlyAmount || 0) : 0
+  const scpMonthly = scpResult?.eligible ? (scpResult.monthlyEquivalent || 0) : 0
+
+  const activeBenefits = [
+    ucMonthly > 0 && { label: 'Universal Credit', monthly: ucMonthly },
+    cbMonthly > 0 && { label: 'Child Benefit', monthly: cbMonthly },
+    scpMonthly > 0 && { label: 'Scottish Child Payment', monthly: scpMonthly },
+    (fsmUniversalMonthly !== null && fsmUniversalMonthly > 0) && { label: 'Free School Meals – universal (estimated)', monthly: fsmUniversalMonthly },
+    (fsmMeansTestedMonthly !== null && fsmMeansTestedMonthly > 0) && { label: 'Free School Meals – means-tested (estimated)', monthly: fsmMeansTestedMonthly },
+  ].filter(Boolean) as { label: string; monthly: number }[]
+
+  const totalMonthly = activeBenefits.reduce((sum, b) => sum + b.monthly, 0)
+  const showTotalBox = activeBenefits.length > 1
+
   // Calculate adjusted net income for High Income Child Benefit Charge
   const claimantAdjustedIncome = calculateAdjustedNetIncome(
     data.monthlyEarnings || 0,
@@ -294,6 +351,49 @@ export function Results() {
   // Determine if household is affected by HICBC (income over £60,000)
   const higherIncome = Math.max(claimantAdjustedIncome, partnerAdjustedIncome)
   const isAffectedByHICBC = higherIncome > 60000
+
+  // Compute net earnings for FSM out-of-work eligibility check (mirrors FreeSchoolMealsModule logic)
+  const fsmMainMonthlyNet = data.children > 0 &&
+    (data.employmentType === 'employed' || data.employmentType === 'self-employed')
+    ? UniversalCreditCalculator.calculateUINetEarnings(
+        convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
+        data.pensionType,
+        convertToMonthly(data.pensionAmount, data.pensionAmountPeriod),
+        data.pensionPercentage,
+        taxYear
+      )
+    : 0
+  const fsmPartnerMonthlyNet = data.children > 0 && data.circumstances === 'couple' &&
+    (data.partnerEmploymentType === 'employed' || data.partnerEmploymentType === 'self-employed')
+    ? UniversalCreditCalculator.calculateUINetEarnings(
+        convertToMonthly(data.partnerMonthlyEarnings, data.partnerMonthlyEarningsPeriod),
+        data.partnerPensionType,
+        convertToMonthly(data.partnerPensionAmount, data.partnerPensionAmountPeriod),
+        data.partnerPensionPercentage,
+        taxYear
+      )
+    : 0
+
+  const fsmAssessment = data.children > 0
+    ? assessFreeSchoolMealsEligibility(
+        {
+          area: data.area || 'england',
+          children: data.children,
+          childrenInfo: data.childrenInfo,
+          monthlyEarnings: fsmMainMonthlyNet,
+          partnerMonthlyEarnings: fsmPartnerMonthlyNet,
+        },
+        results
+      )
+    : null
+
+  // Whether they qualify for means-tested FSM right now (universal provision is always there —
+  // only means-tested FSM can be lost in work, so this drives the BOC note)
+  const fsmEligibleOutOfWork = fsmAssessment
+    ? fsmAssessment.eligibleChildren.some(c => c.eligible && !c.universalProvision && c.age >= 4 && c.age <= 18)
+    : false
+  // Annual income threshold for FSM in their area (used by BOC to assess in-work eligibility)
+  const fsmAnnualEarningsThreshold = fsmAssessment?.threshold
 
   return (
     <Page.Main>
@@ -324,13 +424,63 @@ export function Results() {
         </Alert>
       )}
 
+      {/* Period selector */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className="text-sm font-medium text-gray-700">Show amounts:</span>
+        <div className="flex rounded-lg border border-slate-300 overflow-hidden text-sm">
+          {PERIODS.map(({ value, label }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setSelectedPeriod(value)}
+              className={`px-3 py-1.5 border-r border-slate-300 last:border-r-0 transition-colors ${
+                selectedPeriod === value
+                  ? 'bg-blue-600 text-white font-medium'
+                  : 'bg-white text-gray-700 hover:bg-slate-50'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="grid gap-6">
+        {/* Total Benefits Entitlement */}
+        {showTotalBox && (
+          <div className="bg-green-700 text-white rounded-lg overflow-hidden">
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold mb-1">Total benefits entitlement</h2>
+              <p className="text-5xl font-bold mt-2">
+                {formatCurrency(convertFromMonthly(totalMonthly, selectedPeriod))}{' '}
+                <span className="text-xl font-normal">{PERIOD_LABELS[selectedPeriod]}</span>
+              </p>
+            </div>
+            <div className="bg-green-800 px-6 py-4 space-y-2">
+              {activeBenefits.map((b) => (
+                <div key={b.label} className="flex justify-between text-green-100 text-sm">
+                  <span>{b.label}</span>
+                  <span className="font-medium text-white">
+                    {formatCurrency(convertFromMonthly(b.monthly, selectedPeriod))}
+                  </span>
+                </div>
+              ))}
+              {((fsmUniversalMonthly !== null && fsmUniversalMonthly > 0) || (fsmMeansTestedMonthly !== null && fsmMeansTestedMonthly > 0)) && (
+                <p className="text-green-300 text-xs pt-2 border-t border-green-700">
+                  Free school meals estimated value is included. To remove it, uncheck &ldquo;Include estimated FSM value in total benefits&rdquo; in the Free School Meals section below.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Calculation Breakdown */}
         <div className="bg-white border border-slate-300 rounded-lg overflow-hidden">
           <div className="bg-blue-50 border-b border-blue-200 p-6">
             <h2 className="text-2xl font-semibold mb-2">Your Universal Credit Entitlement</h2>
             <p className="text-4xl font-bold text-slate-800">
-              £{calc.finalAmount.toFixed(2)} <span className="text-lg">per month</span>
+              {formatCurrency(convertFromMonthly(calc.finalAmount, selectedPeriod))}{' '}
+              <span className="text-lg">{PERIOD_LABELS[selectedPeriod]}</span>
             </p>
             <p className="text-slate-600 mt-2">
               Tax Year: {results.taxYear?.replace('_', '/') || '2025/26'}
@@ -343,49 +493,49 @@ export function Results() {
             <div className="grid">
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Standard Allowance</span>
-                <span className="font-medium">£{calc.standardAllowance.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.standardAllowance, selectedPeriod))}</span>
               </div>
 
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Housing Element</span>
-                <span className="font-medium">£{calc.housingElement.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.housingElement, selectedPeriod))}</span>
               </div>
 
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Child Element</span>
-                <span className="font-medium">£{calc.childElement.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.childElement, selectedPeriod))}</span>
               </div>
 
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Childcare Element</span>
-                <span className="font-medium">£{calc.childcareElement.toFixed(2)}</span>
+                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.childcareElement, selectedPeriod))}</span>
               </div>
 
               {calc.carerElement > 0 && (
                 <div className="flex justify-between py-2 border-t border-slate-200">
                   <span>Carer Element</span>
-                  <span className="font-medium">£{calc.carerElement.toFixed(2)}</span>
+                  <span className="font-medium">{formatCurrency(convertFromMonthly(calc.carerElement, selectedPeriod))}</span>
                 </div>
               )}
               {calc.lcwraElement > 0 && (
                 <div className="flex justify-between py-2 border-t border-slate-200">
                   <span>LCWRA Element</span>
-                  <span className="font-medium">£{calc.lcwraElement.toFixed(2)}</span>
+                  <span className="font-medium">{formatCurrency(convertFromMonthly(calc.lcwraElement, selectedPeriod))}</span>
                 </div>
               )}
               <div className="flex justify-between py-2 border-t border-slate-200 font-[600]">
                 <span>Total Elements</span>
-                <span>£{calc.totalElements.toFixed(2)}</span>
+                <span>{formatCurrency(convertFromMonthly(calc.totalElements, selectedPeriod))}</span>
               </div>
 
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>
                   {calc.workAllowance > 0
-                    ? `Earnings Reduction after work allowance of ${formatCurrency(calc.workAllowance)}`
+                    ? `Earnings Reduction after work allowance of ${formatCurrency(convertFromMonthly(calc.workAllowance, selectedPeriod))}`
                     : 'Earnings Reduction'}
                 </span>
                 <span className="font-medium text-red-600">
-                  -{formatCurrency(calc.earningsReduction)}
+                  -{formatCurrency(convertFromMonthly(calc.earningsReduction, selectedPeriod))}
                 </span>
               </div>
 
@@ -395,7 +545,7 @@ export function Results() {
                   <div className="flex justify-between">
                     <span>Minimum Income Floor Applied</span>
                     <span className="font-medium text-blue-600">
-                      {formatCurrency(calc.mifDetails.combined.ucEarningsThreshold)} assumed earnings
+                      {formatCurrency(convertFromMonthly(calc.mifDetails.combined.ucEarningsThreshold, selectedPeriod))} assumed earnings
                     </span>
                   </div>
                   <div className="mt-2 space-y-2">
@@ -424,17 +574,17 @@ export function Results() {
                                 <span className="font-medium">£{calc.mifDetails.person1.minimumWage.toFixed(2)}/hour</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">MIF (monthly):</span>
-                                <span className="font-medium">£{calc.mifDetails.person1.ucEarningsThreshold.toFixed(2)}</span>
+                                <span className="text-gray-600">MIF ({PERIOD_LABELS[selectedPeriod]}):</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.person1.ucEarningsThreshold, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-600">Actual self-employed earnings:</span>
-                                <span className="font-medium">£{calc.mifDetails.person1.actualEarnings.toFixed(2)}</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.person1.actualEarnings, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between border-t border-gray-300 pt-1 mt-1">
                                 <span className="text-gray-900 font-semibold">Income used in UC calculation:</span>
                                 <span className="font-semibold text-blue-600">
-                                  £{calc.mifDetails.person1.incomeUsedForUC.toFixed(2)}
+                                  {formatCurrency(convertFromMonthly(calc.mifDetails.person1.incomeUsedForUC, selectedPeriod))}
                                 </span>
                               </div>
                             </div>
@@ -454,17 +604,17 @@ export function Results() {
                                 <span className="font-medium">£{calc.mifDetails.person2.minimumWage.toFixed(2)}/hour</span>
                               </div>
                               <div className="flex justify-between">
-                                <span className="text-gray-600">MIF (monthly):</span>
-                                <span className="font-medium">£{calc.mifDetails.person2.ucEarningsThreshold.toFixed(2)}</span>
+                                <span className="text-gray-600">MIF ({PERIOD_LABELS[selectedPeriod]}):</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.person2.ucEarningsThreshold, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-600">Actual self-employed earnings:</span>
-                                <span className="font-medium">£{calc.mifDetails.person2.actualEarnings.toFixed(2)}</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.person2.actualEarnings, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between border-t border-gray-300 pt-1 mt-1">
                                 <span className="text-gray-900 font-semibold">Income used in UC calculation:</span>
                                 <span className="font-semibold text-blue-600">
-                                  £{calc.mifDetails.person2.incomeUsedForUC.toFixed(2)}
+                                  {formatCurrency(convertFromMonthly(calc.mifDetails.person2.incomeUsedForUC, selectedPeriod))}
                                 </span>
                               </div>
                             </div>
@@ -477,16 +627,16 @@ export function Results() {
                             <div className="grid gap-1 text-sm">
                               <div className="flex justify-between">
                                 <span className="text-gray-700">Combined MIF:</span>
-                                <span className="font-medium">£{calc.mifDetails.combined.ucEarningsThreshold.toFixed(2)}</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.combined.ucEarningsThreshold, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-700">Combined actual earnings:</span>
-                                <span className="font-medium">£{calc.mifDetails.combined.actualEarnings.toFixed(2)}</span>
+                                <span className="font-medium">{formatCurrency(convertFromMonthly(calc.mifDetails.combined.actualEarnings, selectedPeriod))}</span>
                               </div>
                               <div className="flex justify-between border-t border-blue-400 pt-1 mt-1">
                                 <span className="text-gray-900 font-semibold">Combined income used:</span>
                                 <span className="font-semibold text-blue-700">
-                                  £{calc.mifDetails.combined.incomeUsedForUC.toFixed(2)}
+                                  {formatCurrency(convertFromMonthly(calc.mifDetails.combined.incomeUsedForUC, selectedPeriod))}
                                 </span>
                               </div>
                             </div>
@@ -509,7 +659,7 @@ export function Results() {
                 <div className="flex justify-between py-2 border-t border-slate-200">
                   <span>Student Income Deduction</span>
                   <span className="font-medium text-red-600">
-                    -{formatCurrency(calc.studentIncomeDeduction)}
+                    -{formatCurrency(convertFromMonthly(calc.studentIncomeDeduction, selectedPeriod))}
                   </span>
                 </div>
               )}
@@ -604,7 +754,7 @@ export function Results() {
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Other Deductions</span>
                 <span className="font-medium text-red-600">
-                  -{formatCurrency(calc.capitalDeduction + calc.benefitDeduction)}
+                  -{formatCurrency(convertFromMonthly(calc.capitalDeduction + calc.benefitDeduction, selectedPeriod))}
                 </span>
               </div>
 
@@ -614,7 +764,7 @@ export function Results() {
                   <div className="flex justify-between">
                     <span>Tariff Income from Savings</span>
                     <span className="font-medium text-red-600">
-                      -{formatCurrency(calc.capitalDeductionDetails.tariffIncome)}
+                      -{formatCurrency(convertFromMonthly(calc.capitalDeductionDetails.tariffIncome, selectedPeriod))}
                     </span>
                   </div>
                   {calc.capitalDeductionDetails.explanation && (
@@ -629,7 +779,7 @@ export function Results() {
 
               <div className="flex justify-between py-2 border-t-2 border-slate-300 text-xl font-bold">
                 <span>Final Universal Credit</span>
-                <span className="text-blue-700">£{calc.finalAmount.toFixed(2)}</span>
+                <span className="text-blue-700">{formatCurrency(convertFromMonthly(calc.finalAmount, selectedPeriod))}</span>
               </div>
             </div>
           </div>
@@ -645,6 +795,7 @@ export function Results() {
               taxYear: taxYear,
             }}
             ucResults={results}
+            selectedPeriod={selectedPeriod}
           />
         )}
 
@@ -654,57 +805,33 @@ export function Results() {
             <div className="bg-blue-50 border-b border-blue-200 p-6">
               <h2 className="text-2xl font-semibold mb-2">Child Benefit</h2>
               <p className="text-4xl font-bold text-slate-800">
-                £{childBenefitResults.monthlyAmount.toFixed(2)}{' '}
-                <span className="text-lg">per month</span>
+                {formatCurrency(convertFromMonthly(childBenefitResults.monthlyAmount, selectedPeriod))}{' '}
+                <span className="text-lg">{PERIOD_LABELS[selectedPeriod]}</span>
               </p>
             </div>
 
             <div className="p-6">
-              <Accordion
-                open={showChildBenefitWeekly}
-                onToggle={setShowChildBenefitWeekly}
-                title={`${showChildBenefitWeekly ? 'Hide' : 'See'} weekly amount`}
-              >
-                <div className="space-y-2 mt-4">
-                  <div className="flex justify-between py-2 border-t border-slate-200">
-                    <span>Child Benefit (Monthly)</span>
-                    <span className="font-medium">
-                      {formatCurrency(childBenefitResults.monthlyAmount)}
-                    </span>
+              {childBenefitResults.breakdown && childBenefitResults.breakdown.length > 0 && (
+                <Accordion
+                  open={showChildBenefitWeekly}
+                  onToggle={setShowChildBenefitWeekly}
+                  title={`${showChildBenefitWeekly ? 'Hide' : 'See'} breakdown`}
+                >
+                  <div className="space-y-2 mt-4">
+                    {childBenefitResults.breakdown.map((child: any, index: number) => (
+                      <div
+                        key={index}
+                        className="flex justify-between py-2 border-t border-slate-200 text-sm"
+                      >
+                        <span className="text-gray-600">{child.description}</span>
+                        <span className="font-medium">
+                          {formatCurrency(convertFromMonthly(child.rate * 52 / 12, selectedPeriod))}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-
-                  {showChildBenefitWeekly && (
-                    <>
-                      <div className="flex justify-between py-2 border-t border-slate-200">
-                        <span>Child Benefit (Weekly)</span>
-                        <span className="font-medium">
-                          {formatCurrency(childBenefitResults.weeklyAmount)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between py-2 border-t border-slate-200">
-                        <span>Child Benefit (Yearly)</span>
-                        <span className="font-medium">
-                          {formatCurrency(childBenefitResults.yearlyAmount)}
-                        </span>
-                      </div>
-                      {childBenefitResults.breakdown &&
-                        childBenefitResults.breakdown.length > 0 && (
-                          <>
-                            {childBenefitResults.breakdown.map((child: any, index: number) => (
-                              <div
-                                key={index}
-                                className="flex justify-between py-2 border-t border-slate-200 text-sm"
-                              >
-                                <span className="text-gray-600">{child.description}</span>
-                                <span>{formatCurrency(child.rate)} per week</span>
-                              </div>
-                            ))}
-                          </>
-                        )}
-                    </>
-                  )}
-                </div>
-              </Accordion>
+                </Accordion>
+              )}
 
               {/* High Income Child Benefit Charge Calculator */}
               {isAffectedByHICBC && (
@@ -772,6 +899,13 @@ export function Results() {
                 postcode: data.postcode,
               }}
               ucResults={results}
+              selectedPeriod={selectedPeriod}
+              onFsmValueChange={({ universal, meansTested }) => {
+                setFsmUniversalMonthly(universal)
+                setFsmMeansTestedMonthly(meansTested)
+              }}
+              includeValue={fsmValueIncluded}
+              onIncludeValueChange={setFsmValueIncluded}
             />
           )
         })()}
@@ -1085,6 +1219,14 @@ export function Results() {
             }
             hasChildren={data.children > 0}
             hasLCWRA={data.hasLCWRA === 'yes' || data.partnerHasLCWRA === 'yes'}
+            childBenefitMonthly={cbMonthly}
+            scpMonthly={scpMonthly}
+            fsmUniversalMonthly={fsmUniversalMonthly}
+            fsmMeansTestedMonthly={fsmMeansTestedMonthly}
+            fsmEligibleOutOfWork={fsmEligibleOutOfWork}
+            fsmAnnualEarningsThreshold={fsmAnnualEarningsThreshold}
+            fsmValueIncluded={fsmValueIncluded}
+            onFsmValueIncludedChange={setFsmValueIncluded}
             onCalculationComplete={(result) => {
               console.log('Better-Off Calculation:', result)
             }}

@@ -7,6 +7,25 @@
 import { formatCurrency } from '~/utils/functions'
 import { calculateScottishChildPayment } from '../utils/scottishChildPaymentCalculator'
 
+const SCP_PERIOD_LABELS: Record<string, string> = {
+  per_week: 'per week',
+  per_2_weeks: 'per 2 weeks',
+  per_4_weeks: 'per 4 weeks',
+  per_month: 'per month',
+  per_year: 'per year',
+}
+
+function scpConvertFromMonthly(monthlyAmount: number, period: string): number {
+  switch (period) {
+    case 'per_week': return monthlyAmount * 12 / 52
+    case 'per_2_weeks': return monthlyAmount * 12 / 26
+    case 'per_4_weeks': return monthlyAmount * 12 / 13
+    case 'per_month': return monthlyAmount
+    case 'per_year': return monthlyAmount * 12
+    default: return monthlyAmount
+  }
+}
+
 interface ScottishChildPaymentModuleProps {
   data: {
     area: string
@@ -24,9 +43,10 @@ interface ScottishChildPaymentModuleProps {
       studentIncomeDeduction: number
     }
   }
+  selectedPeriod?: string
 }
 
-export function ScottishChildPaymentModule({ data, ucResults }: ScottishChildPaymentModuleProps) {
+export function ScottishChildPaymentModule({ data, ucResults, selectedPeriod = 'per_month' }: ScottishChildPaymentModuleProps) {
   const result = calculateScottishChildPayment(data, ucResults)
 
   // Don't render if not Scotland or no children
@@ -59,8 +79,8 @@ export function ScottishChildPaymentModule({ data, ucResults }: ScottishChildPay
         <h2 className="text-2xl font-semibold mb-2">Scottish Child Payment</h2>
         {isEligible && (
           <p className="text-4xl font-bold text-slate-800 mb-2">
-            {formatCurrency(result.fourWeeklyAmount)}{' '}
-            <span className="text-lg">every 4 weeks</span>
+            {formatCurrency(scpConvertFromMonthly(result.monthlyEquivalent, selectedPeriod))}{' '}
+            <span className="text-lg">{SCP_PERIOD_LABELS[selectedPeriod]}</span>
           </p>
         )}
         <div className="flex items-center gap-3">
@@ -95,26 +115,14 @@ export function ScottishChildPaymentModule({ data, ucResults }: ScottishChildPay
             <span className="text-gray-600">Weekly rate per child</span>
             <span className="font-medium">{formatCurrency(result.weeklyRate)}</span>
           </div>
-          <div className="flex justify-between py-2 border-b border-slate-200">
-            <span className="text-gray-600">Total weekly amount</span>
-            <span className="font-medium">{formatCurrency(result.weeklyAmount)}</span>
-          </div>
           <div className="flex justify-between py-2 border-b border-slate-200 font-semibold">
-            <span>4-weekly payment</span>
-            <span>{formatCurrency(result.fourWeeklyAmount)}</span>
-          </div>
-          <div className="flex justify-between py-2 border-b border-slate-200">
-            <span className="text-gray-600">Monthly equivalent</span>
-            <span className="font-medium">{formatCurrency(result.monthlyEquivalent)}</span>
-          </div>
-          <div className="flex justify-between py-2 border-b border-slate-200">
-            <span className="text-gray-600">Annual amount</span>
-            <span className="font-medium">{formatCurrency(result.yearlyAmount)}</span>
+            <span>Total amount</span>
+            <span>{formatCurrency(scpConvertFromMonthly(result.monthlyEquivalent, selectedPeriod))} <span className="font-normal text-gray-500 text-sm">{SCP_PERIOD_LABELS[selectedPeriod]}</span></span>
           </div>
           <div className="flex justify-between py-2 border-b border-slate-200">
             <span className="text-gray-600">Receiving Universal Credit</span>
             <span className={`font-medium ${result.ucAmount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {result.ucAmount > 0 ? `Yes (${formatCurrency(result.ucAmount)}/month)` : 'No (£0)'}
+              {result.ucAmount > 0 ? `Yes (${formatCurrency(scpConvertFromMonthly(result.ucAmount, selectedPeriod))} ${SCP_PERIOD_LABELS[selectedPeriod]})` : 'No (£0)'}
             </span>
           </div>
         </div>

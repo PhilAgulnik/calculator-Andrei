@@ -15,7 +15,6 @@ import {
   type FreeSchoolMealsResult,
   type FreeSchoolMealsChild,
   FSM_THRESHOLDS,
-  FSM_ENGLAND_FUTURE_THRESHOLD,
   FSM_MIN_SCHOOL_AGE,
   FSM_MAX_SCHOOL_AGE,
   SCOTLAND_UNIVERSAL_FSM_MIN_AGE,
@@ -112,7 +111,7 @@ export function assessFreeSchoolMealsEligibility(
   const threshold = getThreshold(area)
   const countryName = formatCountryName(area)
 
-  // England has new rules from September 2026: eligible if net earned income <= £20,000
+  // England has new rules from September 2026: eligible if UC > 0
   const isEngland = normalizedArea === 'england'
 
   // Calculate net earned income
@@ -128,10 +127,8 @@ export function assessFreeSchoolMealsEligibility(
   // Check income thresholds
   const meetsIncomeThreshold = netEarnedIncome <= threshold
 
-  // September 2026 rule for England: net earned income <= £20,000 (not just UC > 0)
-  const meetsFutureIncomeThreshold = isEngland
-    ? netEarnedIncome <= FSM_ENGLAND_FUTURE_THRESHOLD
-    : meetsIncomeThreshold
+  // September 2026 rule for England: just need UC > 0
+  const meetsFutureIncomeThreshold = isEngland ? hasUniversalCredit : meetsIncomeThreshold
 
   // No children = not applicable
   if (!data.children || data.children === 0) {
@@ -169,9 +166,8 @@ export function assessFreeSchoolMealsEligibility(
     // Currently eligible: UC > 0 AND income within current threshold
     currentlyEligible = true
     eligibilityReason = 'Your children are eligible for Free School Meals.'
-  } else if (isEngland && meetsFutureIncomeThreshold) {
-    // Not currently eligible, but will be from September 2026
-    // This covers: income > £7,400 with UC, AND cases where UC = 0 but income <= £20,000
+  } else if (isEngland && hasUniversalCredit) {
+    // Not currently eligible, but will be from September 2026 (UC > 0 rule)
     futureEligible = true
     eligibilityReason = 'Your children will be eligible for Free School Meals from September 2026 when the new rules take effect for all Universal Credit claimants.'
   } else if (!hasUniversalCredit) {
@@ -234,7 +230,7 @@ export function assessFreeSchoolMealsEligibility(
     reason: eligibilityReason,
     country: countryName,
     threshold,
-    futureThreshold: FSM_ENGLAND_FUTURE_THRESHOLD,
+    futureThreshold: undefined, // No threshold — rule is just UC > 0
     netEarnedIncome,
     eligibleChildren,
     hasUniversalCredit,
