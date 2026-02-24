@@ -790,6 +790,112 @@ const examples: ExampleScenario[] = [
       monthlyEarningsPeriod: 'per_month',
     },
   },
+  {
+    id: 'fsm-scotland-universal-over-threshold',
+    name: 'Scotland: P4 universal + S2 over threshold',
+    description: 'Scotland with income above £10,200 threshold. P4 child (age 8) still gets universal FSM; S2 child (age 13) does not qualify. Panel shows eligible because universal provision applies.',
+    category: 'fsm-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 36,
+      children: 2,
+      childrenInfo: [
+        { age: 8, hasDisability: 'no' },  // P4 - universal provision
+        { age: 13, hasDisability: 'no' }, // S2 - income-based, over threshold
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 800,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1100, // £13,200/year - above £10,200 threshold; P4 still universal
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'fsm-wales-primary-universal-secondary-over-threshold',
+    name: 'Wales: Year 4 universal + Year 9 over threshold',
+    description: 'Wales with income above £7,400 threshold. Year 4 child (age 9) gets universal primary FSM; Year 9 child (age 14) does not qualify. Panel shows eligible because universal provision applies.',
+    category: 'fsm-test',
+    data: {
+      area: 'wales',
+      postcode: 'CF10 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 38,
+      children: 2,
+      childrenInfo: [
+        { age: 9, hasDisability: 'no' },  // Year 4 - universal primary
+        { age: 14, hasDisability: 'no' }, // Year 9 - secondary, over threshold
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 750,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 800, // £9,600/year - above £7,400 secondary threshold; Year 4 still universal
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'fsm-england-all-not-eligible',
+    name: 'England: All children not eligible (no UC)',
+    description: 'England couple with high combined earnings — UC tapers to £0 and income far exceeds threshold. Both school-age children are genuinely not eligible for FSM.',
+    category: 'fsm-test',
+    data: {
+      area: 'england',
+      postcode: 'M1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 40,
+      partnerAge: 38,
+      children: 2,
+      childrenInfo: [
+        { age: 8, hasDisability: 'no' },
+        { age: 12, hasDisability: 'no' },
+      ],
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 1200,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 2500,         // combined £5,000/month = £60,000/year
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'employed',
+      partnerMonthlyEarnings: 2500,  // UC tapers to £0 at this income level
+      partnerMonthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'fsm-scotland-all-secondary-not-eligible',
+    name: 'Scotland: All secondary, all not eligible',
+    description: 'Scotland with two secondary-age children and income above the £10,200 threshold. No universal provision applies. All children are genuinely not eligible.',
+    category: 'fsm-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 42,
+      partnerAge: 40,
+      children: 2,
+      childrenInfo: [
+        { age: 12, hasDisability: 'no' }, // S1 - no universal provision
+        { age: 15, hasDisability: 'no' }, // S4 - no universal provision
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 900,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1200, // £14,400/year - above £10,200 threshold
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
 
   // --- Scottish Child Payment (SCP) Test Scenarios ---
   {

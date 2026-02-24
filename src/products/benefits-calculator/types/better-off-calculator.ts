@@ -77,6 +77,14 @@ export interface BetterOffCalculation {
   grossEarnings: IncomeBreakdown
   netEarnings: IncomeBreakdown
   universalCredit: IncomeBreakdown
+  childBenefit?: IncomeBreakdown
+  scottishChildPayment?: IncomeBreakdown
+  /** Universal FSM (Scotland P1-P5 / Wales primary) — always eligible regardless of earnings */
+  freeSchoolMealsUniversal?: IncomeBreakdown
+  /** Means-tested FSM — can be lost in work if earnings exceed the threshold */
+  freeSchoolMealsMeansTested?: IncomeBreakdown
+  /** Whether means-tested FSM is still eligible at the modelled in-work earnings */
+  inWorkMeansTestedFsmEligible?: boolean
   totalIncome: IncomeBreakdown
   workCosts: WorkCostsSummary
   betterOffAmount: number
@@ -97,6 +105,22 @@ export interface BetterOffCalculatorProps {
   hasLCWRA?: boolean
   /** Callback when calculation is complete */
   onCalculationComplete?: (result: BetterOffCalculation) => void
+  /** Child Benefit monthly amount (unchanged by employment) */
+  childBenefitMonthly?: number
+  /** Scottish Child Payment monthly amount (out-of-work) */
+  scpMonthly?: number
+  /** Universal FSM monthly value (Scotland P1-P5 / Wales primary); null means not opted in */
+  fsmUniversalMonthly?: number | null
+  /** Means-tested FSM monthly value; null means not opted in */
+  fsmMeansTestedMonthly?: number | null
+  /** True if means-tested FSM eligible out of work but no value opted in — triggers a note */
+  fsmEligibleOutOfWork?: boolean
+  /** Annual earnings threshold for means-tested FSM in their area */
+  fsmAnnualEarningsThreshold?: number
+  /** Whether the user has opted to include the estimated FSM value in the comparison */
+  fsmValueIncluded?: boolean
+  /** Callback when the user toggles the FSM include checkbox in the BOC */
+  onFsmValueIncludedChange?: (v: boolean) => void
 }
 
 /**
