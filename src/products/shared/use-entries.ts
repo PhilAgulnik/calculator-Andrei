@@ -10,8 +10,8 @@ export function useEntries({ basePath }: { basePath: string }) {
 
   const [entries, setEntries] = useState<any>(localEntries)
 
-  const addEntry = useCallback((initialData?: Record<string, unknown>) => {
-    const newEntry = { id: generateId(), data: initialData || {}, createdAt: new Date().toISOString() }
+  const addEntry = useCallback((initialData?: Record<string, unknown>, options?: { isExample?: boolean }) => {
+    const newEntry = { id: generateId(), data: initialData || {}, createdAt: new Date().toISOString(), ...(options?.isExample ? { isExample: true } : {}) }
 
     setEntries((prevEntries: any) => {
       const newEntries = { ...prevEntries, [newEntry.id]: newEntry }

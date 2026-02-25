@@ -18,8 +18,8 @@ function HomeComponent() {
 
 
   const handleLoadExample = (exampleData: Record<string, any>) => {
-    // Create a new entry with the example data pre-filled
-    const newEntry = benefitsCalculator.addEntry(exampleData)
+    // Create a temporary entry with the example data — marked so it is excluded from saved entries
+    const newEntry = benefitsCalculator.addEntry(exampleData, { isExample: true })
 
     // Navigate directly to the results page with the pre-filled data
     navigate({ to: '/benefits-calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
@@ -63,9 +63,10 @@ function HomeComponent() {
             </div>
           </button>
 
-          {benefitsCalculator.entries && Object.values(benefitsCalculator.entries).length > 0 && (
+          {benefitsCalculator.entries && Object.values(benefitsCalculator.entries).filter((e: any) => !e.isExample).length > 0 && (
             <Accordion title="Saved entries" open={true} className="mt-4">
               {Object.values(benefitsCalculator.entries)
+                .filter((e: any) => !e.isExample)
                 .sort(
                   (a: any, b: any) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -93,7 +94,7 @@ function HomeComponent() {
           )}
 
           {/* Example Scenarios Section */}
-          <Accordion title="Example Scenarios" open={false} className="mt-4">
+          <Accordion title="Example Scenarios" open={true} className="mt-4">
             <div className="py-4">
               <ExampleScenarios onLoadExample={handleLoadExample} compact={false} />
             </div>

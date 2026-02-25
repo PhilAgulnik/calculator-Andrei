@@ -59,6 +59,13 @@ export const WALES_UNIVERSAL_FSM_MAX_AGE = 11
 export const WALES_UNIVERSAL_FSM_MIN_AGE = 4
 
 /**
+ * London (Mayor of London scheme) universal provision age range (all primary school)
+ * Reception through Year 6 (ages 4-11)
+ */
+export const LONDON_UNIVERSAL_FSM_MIN_AGE = 4
+export const LONDON_UNIVERSAL_FSM_MAX_AGE = 11
+
+/**
  * School age range for FSM eligibility
  */
 export const FSM_MIN_SCHOOL_AGE = 4

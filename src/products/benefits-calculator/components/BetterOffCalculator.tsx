@@ -670,7 +670,7 @@ export function BetterOffCalculator({
                   )}
                   {calculation.freeSchoolMealsUniversal && (
                     <tr className="border-b border-gray-200">
-                      <td className="p-3 text-sm">Free School Meals – universal (estimated)</td>
+                      <td className="p-3 text-sm">Free School Meals – universal estimated value</td>
                       <td className="p-3 text-sm text-right font-mono">
                         {formatCurrency(calculation.freeSchoolMealsUniversal.current)}
                       </td>
@@ -684,7 +684,7 @@ export function BetterOffCalculator({
                   )}
                   {calculation.freeSchoolMealsMeansTested && (
                     <tr className="border-b border-gray-200">
-                      <td className="p-3 text-sm">Free School Meals – means-tested (estimated)</td>
+                      <td className="p-3 text-sm">Free School Meals – means-tested estimated value</td>
                       <td className="p-3 text-sm text-right font-mono">
                         {formatCurrency(calculation.freeSchoolMealsMeansTested.current)}
                       </td>

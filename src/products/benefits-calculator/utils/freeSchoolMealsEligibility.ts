@@ -21,6 +21,8 @@ import {
   SCOTLAND_UNIVERSAL_FSM_MAX_AGE,
   WALES_UNIVERSAL_FSM_MIN_AGE,
   WALES_UNIVERSAL_FSM_MAX_AGE,
+  LONDON_UNIVERSAL_FSM_MIN_AGE,
+  LONDON_UNIVERSAL_FSM_MAX_AGE,
 } from '../types/free-school-meals'
 
 interface AssessmentData {
@@ -29,6 +31,7 @@ interface AssessmentData {
   childrenInfo?: { age: number }[]
   monthlyEarnings?: number
   partnerMonthlyEarnings?: number
+  postcode?: string
 }
 
 interface UCResults {
@@ -100,6 +103,21 @@ function isWalesUniversalEligible(age: number): boolean {
 }
 
 /**
+ * Checks if a postcode is in London (Mayor of London universal primary FSM scheme)
+ */
+function isLondonPostcode(postcode: string): boolean {
+  const prefix = postcode.trim().toUpperCase().split(/\s/)[0]
+  return /^(E|EC|N|NW|SE|SW|W|WC)\d/.test(prefix)
+}
+
+/**
+ * Checks if a child in London qualifies for universal FSM provision (all primary)
+ */
+function isLondonUniversalEligible(age: number): boolean {
+  return age >= LONDON_UNIVERSAL_FSM_MIN_AGE && age <= LONDON_UNIVERSAL_FSM_MAX_AGE
+}
+
+/**
  * Assesses Free School Meals eligibility based on household data and UC calculation results
  */
 export function assessFreeSchoolMealsEligibility(
@@ -113,6 +131,7 @@ export function assessFreeSchoolMealsEligibility(
 
   // England has new rules from September 2026: eligible if UC > 0
   const isEngland = normalizedArea === 'england'
+  const isLondon = isEngland && !!data.postcode && isLondonPostcode(data.postcode)
 
   // Calculate net earned income
   const netEarnedIncome = calculateAnnualNetEarnedIncome(
@@ -210,6 +229,17 @@ export function assessFreeSchoolMealsEligibility(
       }
     }
 
+    // London (Mayor of London scheme) universal provision for all primary school children
+    if (isLondon && isLondonUniversalEligible(age)) {
+      return {
+        age,
+        eligible: true,
+        eligibleFromSeptember2026: false,
+        reason: 'Universal Primary Free School Meals (Mayor of London)',
+        universalProvision: true,
+      }
+    }
+
     return {
       age,
       eligible: currentlyEligible,
@@ -222,10 +252,12 @@ export function assessFreeSchoolMealsEligibility(
     }
   })
 
+  const anyUniversalChild = eligibleChildren.some(c => c.eligible && c.universalProvision)
+
   return {
-    eligible: currentlyEligible,
+    eligible: currentlyEligible || anyUniversalChild,
     eligibleFromSeptember2026: futureEligible,
-    anyChildEligible: currentlyEligible,
+    anyChildEligible: currentlyEligible || anyUniversalChild,
     anyChildEligibleFromSeptember2026: futureEligible,
     reason: eligibilityReason,
     country: countryName,

@@ -45,10 +45,15 @@ interface FreeSchoolMealsModuleProps {
   ucResults: {
     calculation?: {
       finalAmount: number
+      totalElements?: number
+      workAllowance?: number
+      capitalDeduction?: number
+      benefitDeduction?: number
+      studentIncomeDeduction?: number
     }
   }
   selectedPeriod?: string
-  onFsmValueChange?: (values: { universal: number | null; meansTested: number | null }) => void
+  onFsmValueChange?: (values: { universal: number | null; meansTested: number | null; annualPerChild: number }) => void
   /** Controlled value for the "include estimated value" checkbox — lifted to parent */
   includeValue?: boolean
   /** Callback when user toggles the checkbox — lifted to parent */
@@ -99,6 +104,7 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
   const isEngland = result.country === 'England'
   const isScotland = result.country === 'Scotland'
   const isWales = result.country === 'Wales'
+  const isNorthernIreland = result.country === 'Northern Ireland'
   const isLondon = isEngland && data.postcode ? isLondonPostcode(data.postcode) : false
   const isNotEligible = !isCurrentlyEligible && !isFutureEligible
 
@@ -112,6 +118,22 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
 
   // Show cross-country note when not eligible but has UC (and not in England)
   const showEnglandComparisonNote = isNotEligible && result.hasUniversalCredit && !isEngland
+
+  // For England: compute the net earnings level at which UC > 0 (and hence means-tested FSM kicks in).
+  // Uses the same taper formula as the SCP module: threshold = (totalElements - otherDeductions) / 0.55 + workAllowance
+  let earningsThresholdForUC: number | null = null
+  const calc = ucResults.calculation
+  if (isEngland && !result.hasUniversalCredit && !hasUniversal && calc) {
+    const otherDeductions =
+      (calc.capitalDeduction || 0) +
+      (calc.benefitDeduction || 0) +
+      (calc.studentIncomeDeduction || 0)
+    const availableForTaper = (calc.totalElements || 0) - otherDeductions
+    if (availableForTaper > 0) {
+      earningsThresholdForUC = availableForTaper / 0.55 + (calc.workAllowance || 0)
+    }
+  }
+  const showUCZeroAdvisory = isEngland && !result.hasUniversalCredit && isNotEligible && !hasUniversal
 
   const parsedAnnual = Math.max(0, parseFloat(perChildAnnualInput) || 0)
   const universalMonthly = (parsedAnnual * universalChildren.length) / 12
@@ -146,11 +168,29 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
       onFsmValueChange({
         universal: universalMonthly > 0 ? universalMonthly : null,
         meansTested: meansTestedMonthly > 0 ? meansTestedMonthly : null,
+        annualPerChild: parsedAnnual,
       })
     } else {
-      onFsmValueChange({ universal: null, meansTested: null })
+      onFsmValueChange({ universal: null, meansTested: null, annualPerChild: parsedAnnual })
     }
   }, [includeValue, universalMonthly, meansTestedMonthly, isCurrentlyEligible])
+
+  // Paragraph text shown under the header — override the utility's reason string when no UC,
+  // to spell out means-tested vs universal and reference the September 2026 rule.
+  let displayReason = result.reason
+  if (!result.hasUniversalCredit && !allEligibleAreUniversal) {
+    const thresholdFormatted = `£${result.threshold.toLocaleString()}/year`
+    if (isEngland) {
+      displayReason =
+        `You are not currently receiving Universal Credit. Means-tested free school meals in England currently require you to have net earnings below the income threshold of ${thresholdFormatted}. From September 2026 this income threshold will be abolished in England and having any UC award (greater than £0) will be sufficient to qualify for means-tested free school meals. Some children may also be eligible for universal free school meals regardless of income — for example, all primary school children in London.`
+    } else if (isNorthernIreland) {
+      displayReason =
+        `Means-tested free school meals in Northern Ireland currently require you to have net earnings below the income threshold of ${thresholdFormatted}.`
+    } else {
+      displayReason =
+        `Means-tested free school meals in ${result.country} currently require you to have net earnings below the income threshold of ${thresholdFormatted}. Some children may also be eligible for universal free school meals regardless of income.`
+    }
+  }
 
   let headerMessage: string
   let headerBgClass: string
@@ -158,18 +198,27 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
 
   const childOrChildren = schoolAgeChildren.length === 1 ? 'child' : 'children'
 
+  const isOrAre = schoolAgeChildren.length === 1 ? 'is' : 'are'
+  const qualifyOrQualifies = schoolAgeChildren.length === 1 ? 'qualifies' : 'qualify'
+
   if (isCurrentlyEligible) {
     if (hasUniversal && hasMeansTested) {
-      headerMessage = `Your ${childOrChildren} qualify for universal and means-tested Free School Meals`
+      headerMessage = `Your ${childOrChildren} ${qualifyOrQualifies} for universal and means-tested Free School Meals`
     } else if (hasUniversal) {
-      headerMessage = `Your ${childOrChildren} are eligible for universal Free School Meals`
+      if (universalChildren.length < schoolAgeChildren.length) {
+        const n = universalChildren.length
+        const nIsAre = n === 1 ? 'is' : 'are'
+        headerMessage = `${n} of your children ${nIsAre} eligible for universal Free School Meals`
+      } else {
+        headerMessage = `Your ${childOrChildren} ${isOrAre} eligible for universal Free School Meals`
+      }
     } else {
-      headerMessage = `Your ${childOrChildren} are eligible for means-tested Free School Meals`
+      headerMessage = `Your ${childOrChildren} ${isOrAre} eligible for means-tested Free School Meals`
     }
     headerBgClass = 'bg-green-50 border-green-200'
     badgeBgClass = 'bg-green-100 text-green-800'
   } else if (isFutureEligible) {
-    headerMessage = `Your ${childOrChildren} ${schoolAgeChildren.length === 1 ? 'is' : 'are'} eligible for means-tested Free School Meals from September 2026`
+    headerMessage = `Your ${childOrChildren} ${isOrAre} eligible for means-tested Free School Meals from September 2026`
     headerBgClass = 'bg-amber-50 border-amber-200'
     badgeBgClass = 'bg-amber-100 text-amber-800'
   } else {
@@ -214,7 +263,7 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
             ? result.country === 'Scotland'
               ? 'Eligible children in P1–P5 receive free school meals automatically. No income test applies.'
               : 'Eligible children in primary school receive free school meals automatically. No income test applies.'
-            : result.reason}
+            : displayReason}
         </p>
 
         <div className="space-y-3 mb-4">
@@ -283,8 +332,8 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
                 <tr>
                   <th className="text-left px-3 py-2 text-gray-600 font-medium">Child</th>
                   <th className="text-left px-3 py-2 text-gray-600 font-medium">Age</th>
-                  <th className="text-left px-3 py-2 text-gray-600 font-medium">Universal FSM</th>
-                  <th className="text-right px-3 py-2 text-gray-600 font-medium">Status</th>
+                  <th className="text-left px-3 py-2 text-gray-600 font-medium">Universal FSM eligibility</th>
+                  <th className="text-right px-3 py-2 text-gray-600 font-medium">Means-tested FSM eligibility</th>
                 </tr>
               </thead>
               <tbody>
@@ -300,14 +349,17 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
 
                   let statusText: string
                   let statusClass: string
-                  if (child.eligible) {
-                    statusText = child.universalProvision ? 'Eligible (universal)' : 'Eligible'
+                  if (child.universalProvision) {
+                    statusText = 'N/A (universal provision)'
+                    statusClass = 'text-gray-500'
+                  } else if (child.eligible) {
+                    statusText = 'Yes'
                     statusClass = 'text-green-600'
                   } else if (child.eligibleFromSeptember2026) {
-                    statusText = 'Eligible from Sep 2026'
+                    statusText = 'From Sep 2026'
                     statusClass = 'text-amber-600'
                   } else {
-                    statusText = 'Not eligible'
+                    statusText = 'No'
                     statusClass = 'text-red-600'
                   }
 
@@ -451,9 +503,36 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
           </div>
         )}
 
+        {/* England UC = 0 advisory — earnings too high for UC, hence no means-tested FSM */}
+        {showUCZeroAdvisory && (
+          <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
+            <p className="text-sm text-amber-800">
+              Your Universal Credit has been reduced to £0 by your earnings. Where a child does not
+              qualify for universal Free School Meals, means-tested Free School Meals in England
+              require a UC award greater than zero (from September 2026).
+            </p>
+            {earningsThresholdForUC != null && earningsThresholdForUC > 0 && (
+              <p className="text-sm text-amber-800">
+                If your combined net monthly earnings (after tax and National Insurance) were below
+                approximately{' '}
+                <strong>£{earningsThresholdForUC.toLocaleString(undefined, { maximumFractionDigits: 0 })}/month</strong>
+                {' '}(£{(earningsThresholdForUC * 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/year),
+                you would receive some Universal Credit and your{' '}
+                {schoolAgeChildren.length === 1 ? 'child' : 'children'} would qualify for means-tested
+                Free School Meals.
+              </p>
+            )}
+            <p className="text-sm text-amber-800">
+              If your earnings decrease or your circumstances change such that you receive some UC,
+              your {schoolAgeChildren.length === 1 ? 'child' : 'children'} would become eligible for
+              means-tested Free School Meals.
+            </p>
+          </div>
+        )}
+
         <div className="mt-6 pt-4 border-t border-slate-200">
           <p className="text-sm text-gray-600 mb-3">
-            Free School Meals must be applied for through your local council.
+            Applications for Free School Meals are generally made directly through your child's school or through the local council where your child's school is located.
             {isScotland && hasScotlandP1P5Children && (
               <span className="block mt-1">
                 Note: In Scotland, all children in Primary 1–5 (ages 4–10) automatically receive free school meals, regardless of income.
@@ -467,28 +546,17 @@ export function FreeSchoolMealsModule({ data, ucResults, selectedPeriod = 'per_m
             {isFutureEligible && isEngland && (
               <span className="block mt-1 text-amber-700">
                 {isLondon
-                  ? 'Note: From September 2026, all Universal Credit claimants in England — including London — will be eligible for Free School Meals. You will be able to apply closer to that date.'
-                  : 'Note: From September 2026, all Universal Credit claimants in England will be eligible for Free School Meals. You will be able to apply closer to that date.'
+                  ? 'Note: From September 2026, all Universal Credit claimants in England — including London — will be eligible for means-tested free school meals. You will be able to apply closer to that date.'
+                  : 'Note: From September 2026, all Universal Credit claimants in England will be eligible for means-tested free school meals. You will be able to apply closer to that date.'
                 }
               </span>
             )}
             {showEnglandComparisonNote && (
               <span className="block mt-2 text-gray-500">
-                Note: In England, all households with a Universal Credit award will be eligible for free school meals from September 2026. However, these new rules do not apply in {result.country}, where the earnings limit remains £{result.threshold.toLocaleString()}/year (£{(result.threshold / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/month).
+                Note: In England, all households with a Universal Credit award will be eligible for means-tested free school meals from September 2026. However, these new rules do not apply in {result.country}, where the earnings limit remains £{result.threshold.toLocaleString()}/year (£{(result.threshold / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/month).
               </span>
             )}
           </p>
-          {(isCurrentlyEligible || !isFutureEligible) && (
-            <a
-              href="https://www.gov.uk/apply-free-school-meals"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 hover:underline text-sm"
-            >
-              Apply for Free School Meals on GOV.UK
-              <span className="ml-1">→</span>
-            </a>
-          )}
         </div>
       </div>
     </div>

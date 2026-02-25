@@ -79,6 +79,7 @@ export function Results() {
   const [fsmUniversalMonthly, setFsmUniversalMonthly] = useState<number | null>(null)
   const [fsmMeansTestedMonthly, setFsmMeansTestedMonthly] = useState<number | null>(null)
   const [fsmValueIncluded, setFsmValueIncluded] = useState(false)
+  const [fsmAnnualPerChild, setFsmAnnualPerChild] = useState<number>(500)
 
   const data: any = entry?.data || {}
 
@@ -320,8 +321,8 @@ export function Results() {
     ucMonthly > 0 && { label: 'Universal Credit', monthly: ucMonthly },
     cbMonthly > 0 && { label: 'Child Benefit', monthly: cbMonthly },
     scpMonthly > 0 && { label: 'Scottish Child Payment', monthly: scpMonthly },
-    (fsmUniversalMonthly !== null && fsmUniversalMonthly > 0) && { label: 'Free School Meals – universal (estimated)', monthly: fsmUniversalMonthly },
-    (fsmMeansTestedMonthly !== null && fsmMeansTestedMonthly > 0) && { label: 'Free School Meals – means-tested (estimated)', monthly: fsmMeansTestedMonthly },
+    (fsmUniversalMonthly !== null && fsmUniversalMonthly > 0) && { label: 'Free School Meals – universal (estimated value)', monthly: fsmUniversalMonthly },
+    (fsmMeansTestedMonthly !== null && fsmMeansTestedMonthly > 0) && { label: 'Free School Meals – means-tested (estimated value)', monthly: fsmMeansTestedMonthly },
   ].filter(Boolean) as { label: string; monthly: number }[]
 
   const totalMonthly = activeBenefits.reduce((sum, b) => sum + b.monthly, 0)
@@ -467,7 +468,7 @@ export function Results() {
               ))}
               {((fsmUniversalMonthly !== null && fsmUniversalMonthly > 0) || (fsmMeansTestedMonthly !== null && fsmMeansTestedMonthly > 0)) && (
                 <p className="text-green-300 text-xs pt-2 border-t border-green-700">
-                  Free school meals estimated value is included. To remove it, uncheck &ldquo;Include estimated FSM value in total benefits&rdquo; in the Free School Meals section below.
+                  Free school meals estimated value is included based on an annual value per child of £{fsmAnnualPerChild.toLocaleString()}. To remove it, uncheck the estimated value of free school meals tickbox in the panel below.
                 </p>
               )}
             </div>
@@ -900,9 +901,10 @@ export function Results() {
               }}
               ucResults={results}
               selectedPeriod={selectedPeriod}
-              onFsmValueChange={({ universal, meansTested }) => {
+              onFsmValueChange={({ universal, meansTested, annualPerChild }) => {
                 setFsmUniversalMonthly(universal)
                 setFsmMeansTestedMonthly(meansTested)
+                setFsmAnnualPerChild(annualPerChild)
               }}
               includeValue={fsmValueIncluded}
               onIncludeValueChange={setFsmValueIncluded}
