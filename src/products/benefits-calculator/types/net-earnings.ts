@@ -26,7 +26,7 @@ export interface NICalculation {
   lowerEarningsLimit: number // £6,396/year (£123/week)
   primaryThreshold: number // £12,570/year
   upperEarningsLimit: number // £50,270/year (£967/week)
-  rate12Percent: number // 12% on £12,570-£50,270
+  rate8Percent: number // 8% on £12,570-£50,270
   rate2Percent: number // 2% above £50,270
   totalNI: number
   effectiveRate: number

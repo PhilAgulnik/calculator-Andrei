@@ -30,14 +30,27 @@ export interface ChildBenefitChargeProps {
   numberOfChildren: number
   claimantIncome?: number
   partnerIncome?: number
+  taxYear?: string
   onCalculationComplete?: (result: ChildBenefitChargeCalculation) => void
 }
 
-// Child Benefit rates (2024/25 tax year)
+// Child Benefit rates by tax year
+export const CHILD_BENEFIT_RATES_BY_YEAR: Record<string, { firstChild: number; additionalChild: number }> = {
+  '2024_25': { firstChild: 25.60, additionalChild: 16.95 },
+  '2025_26': { firstChild: 26.05, additionalChild: 17.25 },
+  '2026_27': { firstChild: 27.05, additionalChild: 17.90 },
+}
+
+// Child Benefit rates (2025/26 tax year) — kept for backwards compatibility
 export const CHILD_BENEFIT_RATES = {
-  firstChild: 25.6, // £25.60 per week
-  additionalChild: 16.95, // £16.95 per week per additional child
-  taxYear: '2024/25',
+  firstChild: 26.05, // £26.05 per week
+  additionalChild: 17.25, // £17.25 per week per additional child
+  taxYear: '2025/26',
+}
+
+// Helper to get CB rates for a given tax year (falls back to 2025/26)
+export function getChildBenefitRates(taxYear?: string) {
+  return CHILD_BENEFIT_RATES_BY_YEAR[taxYear ?? '2025_26'] ?? CHILD_BENEFIT_RATES_BY_YEAR['2025_26']
 }
 
 // HICBC thresholds

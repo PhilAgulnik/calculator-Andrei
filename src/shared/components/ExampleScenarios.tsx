@@ -10,188 +10,227 @@ export interface ExampleScenario {
   id: string
   name: string
   description: string
-  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student' | 'scp-test'
+  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student' | 'scp-test' | 'ema-test'
   data: Record<string, any>
 }
 
 const examples: ExampleScenario[] = [
   {
     id: 'single-no-children',
-    name: 'Single person, no children',
+    name: 'Simple 1: Single person, no children',
     description: 'Basic single person scenario with no dependents',
     category: 'simple',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 32,
-      numberOfChildren: 0,
-      hasHousingCosts: true,
-      monthlyRent: 650,
-      brma: 'Manchester',
-      hasEarnings: false,
+      children: 0,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 650,
+      rentPeriod: 'per_month',
+      brma: 'Central Greater Manchester',
+      employmentType: 'not_working',
     },
   },
   {
     id: 'single-parent-2-kids',
-    name: 'Single parent, 2 children',
+    name: 'Real World 1: Single parent, 2 children',
     description: 'Single parent with 2 children in Manchester',
     category: 'real-world',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 35,
-      numberOfChildren: 2,
-      children: [
-        { age: 5, disabled: false },
-        { age: 8, disabled: false },
+      children: 2,
+      childrenInfo: [
+        { age: 5, hasDisability: false },
+        { age: 8, hasDisability: false },
       ],
-      hasHousingCosts: true,
-      monthlyRent: 820,
-      brma: 'Manchester',
-      hasEarnings: false,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 820,
+      rentPeriod: 'per_month',
+      brma: 'Central Greater Manchester',
+      employmentType: 'not_working',
     },
   },
   {
     id: 'couple-3-kids',
-    name: 'Couple with 3 children',
+    name: 'Complex 1: Couple with 3 children',
     description: 'Couple with 3 children, one with disability',
     category: 'complex',
     data: {
-      householdType: 'couple',
-      claimantAge: 38,
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 38,
       partnerAge: 40,
-      numberOfChildren: 3,
-      children: [
-        { age: 4, disabled: false },
-        { age: 7, disabled: true },
-        { age: 12, disabled: false },
+      children: 3,
+      childrenInfo: [
+        { age: 4, hasDisability: false },
+        { age: 7, hasDisability: true },
+        { age: 12, hasDisability: false },
       ],
-      hasHousingCosts: true,
-      monthlyRent: 1100,
-      brma: 'London',
-      hasEarnings: true,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 1100,
+      rentPeriod: 'per_month',
+      brma: 'Outer South East London',
+      employmentType: 'employed',
       monthlyEarnings: 1200,
+      monthlyEarningsPeriod: 'per_month',
     },
   },
   {
     id: 'part-time-worker',
-    name: 'Part-time worker',
-    description: 'Single person working 16 hours/week',
+    name: 'Real World 2: Part-time worker',
+    description: 'Single person working 16 hours/week at minimum wage (~£800/month)',
     category: 'real-world',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 28,
-      numberOfChildren: 0,
-      hasHousingCosts: true,
-      monthlyRent: 550,
+      children: 0,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 550,
+      rentPeriod: 'per_month',
       brma: 'Leeds',
-      hasEarnings: true,
+      employmentType: 'employed',
       monthlyEarnings: 800,
-      hoursPerWeek: 16,
-      hourlyWage: 11.5,
+      monthlyEarningsPeriod: 'per_month',
     },
   },
   {
     id: 'carer-scenario',
-    name: 'Carer for disabled parent',
+    name: 'Complex 2: Carer for disabled parent',
     description: 'Single person caring for disabled parent 40+ hours/week',
     category: 'complex',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 45,
-      numberOfChildren: 0,
-      hasHousingCosts: true,
-      monthlyRent: 600,
+      children: 0,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 600,
+      rentPeriod: 'per_month',
       brma: 'Birmingham',
-      isCarer: true,
-      hoursOfCarePerWeek: 45,
-      hasEarnings: false,
+      isCarer: 'yes',
+      employmentType: 'not_working',
     },
   },
   {
     id: 'pension-age-couple',
-    name: 'Mixed-age couple (one at SPA)',
+    name: 'Edge Case 1: Mixed-age couple (one at SPA)',
     description: 'Couple where partner has reached State Pension Age',
     category: 'edge-case',
     data: {
-      householdType: 'couple',
-      claimantAge: 55,
-      partnerAge: 67, // Over State Pension Age
-      numberOfChildren: 0,
-      hasHousingCosts: true,
-      monthlyRent: 750,
-      brma: 'Glasgow',
-      hasEarnings: false,
+      area: 'scotland',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 55,
+      partnerAge: 67,
+      children: 0,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 750,
+      rentPeriod: 'per_month',
+      brma: 'Greater Glasgow',
+      employmentType: 'not_working',
     },
   },
   {
     id: 'high-earner',
-    name: 'High earner with children',
+    name: 'Edge Case 2: High earner with children',
     description: 'Family with income over £60k (Child Benefit charge applies)',
     category: 'edge-case',
     data: {
-      householdType: 'couple',
-      claimantAge: 42,
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 42,
       partnerAge: 40,
-      numberOfChildren: 2,
-      children: [
-        { age: 6, disabled: false },
-        { age: 10, disabled: false },
+      children: 2,
+      childrenInfo: [
+        { age: 6, hasDisability: false },
+        { age: 10, hasDisability: false },
       ],
-      hasHousingCosts: true,
-      monthlyRent: 1200,
-      brma: 'South East London',
-      hasEarnings: true,
-      annualIncome: 65000,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 1200,
+      rentPeriod: 'per_month',
+      brma: 'Outer South East London',
+      employmentType: 'employed',
+      monthlyEarnings: 5417,
+      monthlyEarningsPeriod: 'per_month',
     },
   },
   {
     id: 'lcwra-element',
-    name: 'Person with LCWRA',
+    name: 'Complex 3: Person with LCWRA',
     description: 'Single person with Limited Capability for Work and Work-Related Activity',
     category: 'complex',
     data: {
-      householdType: 'single',
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 51,
-      numberOfChildren: 0,
-      hasHousingCosts: true,
-      monthlyRent: 580,
+      children: 0,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 580,
+      rentPeriod: 'per_month',
       brma: 'Cardiff',
-      hasLCWRA: true,
-      hasEarnings: false,
+      hasLCWRA: 'yes',
+      employmentType: 'not_working',
     },
   },
   {
     id: 'childcare-costs',
-    name: 'Working parent with childcare',
+    name: 'Real World 3: Working parent with childcare',
     description: 'Single parent working full-time with high childcare costs',
     category: 'real-world',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 33,
-      numberOfChildren: 2,
-      children: [
-        { age: 2, disabled: false },
-        { age: 4, disabled: false },
+      children: 2,
+      childrenInfo: [
+        { age: 2, hasDisability: false },
+        { age: 4, hasDisability: false },
       ],
-      hasHousingCosts: true,
-      monthlyRent: 900,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 900,
+      rentPeriod: 'per_month',
       brma: 'Bristol',
-      hasEarnings: true,
+      employmentType: 'employed',
       monthlyEarnings: 1800,
-      hasChildcareCosts: true,
-      monthlyChildcareCosts: 1200,
+      monthlyEarningsPeriod: 'per_month',
+      childcareCosts: 1200,
+      childcareCostsPeriod: 'per_month',
     },
   },
   {
     id: 'zero-income',
-    name: 'No income or housing costs',
+    name: 'Edge Case 3: No income or housing costs',
     description: 'Edge case: Single person with no income living rent-free',
     category: 'edge-case',
     data: {
-      householdType: 'single',
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
       age: 25,
-      numberOfChildren: 0,
-      hasHousingCosts: false,
-      hasEarnings: false,
+      children: 0,
+      housingStatus: 'no_housing_costs',
+      employmentType: 'not_working',
     },
   },
   // ============================================
@@ -199,7 +238,7 @@ const examples: ExampleScenario[] = [
   // ============================================
   {
     id: 'student-parent-loan',
-    name: 'Student parent with maintenance loan',
+    name: 'Student 1: Student parent with maintenance loan',
     description: 'Single parent studying undergraduate degree, qualifies via responsible for child exception',
     category: 'student',
     data: {
@@ -231,7 +270,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-postgrad-pip',
-    name: 'Postgraduate student with PIP',
+    name: 'Student 2: Postgraduate student with PIP',
     description: 'Postgraduate student receiving PIP, qualifies via disability exception. 30% rule applies to postgrad loan',
     category: 'student',
     data: {
@@ -265,7 +304,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-loan-and-grant',
-    name: 'Student with loan and grant',
+    name: 'Student 3: Student with loan and grant',
     description: 'Single parent with both maintenance loan and grant. Combined income spread over 9 months less £110 disregard',
     category: 'student',
     data: {
@@ -300,7 +339,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-summer-holiday',
-    name: 'Student in summer holiday',
+    name: 'Student 4: Student in summer holiday',
     description: 'Student currently in summer vacation after course ended. Student income is NOT counted during summer holidays',
     category: 'student',
     data: {
@@ -332,7 +371,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-under-21',
-    name: 'Under 21 student without parental support',
+    name: 'Student 5: Under 21 without parental support',
     description: 'Young student under 21 in non-advanced education with no parental support, small maintenance loan',
     category: 'student',
     data: {
@@ -361,7 +400,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-couple-both-studying',
-    name: 'Couple both studying',
+    name: 'Student 6: Couple both studying',
     description: 'Both partners are students with partner caring for child. Both have maintenance loans',
     category: 'student',
     data: {
@@ -395,7 +434,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-foster-parent',
-    name: 'Student foster parent',
+    name: 'Student 7: Student foster parent',
     description: 'Single foster parent studying with a child placed with them. Qualifies via foster parent exception, loan only',
     category: 'student',
     data: {
@@ -427,7 +466,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-grant-only',
-    name: 'Student with grant only (no loan)',
+    name: 'Student 8: Student with grant only',
     description: 'Student with a bursary/grant but no maintenance loan. Qualifies via responsible for child',
     category: 'student',
     data: {
@@ -459,7 +498,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-pension-age',
-    name: 'Student at pension age with younger partner',
+    name: 'Student 9: Student at pension age',
     description: 'Older student who has reached state pension age with a younger partner. 12-month postgraduate course with grant',
     category: 'student',
     data: {
@@ -493,7 +532,7 @@ const examples: ExampleScenario[] = [
   // ============================================
   {
     id: 'fsm-england-eligible',
-    name: 'England: FSM Eligible (below £7,400)',
+    name: 'FSM 1: England eligible (below £7,400)',
     description: 'Family in England with income below £7,400 threshold - FSM eligible',
     category: 'fsm-test',
     data: {
@@ -538,7 +577,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-england-future',
-    name: 'England: FSM Sept 2026 (above £7,400)',
+    name: 'FSM 2: England Sept 2026 (above £7,400)',
     description: 'Family above threshold but will be eligible from September 2026',
     category: 'fsm-test',
     data: {
@@ -562,7 +601,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-scotland-universal',
-    name: 'Scotland: Universal FSM (P1-P5)',
+    name: 'FSM 3: Scotland universal (P1-P5)',
     description: 'Scotland with children ages 6 and 9 - universal provision regardless of income',
     category: 'fsm-test',
     data: {
@@ -589,7 +628,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-scotland-p6-eligible',
-    name: 'Scotland: P6+ FSM (below £850/month)',
+    name: 'FSM 4: Scotland P6+ eligible',
     description: 'Scotland with secondary child - eligible under £850/month threshold',
     category: 'fsm-test',
     data: {
@@ -611,7 +650,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-scotland-p6-not-eligible',
-    name: 'Scotland: P6+ Not Eligible (above £850/month)',
+    name: 'FSM 5: Scotland P6+ not eligible',
     description: 'Scotland with secondary child - NOT eligible (income above threshold)',
     category: 'fsm-test',
     data: {
@@ -635,7 +674,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-wales-universal-primary',
-    name: 'Wales: Universal Primary FSM',
+    name: 'FSM 6: Wales universal primary',
     description: 'Wales with primary children (ages 5 and 11) - universal provision',
     category: 'fsm-test',
     data: {
@@ -662,7 +701,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-wales-secondary-eligible',
-    name: 'Wales: Secondary FSM Eligible',
+    name: 'FSM 7: Wales secondary eligible',
     description: 'Wales with secondary child - eligible under £7,400 threshold',
     category: 'fsm-test',
     data: {
@@ -684,7 +723,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-wales-secondary-not-eligible',
-    name: 'Wales: Secondary Not Eligible',
+    name: 'FSM 8: Wales secondary not eligible',
     description: 'Wales with secondary child - NOT eligible (income above threshold)',
     category: 'fsm-test',
     data: {
@@ -708,7 +747,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-ni-eligible',
-    name: 'N. Ireland: FSM Eligible (below £14,000)',
+    name: 'FSM 9: N. Ireland eligible',
     description: 'Northern Ireland with income below £14,000 threshold - FSM eligible',
     category: 'fsm-test',
     data: {
@@ -735,7 +774,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-ni-not-eligible',
-    name: 'N. Ireland: Not Eligible (above £14,000)',
+    name: 'FSM 10: N. Ireland not eligible',
     description: 'Northern Ireland with income above £14,000 threshold - NOT eligible',
     category: 'fsm-test',
     data: {
@@ -759,7 +798,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-mixed-ages-scotland',
-    name: 'Scotland: Mixed Ages (P3 + Secondary)',
+    name: 'FSM 11: Scotland mixed ages (P3 + secondary)',
     description: 'Scotland with P3 child (universal) and secondary child (income-based)',
     category: 'fsm-test',
     data: {
@@ -787,7 +826,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-mixed-ages-wales',
-    name: 'Wales: Mixed Ages (Primary + Secondary)',
+    name: 'FSM 12: Wales mixed ages (primary + secondary)',
     description: 'Wales with Year 5 (universal) and Year 9 (income-based)',
     category: 'fsm-test',
     data: {
@@ -812,7 +851,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-scotland-universal-over-threshold',
-    name: 'Scotland: P4 universal + S2 over threshold',
+    name: 'FSM 13: Scotland P4 universal + S2 over threshold',
     description: 'Scotland with income above £10,200 threshold. P4 child (age 8) still gets universal FSM; S2 child (age 13) does not qualify. Panel shows eligible because universal provision applies.',
     category: 'fsm-test',
     data: {
@@ -837,7 +876,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-wales-primary-universal-secondary-over-threshold',
-    name: 'Wales: Year 4 universal + Year 9 over threshold',
+    name: 'FSM 14: Wales Year 4 universal + Year 9 over threshold',
     description: 'Wales with income above £7,400 threshold. Year 4 child (age 9) gets universal primary FSM; Year 9 child (age 14) does not qualify. Panel shows eligible because universal provision applies.',
     category: 'fsm-test',
     data: {
@@ -862,7 +901,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-england-all-not-eligible',
-    name: 'England: All children not eligible (no UC)',
+    name: 'FSM 15: England all not eligible (no UC)',
     description: 'England couple with high combined earnings — UC tapers to £0 and income far exceeds threshold. Both school-age children are genuinely not eligible for FSM.',
     category: 'fsm-test',
     data: {
@@ -891,7 +930,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-scotland-all-secondary-not-eligible',
-    name: 'Scotland: All secondary, all not eligible',
+    name: 'FSM 16: Scotland all secondary not eligible',
     description: 'Scotland with two secondary-age children and income above the £10,200 threshold. No universal provision applies. All children are genuinely not eligible.',
     category: 'fsm-test',
     data: {
@@ -919,7 +958,7 @@ const examples: ExampleScenario[] = [
 
   {
     id: 'fsm-england-uc-zero-advisory',
-    name: 'England: UC = £0 (earnings too high) — FSM advisory',
+    name: 'FSM 17: England UC = £0 advisory',
     description: 'Single parent in Manchester earning £2,400/month. Earnings taper UC to £0, so no means-tested FSM. Should show the amber advisory with the earnings threshold at which UC would become positive.',
     category: 'fsm-test',
     data: {
@@ -944,7 +983,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-london-primary-universal',
-    name: 'London: Primary-age children — universal FSM (Mayor\'s scheme)',
+    name: 'FSM 18: London primary universal (Mayor\'s scheme)',
     description: 'Single parent in London with two primary-age children. All London primary pupils receive free school meals under the Mayor\'s UFSM scheme regardless of income.',
     category: 'fsm-test',
     data: {
@@ -969,7 +1008,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'fsm-london-primary-and-secondary',
-    name: 'London: Mixed primary + secondary ages',
+    name: 'FSM 19: London mixed primary + secondary',
     description: 'Single parent in London with one primary-age and one secondary-age child. Primary child gets universal FSM via Mayor\'s scheme. Secondary child is subject to means-tested rules.',
     category: 'fsm-test',
     data: {
@@ -995,7 +1034,7 @@ const examples: ExampleScenario[] = [
 
   {
     id: 'fsm-ni-no-uc',
-    name: 'N. Ireland: No UC (earnings too high)',
+    name: 'FSM 20: N. Ireland no UC',
     description: 'Single parent in Belfast earning £2,000/month. Earnings taper UC to £0 and income (£24,000/year) is well above the £14,000 NI threshold. Shows NI-specific not-eligible message with no universal FSM note.',
     category: 'fsm-test',
     data: {
@@ -1016,10 +1055,149 @@ const examples: ExampleScenario[] = [
     },
   },
 
+  // --- FSM Mixed Universal + Means-Tested Scenarios ---
+  {
+    id: 'fsm-london-primary-universal-secondary-eligible',
+    name: 'FSM 21: London primary universal + secondary eligible',
+    description: 'Couple in East London. Age 7 child gets universal FSM via Mayor\'s scheme. Age 13 secondary child qualifies means-tested (earnings £500/month = £6,000/year, below £7,400 threshold).',
+    category: 'fsm-test',
+    data: {
+      area: 'england',
+      postcode: 'E3 2AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 37,
+      partnerAge: 35,
+      children: 2,
+      childrenInfo: [
+        { age: 7, hasDisability: 'no' },   // Year 3 — universal (Mayor of London)
+        { age: 13, hasDisability: 'no' },  // Year 9 — means-tested, below £7,400
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 1100,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 500,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
+
+  {
+    id: 'fsm-scotland-p3-universal-s1-means-tested',
+    name: 'FSM 22: Scotland P3 universal + S1 eligible',
+    description: 'Single parent in Edinburgh. Age 8 child (P3) gets universal FSM. Age 12 child (S1) qualifies means-tested (earnings £700/month = £8,400/year, below £10,200 threshold).',
+    category: 'fsm-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH6 4AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 36,
+      children: 2,
+      childrenInfo: [
+        { age: 8, hasDisability: 'no' },   // P3 — universal (P1-P5)
+        { age: 12, hasDisability: 'no' },  // S1 — means-tested, below £10,200
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 800,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 700,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+
+  {
+    id: 'fsm-wales-year3-universal-year9-means-tested',
+    name: 'FSM 23: Wales Year 3 universal + Year 9 eligible',
+    description: 'Couple in Cardiff. Age 8 child (Year 3) gets universal primary FSM. Age 14 child (Year 9) qualifies means-tested (earnings £500/month = £6,000/year, below £7,400 threshold).',
+    category: 'fsm-test',
+    data: {
+      area: 'wales',
+      postcode: 'CF24 2AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 39,
+      partnerAge: 37,
+      children: 2,
+      childrenInfo: [
+        { age: 8, hasDisability: 'no' },   // Year 3 — universal primary
+        { age: 14, hasDisability: 'no' },  // Year 9 — means-tested, below £7,400
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 850,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 500,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
+
+  {
+    id: 'fsm-scotland-3-children-2-universal-1-means-tested',
+    name: 'FSM 24: Scotland 3 children (2 universal, 1 means-tested)',
+    description: 'Couple in Glasgow with three children. Ages 6 (P2) and 9 (P4) get universal FSM. Age 12 (S1) qualifies means-tested (earnings £800/month = £9,600/year, below £10,200 threshold).',
+    category: 'fsm-test',
+    data: {
+      area: 'scotland',
+      postcode: 'G1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 41,
+      partnerAge: 39,
+      children: 3,
+      childrenInfo: [
+        { age: 6, hasDisability: 'no' },   // P2 — universal
+        { age: 9, hasDisability: 'no' },   // P4 — universal
+        { age: 12, hasDisability: 'no' },  // S1 — means-tested, below £10,200
+      ],
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 950,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 800,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
+
+  {
+    id: 'fsm-london-3-children-2-primary-universal-1-secondary-means-tested',
+    name: 'FSM 25: London 3 children (2 universal, 1 means-tested)',
+    description: 'Single parent in South London. Ages 7 (Year 3) and 10 (Year 5) get universal FSM via Mayor\'s scheme. Age 15 (Year 10) qualifies means-tested (earnings £500/month = £6,000/year, below £7,400 threshold).',
+    category: 'fsm-test',
+    data: {
+      area: 'england',
+      postcode: 'SE15 3AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 40,
+      children: 3,
+      childrenInfo: [
+        { age: 7, hasDisability: 'no' },   // Year 3 — universal (Mayor of London)
+        { age: 10, hasDisability: 'no' },  // Year 5 — universal (Mayor of London)
+        { age: 15, hasDisability: 'no' },  // Year 10 — means-tested, below £7,400
+      ],
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 1300,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 500,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+
   // --- Scottish Child Payment (SCP) Test Scenarios ---
   {
     id: 'scp-eligible-basic',
-    name: 'Scotland: SCP Eligible (2 children)',
+    name: 'SCP 1: Scotland eligible (2 children)',
     description: 'Single parent in Scotland with 2 children under 16, no earnings. Receives UC so qualifies for SCP at £27.15/week per child.',
     category: 'scp-test',
     data: {
@@ -1043,7 +1221,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'scp-eligible-low-earnings',
-    name: 'Scotland: SCP with Low Earnings',
+    name: 'SCP 2: Scotland with low earnings',
     description: 'Single parent in Scotland with 1 child, earning £800/month. UC still positive so qualifies for SCP.',
     category: 'scp-test',
     data: {
@@ -1066,7 +1244,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'scp-mixed-ages',
-    name: 'Scotland: SCP Mixed Ages (2 of 3 eligible)',
+    name: 'SCP 3: Scotland mixed ages',
     description: 'Couple in Scotland with 3 children (ages 5, 12, 16). Only 2 children under 16 are eligible for SCP.',
     category: 'scp-test',
     data: {
@@ -1091,9 +1269,198 @@ const examples: ExampleScenario[] = [
       partnerEmploymentType: 'not_working',
     },
   },
+  // ---------------------------------------------------------------------------
+  // EMA test scenarios
+  // ---------------------------------------------------------------------------
+  {
+    id: 'ema-wales-eligible-single',
+    name: 'EMA 1: Wales eligible – 1 student',
+    description: 'Single parent in Wales with a 17-year-old in full-time further education (A-levels) and low income of £1,500/month (£18,000/year). Should be eligible for £40/week EMA.',
+    category: 'ema-test',
+    data: {
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 40,
+      children: 1,
+      childrenInfo: [{ age: 17, isInFurtherEducation: true, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1500,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-wales-income-too-high',
+    name: 'EMA 2: Wales not eligible – income too high',
+    description: 'Single parent in Wales with a 17-year-old in FTE but income of £2,200/month (£26,400/year) exceeds the single-student threshold of £23,400.',
+    category: 'ema-test',
+    data: {
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 42,
+      children: 1,
+      childrenInfo: [{ age: 17, isInFurtherEducation: true, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 700,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 2200,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-wales-two-students-higher-threshold',
+    name: 'EMA 3: Wales eligible – 2 students',
+    description: 'Couple in Wales with two young people (16 and 18) both in FTE and combined income of £2,000/month (£24,000/year). Ineligible under single threshold (£23,400) but eligible under dual threshold (£25,974). Both get £40/week = £80/week total.',
+    category: 'ema-test',
+    data: {
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 44,
+      partnerAge: 42,
+      children: 2,
+      childrenInfo: [
+        { age: 16, isInFurtherEducation: true, hasDisability: false },
+        { age: 18, isInFurtherEducation: true, hasDisability: false },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 800,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 2000,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
+  {
+    id: 'ema-wales-not-in-fte',
+    name: 'EMA 4: Wales not eligible – not in FTE',
+    description: 'Single parent in Wales with a 17-year-old who is NOT in full-time further education (e.g. working, NEET, or on an apprenticeship). Income is within threshold but not eligible due to FTE requirement.',
+    category: 'ema-test',
+    data: {
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 38,
+      children: 1,
+      childrenInfo: [{ age: 17, isInFurtherEducation: false, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1200,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-scotland-eligible',
+    name: 'EMA 5: Scotland eligible – age 19',
+    description: 'Single parent in Scotland with a 19-year-old in FTE at college. Scotland allows EMA up to age 19. Income of £1,800/month (£21,600/year) is below the £26,884 threshold. Eligible for £30/week.',
+    category: 'ema-test',
+    data: {
+      area: 'scotland',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 41,
+      children: 1,
+      childrenInfo: [{ age: 19, isInFurtherEducation: true, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 700,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1800,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-northern-ireland-eligible',
+    name: 'EMA 6: N. Ireland eligible',
+    description: 'Single parent in Northern Ireland with a 17-year-old in FTE. Income of £1,500/month (£18,000/year) is below the Northern Ireland threshold of £20,500. Eligible for £30/week EMA.',
+    category: 'ema-test',
+    data: {
+      area: 'northern_ireland',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 39,
+      children: 1,
+      childrenInfo: [{ age: 17, isInFurtherEducation: true, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 500,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1500,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-england-not-available',
+    name: 'EMA 7: England not available',
+    description: 'Single parent in England with a 17-year-old in FTE. EMA is not available in England (abolished 2011). EMA module should not appear.',
+    category: 'ema-test',
+    data: {
+      area: 'england',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 38,
+      children: 1,
+      childrenInfo: [{ age: 17, isInFurtherEducation: true, hasDisability: false }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 900,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1500,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-mixed-age-children',
+    name: 'EMA 8: Scotland mixed ages',
+    description: 'Couple in Scotland with a 10-year-old (too young for EMA) and a 17-year-old in FTE. Only the 17-year-old qualifies. Income is £1,600/month combined, below the £26,884 threshold.',
+    category: 'ema-test',
+    data: {
+      area: 'scotland',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 40,
+      partnerAge: 38,
+      children: 2,
+      childrenInfo: [
+        { age: 10, isInFurtherEducation: false, hasDisability: false },
+        { age: 17, isInFurtherEducation: true, hasDisability: false },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 750,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 1600,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+    },
+  },
   {
     id: 'scp-not-eligible-earnings',
-    name: 'Scotland: SCP Not Eligible (UC = 0)',
+    name: 'SCP 4: Scotland not eligible (UC = 0)',
     description: 'Couple in Scotland with 1 child but high combined earnings (£4,000 + £3,000/month) reducing UC to zero. Shows earnings threshold message.',
     category: 'scp-test',
     data: {
@@ -1118,6 +1485,76 @@ const examples: ExampleScenario[] = [
       partnerMonthlyEarningsPeriod: 'per_month',
     },
   },
+  {
+    id: 'scp-ema-transition',
+    name: 'SCP 5: Scotland – EMA note for 17-year-old',
+    description: 'Single parent in Scotland with 2 children (ages 10 and 17). UC is positive so SCP applies for the 10-year-old. The 17-year-old is over 16 so no longer eligible for SCP — the EMA advisory note should appear. The 17-year-old is in further education (A-levels at college).',
+    category: 'scp-test',
+    data: {
+      area: 'scotland',
+      postcode: 'EH1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 38,
+      children: 2,
+      childrenInfo: [
+        { age: 10, hasDisability: 'no', isInFurtherEducation: false },
+        { age: 17, hasDisability: 'no', isInFurtherEducation: true },
+      ],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'part_time',
+      monthlyEarnings: 800,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-wales-age-transition',
+    name: 'EMA 9: Wales – 17-year-old in A-levels',
+    description: 'Single parent in Wales with a 17-year-old studying A-levels full-time. Monthly earnings of £1,400 (£16,800/year) are well below the single-student threshold of £23,400. Should be eligible for £40/week EMA.',
+    category: 'ema-test',
+    data: {
+      area: 'wales',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 40,
+      children: 1,
+      childrenInfo: [{ age: 17, hasDisability: 'no', isInFurtherEducation: true }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 550,
+      rentPeriod: 'per_month',
+      employmentType: 'part_time',
+      monthlyEarnings: 1400,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'ema-ni-age-transition',
+    name: 'EMA 10: Northern Ireland – 16-year-old starting college',
+    description: 'Single parent in Northern Ireland with a 16-year-old who has just started full-time further education at college. Household income of £1,400/month (£16,800/year) is below the Northern Ireland threshold of £20,500. Should be eligible for £30/week EMA.',
+    category: 'ema-test',
+    data: {
+      area: 'northern_ireland',
+      taxYear: '2025_26',
+      circumstances: 'single',
+      age: 36,
+      children: 1,
+      childrenInfo: [{ age: 16, hasDisability: 'no', isInFurtherEducation: true }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 500,
+      rentPeriod: 'per_month',
+      employmentType: 'part_time',
+      monthlyEarnings: 1400,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
 ]
 
 const EXCEPTION_SHORT_LABELS: Record<string, string> = {
@@ -1136,6 +1573,7 @@ interface ExampleScenariosProps {
 
 export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScenariosProps) {
   const categories = [
+    { id: 'ema-test', label: 'EMA Tests', color: 'yellow' },
     { id: 'scp-test', label: 'Scottish Child Payment', color: 'indigo' },
     { id: 'student', label: 'Students', color: 'teal' },
     { id: 'fsm-test', label: 'FSM Tests', color: 'orange' },

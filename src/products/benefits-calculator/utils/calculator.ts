@@ -112,8 +112,8 @@ export class UniversalCreditCalculator {
           maxAmount: 950.92,
         },
         workAllowance: {
-          single: { withHousing: 411, withoutHousing: 684 },
-          couple: { withHousing: 411, withoutHousing: 684 },
+          single: { withHousing: 404, withoutHousing: 673 },
+          couple: { withHousing: 404, withoutHousing: 673 },
         },
         taperRate: 0.55,
         carerElement: 201.68,

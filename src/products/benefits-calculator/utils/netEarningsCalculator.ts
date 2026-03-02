@@ -141,7 +141,7 @@ export function calculateNationalInsurance(grossAnnual: number): NICalculation {
     lowerEarningsLimit: NI_RATES.lowerEarningsLimit,
     primaryThreshold: NI_RATES.primaryThreshold,
     upperEarningsLimit: NI_RATES.upperEarningsLimit,
-    rate12Percent: rate8Percent, // Keep old property name for compatibility
+    rate8Percent,
     rate2Percent,
     totalNI,
     effectiveRate: grossAnnual > 0 ? (totalNI / grossAnnual) * 100 : 0,

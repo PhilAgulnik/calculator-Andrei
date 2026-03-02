@@ -2,8 +2,8 @@
  * Free School Meals Eligibility Assessment
  *
  * Eligibility rules:
- * - England: UC with net earned income <= £7,400/year (current)
- *            From September 2026: UC > 0 (any UC entitlement)
+ * - England (2025/26): UC with net earned income <= £7,400/year
+ * - England (2026/27+): UC > 0 (any UC entitlement — rule active from September 2026)
  * - Wales: Universal for all primary school children (ages 4-11)
  *          Secondary: UC with net earned income <= £7,400/year
  * - Scotland: Universal for P1-P5 (ages 4-10)
@@ -32,6 +32,7 @@ interface AssessmentData {
   monthlyEarnings?: number
   partnerMonthlyEarnings?: number
   postcode?: string
+  taxYear?: string
 }
 
 interface UCResults {
@@ -129,9 +130,10 @@ export function assessFreeSchoolMealsEligibility(
   const threshold = getThreshold(area)
   const countryName = formatCountryName(area)
 
-  // England has new rules from September 2026: eligible if UC > 0
   const isEngland = normalizedArea === 'england'
   const isLondon = isEngland && !!data.postcode && isLondonPostcode(data.postcode)
+  // September 2026 rule is active when computing for 2026/27 or later
+  const isSept2026Active = (data.taxYear ?? '2025_26') >= '2026_27'
 
   // Calculate net earned income
   const netEarnedIncome = calculateAnnualNetEarnedIncome(
@@ -146,7 +148,7 @@ export function assessFreeSchoolMealsEligibility(
   // Check income thresholds
   const meetsIncomeThreshold = netEarnedIncome <= threshold
 
-  // September 2026 rule for England: just need UC > 0
+  // From September 2026, England only requires UC > 0
   const meetsFutureIncomeThreshold = isEngland ? hasUniversalCredit : meetsIncomeThreshold
 
   // No children = not applicable
@@ -181,18 +183,18 @@ export function assessFreeSchoolMealsEligibility(
 
   if (!hasSchoolAgeChildren) {
     eligibilityReason = 'No school-age children in household.'
-  } else if (hasUniversalCredit && meetsIncomeThreshold) {
-    // Currently eligible: UC > 0 AND income within current threshold
+  } else if (hasUniversalCredit && (meetsIncomeThreshold || (isEngland && isSept2026Active))) {
+    // Currently eligible: UC > 0 AND (income within threshold OR England 2026/27+ rule active)
     currentlyEligible = true
     eligibilityReason = 'Your children are eligible for Free School Meals.'
-  } else if (isEngland && hasUniversalCredit) {
-    // Not currently eligible, but will be from September 2026 (UC > 0 rule)
+  } else if (isEngland && hasUniversalCredit && !isSept2026Active) {
+    // Income above threshold but will be eligible from September 2026 (UC > 0 rule)
     futureEligible = true
     eligibilityReason = 'Your children will be eligible for Free School Meals from September 2026 when the new rules take effect for all Universal Credit claimants.'
   } else if (!hasUniversalCredit) {
     eligibilityReason = 'You are not receiving Universal Credit. FSM eligibility requires receiving UC.'
   } else {
-    // Has UC but income over threshold (and not England, or income > £20,000)
+    // Has UC but income over threshold
     eligibilityReason = `Your annual net earned income (£${netEarnedIncome.toLocaleString()}) exceeds the £${threshold.toLocaleString()} threshold for ${countryName}.`
   }
 
@@ -247,7 +249,7 @@ export function assessFreeSchoolMealsEligibility(
       reason: currentlyEligible
         ? 'Eligible through Universal Credit'
         : futureEligible
-          ? 'Eligible from September 2026'
+          ? 'Will be eligible from September 2026'
           : eligibilityReason,
     }
   })

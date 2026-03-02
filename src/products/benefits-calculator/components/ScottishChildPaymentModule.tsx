@@ -171,6 +171,31 @@ export function ScottishChildPaymentModule({ data, ucResults, selectedPeriod = '
           </div>
         )}
 
+        {/* EMA advisory for 16-18 year olds when UC > 0 */}
+        {result.ucAmount > 0 && result.children.some((c) => c.age >= 16 && c.age <= 18) && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <p className="text-sm text-blue-800 font-semibold mb-1">
+              Scottish Child Payment stops at age 16
+            </p>
+            <p className="text-sm text-blue-800">
+              SCP ends when a child turns 16. If your child is aged 16–18 and in full-time further
+              education, they may be eligible for{' '}
+              <strong>Education Maintenance Allowance (EMA)</strong> — £30/week to help support
+              continued study. The young person applies directly, and household income must be below
+              £26,884/year.
+            </p>
+            <a
+              href="https://www.mygov.scot/ema"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-blue-700 hover:text-blue-900 hover:underline text-sm mt-2"
+            >
+              Find out about EMA in Scotland
+              <span className="ml-1">&rarr;</span>
+            </a>
+          </div>
+        )}
+
         {/* No eligible children advisory */}
         {result.eligibleChildCount === 0 && result.totalChildCount > 0 && (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">

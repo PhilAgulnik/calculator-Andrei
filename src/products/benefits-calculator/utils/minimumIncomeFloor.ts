@@ -18,10 +18,10 @@ export const NATIONAL_MINIMUM_WAGE = {
     apprentice: 7.55,    // £7.55 per hour for apprentices
   },
   '2026_27': {
-    age21Plus: 12.21,    // Will be updated when rates are announced
-    age18to20: 10.00,
-    age16to17: 7.55,
-    apprentice: 7.55,
+    age21Plus: 12.71,    // £12.71/hr from 1 April 2026
+    age18to20: 10.85,    // £10.85/hr from 1 April 2026
+    age16to17: 8.00,     // £8.00/hr from 1 April 2026
+    apprentice: 8.00,    // £8.00/hr from 1 April 2026
   },
   '2024_25': {
     age21Plus: 11.44,

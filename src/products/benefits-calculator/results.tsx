@@ -25,6 +25,7 @@ import { ChildBenefitChargeCalculator } from './components/ChildBenefitChargeCal
 import { FreeSchoolMealsModule } from './components/FreeSchoolMealsModule'
 import { ScottishChildPaymentModule } from './components/ScottishChildPaymentModule'
 import { assessFreeSchoolMealsEligibility } from './utils/freeSchoolMealsEligibility'
+import { EducationMaintenanceAllowanceModule } from './components/EducationMaintenanceAllowanceModule'
 import { addScenario, generateScenarioName, generateScenarioId } from './utils/scenarioStorage'
 import type { SavedScenario } from './types/saved-scenarios'
 import type { CarerAssessment } from './types/carer-module'
@@ -507,6 +508,12 @@ export function Results() {
                 <span className="font-medium">{formatCurrency(convertFromMonthly(calc.childElement, selectedPeriod))}</span>
               </div>
 
+              {taxYear !== '2026_27' && data.children >= 3 && (
+                <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mt-1">
+                  Note: This figure does not apply the two-child limit. If any children were born on or after 6 April 2017, your actual child element may be lower.
+                </div>
+              )}
+
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Childcare Element</span>
                 <span className="font-medium">{formatCurrency(convertFromMonthly(calc.childcareElement, selectedPeriod))}</span>
@@ -841,6 +848,7 @@ export function Results() {
                     numberOfChildren={data.children}
                     claimantIncome={claimantAdjustedIncome}
                     partnerIncome={partnerAdjustedIncome}
+                    taxYear={taxYear}
                     onCalculationComplete={(result) => {
                       setChildBenefitChargeResult(result)
                     }}
@@ -898,6 +906,7 @@ export function Results() {
                 monthlyEarnings: mainMonthlyNet,
                 partnerMonthlyEarnings: partnerMonthlyNet,
                 postcode: data.postcode,
+                taxYear,
               }}
               ucResults={results}
               selectedPeriod={selectedPeriod}
@@ -911,6 +920,23 @@ export function Results() {
             />
           )
         })()}
+
+        {/* Education Maintenance Allowance */}
+        {data && data.children > 0 && (
+          <EducationMaintenanceAllowanceModule
+            data={{
+              area: data.area || 'england',
+              children: data.children,
+              childrenInfo: data.childrenInfo,
+              monthlyEarnings: convertToMonthly(data.monthlyEarnings, data.monthlyEarningsPeriod),
+              partnerMonthlyEarnings: convertToMonthly(
+                data.partnerMonthlyEarnings,
+                data.partnerMonthlyEarningsPeriod
+              ),
+            }}
+            selectedPeriod={selectedPeriod}
+          />
+        )}
 
         {/* Local Housing Allowance Panel for Private Tenants */}
         {data && data.tenantType === 'private' && calc.lhaDetails && (

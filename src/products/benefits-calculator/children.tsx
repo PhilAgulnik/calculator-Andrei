@@ -65,6 +65,19 @@ export function Children() {
                             descriptionAfter="If this child is not yet 1 year old, please enter 0 and you will be asked for their date of birth. If this child is not yet born, but you'd like to see your entitlements including them, enter their age as 0 and their date of birth as today."
                           />
 
+                          <Show
+                            when={({ formState }: any) =>
+                              (formState.values.childrenInfo?.[index]?.age || 0) >= 16
+                            }
+                          >
+                            <Fields.BooleanRadio
+                              label={`Is Child ${childNumber} currently in full-time further education (school sixth form or college)?`}
+                              name="isInFurtherEducation"
+                              defaultValue={false}
+                              descriptionBefore="Answer 'yes' if this young person is studying full-time at school (sixth form) or college on a course up to Level 3 (e.g. A-levels, BTECs). Do not include university or apprenticeships. This is used to check eligibility for Education Maintenance Allowance (EMA)."
+                            />
+                          </Show>
+
                           <Fields.BooleanRadio
                             label={`Does Child ${childNumber} have an illness or disability?`}
                             name="hasDisability"

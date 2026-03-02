@@ -16,6 +16,7 @@ import {
 import {
   CHILD_BENEFIT_RATES,
   HICBC_THRESHOLDS,
+  getChildBenefitRates,
 } from '../types/child-benefit-charge'
 import type {
   ChildBenefitChargeProps,
@@ -26,8 +27,10 @@ export function ChildBenefitChargeCalculator({
   numberOfChildren,
   claimantIncome: initialClaimantIncome,
   partnerIncome: initialPartnerIncome,
+  taxYear,
   onCalculationComplete,
 }: ChildBenefitChargeProps) {
+  const cbRates = getChildBenefitRates(taxYear)
   // State for income inputs
   const [claimantIncome, setClaimantIncome] = useState(
     initialClaimantIncome?.toString() || ''
@@ -75,8 +78,8 @@ export function ChildBenefitChargeCalculator({
         claimantIncome: claimantNum,
         partnerIncome: showPartnerIncome ? partnerNum : undefined,
         numberOfChildren,
-        firstChildRate: CHILD_BENEFIT_RATES.firstChild,
-        additionalChildRate: CHILD_BENEFIT_RATES.additionalChild,
+        firstChildRate: cbRates.firstChild,
+        additionalChildRate: cbRates.additionalChild,
       })
 
       setCalculation(result)
@@ -208,17 +211,17 @@ export function ChildBenefitChargeCalculator({
         <p className="text-lg font-bold text-blue-900 mt-1">
           £
           {(
-            CHILD_BENEFIT_RATES.firstChild * 52 +
+            cbRates.firstChild * 52 +
             (numberOfChildren > 1
-              ? CHILD_BENEFIT_RATES.additionalChild * 52 * (numberOfChildren - 1)
+              ? cbRates.additionalChild * 52 * (numberOfChildren - 1)
               : 0)
           ).toFixed(2)}{' '}
           per year
         </p>
         <p className="text-sm text-gray-600">
-          (£{CHILD_BENEFIT_RATES.firstChild}/week for first child
+          (£{cbRates.firstChild}/week for first child
           {numberOfChildren > 1 &&
-            `, £${CHILD_BENEFIT_RATES.additionalChild}/week for ${numberOfChildren - 1} additional ${numberOfChildren - 1 === 1 ? 'child' : 'children'}`}
+            `, £${cbRates.additionalChild}/week for ${numberOfChildren - 1} additional ${numberOfChildren - 1 === 1 ? 'child' : 'children'}`}
           )
         </p>
       </div>

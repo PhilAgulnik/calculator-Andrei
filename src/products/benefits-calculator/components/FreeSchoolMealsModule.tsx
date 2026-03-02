@@ -41,6 +41,7 @@ interface FreeSchoolMealsModuleProps {
     monthlyEarnings?: number
     partnerMonthlyEarnings?: number
     postcode?: string
+    taxYear?: string
   }
   ucResults: {
     calculation?: {
