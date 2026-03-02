@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { Accordion } from '~/components/Accordion'
 import { CalculatorIcon } from '~/components/ProductIcon'
 
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   const navigate = useNavigate()
+  const router = useRouter()
   const benefitsCalculator = useEntries({ basePath: BenefitsCalculatorBasePath })
 
 
@@ -21,8 +22,9 @@ function HomeComponent() {
     // Create a temporary entry with the example data — marked so it is excluded from saved entries
     const newEntry = benefitsCalculator.addEntry(exampleData, { isExample: true })
 
-    // Navigate directly to the results page with the pre-filled data
-    navigate({ to: '/benefits-calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
+    // Open the results page in a new tab
+    const location = router.buildLocation({ to: '/benefits-calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
+    window.open(location.href, '_blank')
   }
 
   return (
