@@ -13,7 +13,7 @@ import { StudentDetails } from './student-details'
 
 import { type Page } from '../shared/context'
 
-export const BASE_PATH = '/benefits-calculator'
+export const BASE_PATH = '/calculator'
 
 export const PAGES: Page[] = [
   {

@@ -6,15 +6,13 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { APP_BASE_PATH } from './constants.ts'
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   server: {
     port: 3000,
   },
-  base: APP_BASE_PATH,
+  base: command === 'serve' ? '/' : '/benefits-calculator/',
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src'),
@@ -30,4 +28,4 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react(),
   ],
-})
+}))

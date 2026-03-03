@@ -16,7 +16,7 @@ type FooterProps = {
 export function Footer(props: FooterProps) {
   const { nextButton } = props
   const { basePath, nextPage, previousPage, progressPercentage } = useWorkflow()
-  const { id } = useParams({ from: '/benefits-calculator/$id' })
+  const { id } = useParams({ from: '/calculator/$id' })
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

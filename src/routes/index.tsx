@@ -22,8 +22,8 @@ function HomeComponent() {
     // Create a temporary entry with the example data — marked so it is excluded from saved entries
     const newEntry = benefitsCalculator.addEntry(exampleData, { isExample: true })
 
-    // Open the results page in a new tab
-    const location = router.buildLocation({ to: '/benefits-calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
+    // Open results in a new tab so the home page stays open for comparison
+    const location = router.buildLocation({ to: '/calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
     window.open(location.href, '_blank')
   }
 
@@ -54,7 +54,7 @@ function HomeComponent() {
           <button
             onClick={() => {
               const newEntry = benefitsCalculator.addEntry()
-              navigate({ to: '/benefits-calculator/$id', params: { id: newEntry.id } })
+              navigate({ to: '/calculator/$id', params: { id: newEntry.id } })
             }}
             className="w-full min-h-app-header-height flex items-center gap-2 px-7 sticky z-1 top-0 bg-main-bg rounded-md cursor-pointer"
           >
@@ -77,7 +77,7 @@ function HomeComponent() {
                   <div key={entry.id} className="flex items-center gap-2">
                     <button
                       onClick={() =>
-                        navigate({ to: '/benefits-calculator/$id', params: { id: entry.id } })
+                        navigate({ to: '/calculator/$id', params: { id: entry.id } })
                       }
                       className="text-primary py-1.5 px-2 hover:bg-slate-100 rounded-md flex-1 text-left cursor-pointer"
                     >

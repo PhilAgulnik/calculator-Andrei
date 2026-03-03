@@ -22,7 +22,7 @@ export type WorkflowContext = {
   previousPage: Page | null
   progressPercentage: number
   visiblePages: Page[]
-  basePath: '/benefits-calculator' | null
+  basePath: '/calculator' | null
   goToNextPage: (newData?: Record<string, unknown>) => void
   entry: Entry | null
   entries: Record<string, Entry>

@@ -8,7 +8,7 @@ import { useEntries } from './use-entries'
 type WorkflowProviderProps = {
   children: React.ReactNode
   pages: Page[]
-  basePath: '/benefits-calculator'
+  basePath: '/calculator'
 }
 
 export function WorkflowProvider(props: WorkflowProviderProps) {

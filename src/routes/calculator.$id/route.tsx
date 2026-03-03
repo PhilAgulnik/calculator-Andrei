@@ -8,13 +8,13 @@ import { WorkflowProvider, useWorkflow } from '~/products/shared/use-workflow'
 import { Fragment, useMemo } from 'react'
 import { EntitledtoLogo } from '~/components/EntitledtoLogo'
 
-export const Route = createFileRoute('/benefits-calculator/$id')({
+export const Route = createFileRoute('/calculator/$id')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
   return (
-    <WorkflowProvider pages={PAGES} basePath="/benefits-calculator">
+    <WorkflowProvider pages={PAGES} basePath="/calculator">
       <Product />
     </WorkflowProvider>
   )
