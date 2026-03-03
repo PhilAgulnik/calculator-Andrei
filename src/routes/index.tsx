@@ -24,7 +24,9 @@ function HomeComponent() {
 
     // Open results in a new tab so the home page stays open for comparison
     const location = router.buildLocation({ to: '/calculator/$id/$slug', params: { id: newEntry.id, slug: 'results' } })
-    window.open(location.href, '_blank')
+    // Prepend BASE_URL so the link works on GitHub Pages (where base != '/')
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    window.open(base + location.href, '_blank')
   }
 
   return (
