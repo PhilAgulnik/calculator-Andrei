@@ -26,6 +26,7 @@ import { FreeSchoolMealsModule } from './components/FreeSchoolMealsModule'
 import { ScottishChildPaymentModule } from './components/ScottishChildPaymentModule'
 import { assessFreeSchoolMealsEligibility } from './utils/freeSchoolMealsEligibility'
 import { EducationMaintenanceAllowanceModule } from './components/EducationMaintenanceAllowanceModule'
+import { StudentsAndBenefitsModule } from './components/StudentsAndBenefitsModule'
 import { addScenario, generateScenarioName, generateScenarioId } from './utils/scenarioStorage'
 import type { SavedScenario } from './types/saved-scenarios'
 import type { CarerAssessment } from './types/carer-module'
@@ -417,14 +418,7 @@ export function Results() {
         circumstances={data.circumstances || 'single'}
       />
 
-      {/* Student Exception Warning */}
-      {data.isFullTimeStudent && calc.studentIncomeDetails && !calc.studentIncomeDetails.meetsException && (
-        <Alert type="warning" className="mb-4">
-          You are a full-time student but have not indicated any exception that allows students
-          to claim Universal Credit. Full-time students are generally not eligible for UC unless
-          they meet one of the qualifying exceptions under Regulation 14.
-        </Alert>
-      )}
+      {/* Student eligibility info is now in the Students and benefits panel below */}
 
       {/* Period selector */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -672,92 +666,7 @@ export function Results() {
                 </div>
               )}
 
-              {/* Student Income Details Accordion */}
-              {calc.studentIncomeDetails && calc.studentIncomeDetails.monthlyStudentIncome > 0 && (
-                <div className="border-t border-slate-200 py-2">
-                  <Accordion title="See Student Income Details" open={false}>
-                    <div className="bg-gray-50 border border-gray-200 rounded p-4 text-sm space-y-3">
-                      <p className="text-gray-700">
-                        Student income is treated as unearned income and deducted pound-for-pound
-                        from your UC entitlement.
-                      </p>
-                      <div className="bg-white p-3 rounded border border-gray-300">
-                        <h4 className="font-semibold text-gray-900 mb-2">Calculation Breakdown</h4>
-                        <div className="grid gap-1 text-sm">
-                          {calc.studentIncomeDetails.breakdown.annualLoanAmount > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Annual student loan:</span>
-                              <span className="font-medium">
-                                {formatCurrency(calc.studentIncomeDetails.breakdown.annualLoanAmount)}
-                              </span>
-                            </div>
-                          )}
-                          {calc.studentIncomeDetails.breakdown.annualPostgraduateLoanAmount > 0 && (
-                            <>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Annual postgraduate loan:</span>
-                                <span className="font-medium">
-                                  {formatCurrency(calc.studentIncomeDetails.breakdown.annualPostgraduateLoanAmount)}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">30% counted for UC:</span>
-                                <span className="font-medium">
-                                  {formatCurrency(calc.studentIncomeDetails.breakdown.postgraduateLoanIncluded)}
-                                </span>
-                              </div>
-                            </>
-                          )}
-                          {calc.studentIncomeDetails.breakdown.annualGrantAmount > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Annual grant (after exclusions):</span>
-                              <span className="font-medium">
-                                {formatCurrency(calc.studentIncomeDetails.breakdown.annualGrantAmount)}
-                              </span>
-                            </div>
-                          )}
-                          <div className="flex justify-between border-t border-gray-300 pt-1 mt-1">
-                            <span className="text-gray-600">
-                              Divided by {calc.studentIncomeDetails.assessmentPeriods} assessment periods:
-                            </span>
-                            <span className="font-medium">
-                              {formatCurrency(calc.studentIncomeDetails.breakdown.dividedByPeriods)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Less £110 disregard:</span>
-                            <span className="font-medium text-green-600">
-                              -{formatCurrency(calc.studentIncomeDetails.disregard)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between border-t border-gray-300 pt-1 mt-1">
-                            <span className="text-gray-900 font-semibold">
-                              Monthly student income deduction:
-                            </span>
-                            <span className="font-semibold text-red-600">
-                              {formatCurrency(calc.studentIncomeDetails.monthlyStudentIncome)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {calc.studentIncomeDetails.warnings.length > 0 && (
-                        <div className="bg-yellow-50 p-3 rounded border border-yellow-300">
-                          {calc.studentIncomeDetails.warnings.map((w: string, i: number) => (
-                            <p key={i} className="text-sm text-yellow-800">{w}</p>
-                          ))}
-                        </div>
-                      )}
-
-                      <p className="text-xs text-gray-600 italic">
-                        Student income is calculated per assessment period based on UC Regulations 68-71.
-                        The £110 disregard applies per assessment period. Postgraduate loans are counted
-                        at 30% of the loan amount.
-                      </p>
-                    </div>
-                  </Accordion>
-                </div>
-              )}
+              {/* Student income details moved to Students and benefits panel */}
 
               <div className="flex justify-between py-2 border-t border-slate-200">
                 <span>Other Deductions</span>
@@ -792,6 +701,16 @@ export function Results() {
             </div>
           </div>
         </div>
+
+        {/* Students and benefits */}
+        {data?.isFullTimeStudent && (
+          <StudentsAndBenefitsModule
+            data={data}
+            calc={calc}
+            selectedPeriod={selectedPeriod}
+            convertFromMonthly={convertFromMonthly}
+          />
+        )}
 
         {/* Scottish Child Payment */}
         {data && data.children > 0 && (data.area || '').toLowerCase() === 'scotland' && (

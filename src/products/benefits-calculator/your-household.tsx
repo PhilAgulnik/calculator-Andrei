@@ -97,7 +97,8 @@ export function YourHousehold() {
                 <p className="font-semibold text-base">Full-time students and Universal Credit</p>
                 <p>
                   Full-time students are generally not eligible for Universal Credit. However,
-                  there are important exceptions. You will be asked about these on the next page.
+                  there are important exceptions. We'll collect details about your student status
+                  later in the calculator, once we have more information about your circumstances.
                 </p>
                 <Accordion title="What counts as a full-time student?" open={false}>
                   <div className="mt-3 space-y-4">
@@ -140,7 +141,7 @@ export function YourHousehold() {
                       </p>
                       <p>
                         If you qualify, your student income (loans and grants) will be taken into account
-                        when calculating your UC. You will be asked for details on the next page.
+                        when calculating your UC. You will be asked for details later in the calculator.
                       </p>
                     </div>
                   </div>

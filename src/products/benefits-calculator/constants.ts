@@ -12,6 +12,7 @@ import { PartnerEarnings } from './partner-earnings'
 import { StudentDetails } from './student-details'
 
 import { type Page } from '../shared/context'
+import { isSimpleStudentCase } from './utils/studentEligibility'
 
 export const BASE_PATH = '/calculator'
 
@@ -27,15 +28,6 @@ export const PAGES: Page[] = [
     slug: 'your-household',
     isVisible: true,
     component: YourHousehold,
-  },
-  {
-    title: 'Student details',
-    slug: 'student-details',
-    isVisible: false,
-    getIsVisible: (entryData: any) => {
-      return entryData?.isFullTimeStudent === true
-    },
-    component: StudentDetails,
   },
   {
     title: 'Age and disability',
@@ -97,6 +89,15 @@ export const PAGES: Page[] = [
     slug: 'council-tax',
     isVisible: true,
     component: CouncilTax,
+  },
+  {
+    title: 'Student details',
+    slug: 'student-details',
+    isVisible: false,
+    getIsVisible: (entryData: any) => {
+      return entryData?.isFullTimeStudent === true && !isSimpleStudentCase(entryData)
+    },
+    component: StudentDetails,
   },
   {
     title: 'Results',
