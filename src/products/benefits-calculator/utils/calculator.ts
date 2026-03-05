@@ -231,11 +231,16 @@ export class UniversalCreditCalculator {
       const studentIncomeResult = this.calculateStudentIncomeDeduction(input)
       const studentIncomeDeduction = studentIncomeResult.monthlyStudentIncome
 
+      // Ineligible full-time students get £0 UC (Regulation 14)
+      const studentIneligible = input.isFullTimeStudent && !studentIncomeResult.meetsException
+
       // Calculate final amount
-      const finalAmount = Math.max(
-        0,
-        totalElements - earningsReduction - capitalDeductionResult.deduction - benefitDeduction - studentIncomeDeduction
-      )
+      const finalAmount = studentIneligible
+        ? 0
+        : Math.max(
+            0,
+            totalElements - earningsReduction - capitalDeductionResult.deduction - benefitDeduction - studentIncomeDeduction
+          )
 
       return {
         success: true,
@@ -255,6 +260,7 @@ export class UniversalCreditCalculator {
           benefitDeduction,
           studentIncomeDeduction,
           studentIncomeDetails: studentIncomeResult,
+          studentIneligible,
           finalAmount,
           lhaDetails,
           mifDetails: earningsReductionResult.mifDetails,

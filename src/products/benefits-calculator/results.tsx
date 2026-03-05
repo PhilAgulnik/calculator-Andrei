@@ -481,6 +481,11 @@ export function Results() {
             <p className="text-slate-600 mt-2">
               Tax Year: {results.taxYear?.replace('_', '/') || '2025/26'}
             </p>
+            {calc.studentIneligible && (
+              <p className="text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mt-3 text-sm">
+                This person is a full-time student and does not meet any Regulation 14 exception. Full-time students are not eligible for Universal Credit.
+              </p>
+            )}
           </div>
 
           <div className="space-y-3 p-6">
