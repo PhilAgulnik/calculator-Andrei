@@ -83,7 +83,8 @@ export function detectStudentExceptions(data: any): StudentException[] {
   }
 
   // Exception 5: Couple both studying, partner cares for child
-  if (data.circumstances === 'couple' && hasChildren) {
+  // Only suggest when partner is confirmed as a full-time student
+  if (data.circumstances === 'couple' && data.partnerIsFullTimeStudent === true && hasChildren) {
     detected.push('couple_both_studying_partner_cares_for_child')
   }
 
@@ -91,6 +92,53 @@ export function detectStudentExceptions(data: any): StudentException[] {
   if (age >= STATE_PENSION_AGE && data.circumstances === 'couple') {
     const partnerAge = data.partnerAge ?? 25
     if (partnerAge < STATE_PENSION_AGE) {
+      detected.push('reached_state_pension_age_younger_partner')
+    }
+  }
+
+  return detected
+}
+
+/**
+ * Auto-detects which Regulation 14 exceptions likely apply to the PARTNER,
+ * based on data already collected. Mirrors detectStudentExceptions but reads
+ * partner-specific fields.
+ */
+export function detectPartnerStudentExceptions(data: any): StudentException[] {
+  const detected: StudentException[] = []
+
+  const partnerAge = data.partnerAge ?? 25
+
+  // Exception 1: Under 21
+  if (partnerAge < 21) {
+    detected.push('under21_non_advanced_no_parental_support')
+  }
+
+  // Exception 2: PIP/DLA/AA with LCWRA
+  const hasDisabilityBenefit =
+    data.partnerClaimsDisabilityBenefits === 'yes' ||
+    (data.partnerDisabilityBenefitType && ['pip', 'dla', 'aa'].includes(data.partnerDisabilityBenefitType))
+  const hasLCWRA = data.partnerHasLCWRA === 'yes' || data.partnerHasLCWRA === 'waiting'
+  if (hasDisabilityBenefit && hasLCWRA) {
+    detected.push('receiving_pip_dla_aa_with_work_limitation')
+  }
+
+  // Exception 3: Responsible for a child
+  const hasChildren = data.hasChildren === true || (data.children && data.children > 0)
+  if (hasChildren) {
+    detected.push('responsible_for_child')
+  }
+
+  // Exception 5: Both studying, one cares for child
+  // Only suggest when claimant is also confirmed as a student
+  if (data.isFullTimeStudent === true && hasChildren) {
+    detected.push('couple_both_studying_partner_cares_for_child')
+  }
+
+  // Exception 6: Reached state pension age with younger partner (the claimant)
+  if (partnerAge >= STATE_PENSION_AGE) {
+    const claimantAge = data.age ?? 25
+    if (claimantAge < STATE_PENSION_AGE) {
       detected.push('reached_state_pension_age_younger_partner')
     }
   }

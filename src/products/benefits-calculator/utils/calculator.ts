@@ -229,10 +229,25 @@ export class UniversalCreditCalculator {
 
       // Calculate student income deduction (unearned income, deducted £1 for £1)
       const studentIncomeResult = this.calculateStudentIncomeDeduction(input)
-      const studentIncomeDeduction = studentIncomeResult.monthlyStudentIncome
+      const partnerStudentIncomeResult = this.calculatePartnerStudentIncomeDeduction(input)
+      const studentIncomeDeduction = studentIncomeResult.monthlyStudentIncome + partnerStudentIncomeResult.monthlyStudentIncome
 
-      // Ineligible full-time students get £0 UC (Regulation 14)
-      const studentIneligible = input.isFullTimeStudent && !studentIncomeResult.meetsException
+      // Determine student eligibility for couples (Regulation 14)
+      const claimantIsStudent = input.isFullTimeStudent === true
+      const partnerIsStudent = input.partnerIsFullTimeStudent === true && input.circumstances === 'couple'
+      const isCouple = input.circumstances === 'couple'
+
+      let studentIneligible = false
+      if (isCouple && claimantIsStudent && partnerIsStudent) {
+        // Both students: at least one must have a Reg 14 exception
+        studentIneligible = !studentIncomeResult.meetsException && !partnerStudentIncomeResult.meetsException
+      } else if (isCouple && (claimantIsStudent || partnerIsStudent) && !(claimantIsStudent && partnerIsStudent)) {
+        // Only one member is a student: non-student satisfies eligibility
+        studentIneligible = false
+      } else if (!isCouple && claimantIsStudent) {
+        // Single student: must have exception (existing behavior)
+        studentIneligible = !studentIncomeResult.meetsException
+      }
 
       // Calculate final amount
       const finalAmount = studentIneligible
@@ -260,6 +275,7 @@ export class UniversalCreditCalculator {
           benefitDeduction,
           studentIncomeDeduction,
           studentIncomeDetails: studentIncomeResult,
+          partnerStudentIncomeDetails: partnerStudentIncomeResult,
           studentIneligible,
           finalAmount,
           lhaDetails,
@@ -998,6 +1014,46 @@ export class UniversalCreditCalculator {
     })
   }
 
+  calculatePartnerStudentIncomeDeduction(input: any): StudentIncomeResult {
+    if (!input.partnerIsFullTimeStudent || input.circumstances !== 'couple') {
+      return {
+        monthlyStudentIncome: 0,
+        loanComponent: 0,
+        grantComponent: 0,
+        postgraduateLoanComponent: 0,
+        disregard: 0,
+        assessmentPeriods: 0,
+        breakdown: {
+          annualLoanAmount: 0,
+          annualGrantAmount: 0,
+          annualPostgraduateLoanAmount: 0,
+          postgraduateLoanIncluded: 0,
+          totalAnnualIncome: 0,
+          dividedByPeriods: 0,
+          lessDisregard: 0,
+          monthlyStudentIncome: 0,
+        },
+        warnings: [],
+        meetsException: false,
+        exceptions: [],
+      }
+    }
+
+    return calculateStudentIncome({
+      isFullTimeStudent: input.partnerIsFullTimeStudent,
+      studentExceptions: input.partnerStudentExceptions || [],
+      studentType: input.partnerStudentType || 'undergraduate',
+      hasStudentLoan: input.partnerHasStudentLoan || false,
+      studentLoanAnnualAmount: input.partnerStudentLoanAnnualAmount || 0,
+      hasPostgraduateLoan: input.partnerHasPostgraduateLoan || false,
+      postgraduateLoanAnnualAmount: input.partnerPostgraduateLoanAnnualAmount || 0,
+      hasStudentGrant: input.partnerHasStudentGrant || false,
+      studentGrantAnnualAmount: input.partnerStudentGrantAnnualAmount || 0,
+      courseAssessmentPeriods: input.partnerCourseAssessmentPeriods || 9,
+      isInSummerHoliday: input.partnerIsInSummerHoliday || false,
+    })
+  }
+
   generateWarnings(input: any) {
     const warnings = []
 
@@ -1011,10 +1067,6 @@ export class UniversalCreditCalculator {
 
     if (input.rent > 2000) {
       warnings.push('High rent amount - verify this is correct')
-    }
-
-    if (input.isFullTimeStudent && (!input.studentExceptions || input.studentExceptions.length === 0)) {
-      warnings.push('Full-time students are generally not eligible for UC without meeting specific exceptions')
     }
 
     return warnings

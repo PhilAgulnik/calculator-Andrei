@@ -95,7 +95,9 @@ export const PAGES: Page[] = [
     slug: 'student-details',
     isVisible: false,
     getIsVisible: (entryData: any) => {
-      return entryData?.isFullTimeStudent === true && !isSimpleStudentCase(entryData)
+      const claimantNeedsDetails = entryData?.isFullTimeStudent === true && !isSimpleStudentCase(entryData)
+      const partnerNeedsDetails = entryData?.circumstances === 'couple' && entryData?.partnerIsFullTimeStudent === true
+      return claimantNeedsDetails || partnerNeedsDetails
     },
     component: StudentDetails,
   },
@@ -193,6 +195,7 @@ export const DEFAULT_VALUES = {
   studentExceptions: [],
   studentType: 'undergraduate',
   hasStudentLoan: false,
+  studentLivingSituation: 'away_not_london',
   studentLoanAnnualAmount: 0,
   hasPostgraduateLoan: false,
   postgraduateLoanAnnualAmount: 0,
@@ -200,4 +203,18 @@ export const DEFAULT_VALUES = {
   studentGrantAnnualAmount: 0,
   courseAssessmentPeriods: 9,
   isInSummerHoliday: false,
+
+  // Partner Student Information
+  partnerIsFullTimeStudent: false,
+  partnerStudentExceptions: [],
+  partnerStudentType: 'undergraduate',
+  partnerHasStudentLoan: false,
+  partnerStudentLivingSituation: 'away_not_london',
+  partnerStudentLoanAnnualAmount: 0,
+  partnerHasPostgraduateLoan: false,
+  partnerPostgraduateLoanAnnualAmount: 0,
+  partnerHasStudentGrant: false,
+  partnerStudentGrantAnnualAmount: 0,
+  partnerCourseAssessmentPeriods: 9,
+  partnerIsInSummerHoliday: false,
 }

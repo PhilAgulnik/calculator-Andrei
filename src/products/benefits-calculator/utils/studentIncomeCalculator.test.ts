@@ -183,7 +183,7 @@ describe('Student Income Calculator', () => {
   // NO EXCEPTION SELECTED
   // ============================================
   describe('No exception selected', () => {
-    it('should warn when no exception is selected', () => {
+    it('should not meet exception when none selected', () => {
       const result = calculateStudentIncome({
         ...baseInput,
         studentExceptions: [],
@@ -192,8 +192,7 @@ describe('Student Income Calculator', () => {
       })
 
       expect(result.meetsException).toBe(false)
-      expect(result.warnings.length).toBeGreaterThan(0)
-      expect(result.warnings[0]).toContain('not selected any exception')
+      expect(result.warnings.length).toBe(0)
     })
 
     it('should still calculate student income even without exception', () => {

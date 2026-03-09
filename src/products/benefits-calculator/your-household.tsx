@@ -150,6 +150,29 @@ export function YourHousehold() {
             </Alert>
           </Show>
 
+          <Show when={({ formState }) => formState.values.circumstances === 'couple'}>
+            <Fields.BooleanRadio
+              label="Is your partner a full-time student?"
+              name="partnerIsFullTimeStudent"
+              defaultValue={false}
+              descriptionBefore="A full-time student is someone undertaking a full-time course of advanced education, or any other full-time course where a student loan or grant is available."
+            />
+
+            <Show when={({ formState }) => formState.values.partnerIsFullTimeStudent === true}>
+              <Alert type="info" className="!items-start">
+                <div className="space-y-3 text-sm">
+                  <p className="font-semibold text-base">Partner's student status and Universal Credit</p>
+                  <p>
+                    Your partner's student status may affect your UC claim. If both of you are full-time students,
+                    at least one of you must meet a Regulation 14 exception to claim UC. If only your partner is
+                    a student, you can still claim UC — but your partner's student income (loans and grants) will
+                    be taken into account.
+                  </p>
+                </div>
+              </Alert>
+            </Show>
+          </Show>
+
           <Show when={({ formState }) => formState.values.HasPartner === true}>
             <Fields.NumberInput
               required

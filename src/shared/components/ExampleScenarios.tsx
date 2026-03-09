@@ -425,7 +425,7 @@ const examples: ExampleScenario[] = [
   {
     id: 'student-couple-both-studying',
     name: 'Student 7: Couple both studying',
-    description: 'Couple, both students, 1 child, partner cares for child — tests exception 5. Student details page shown (couple = borderline).',
+    description: 'Couple, both students, 1 child, partner cares for child — tests exception 5. Both student incomes deducted with independent £110 disregards.',
     category: 'student',
     data: {
       area: 'england',
@@ -454,6 +454,17 @@ const examples: ExampleScenario[] = [
       studentGrantAnnualAmount: 0,
       courseAssessmentPeriods: 9,
       isInSummerHoliday: false,
+      partnerIsFullTimeStudent: true,
+      partnerStudentExceptions: ['couple_both_studying_partner_cares_for_child'],
+      partnerStudentType: 'undergraduate',
+      partnerHasStudentLoan: true,
+      partnerStudentLoanAnnualAmount: 8500,
+      partnerHasPostgraduateLoan: false,
+      partnerPostgraduateLoanAnnualAmount: 0,
+      partnerHasStudentGrant: false,
+      partnerStudentGrantAnnualAmount: 0,
+      partnerCourseAssessmentPeriods: 9,
+      partnerIsInSummerHoliday: false,
     },
   },
   {
@@ -485,6 +496,171 @@ const examples: ExampleScenario[] = [
       studentGrantAnnualAmount: 2000,
       courseAssessmentPeriods: 12,
       isInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-partner-only',
+    name: 'Student 9: Partner-only student',
+    description: 'Claimant is NOT a student, partner IS. No Reg 14 exception needed — couple claims through non-student. Partner student income deducted.',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'M1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 30,
+      partnerAge: 28,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 650,
+      rentPeriod: 'per_month',
+      employmentType: 'employed',
+      monthlyEarnings: 800,
+      monthlyEarningsPeriod: 'per_month',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: false,
+      partnerIsFullTimeStudent: true,
+      partnerStudentType: 'undergraduate',
+      partnerHasStudentLoan: true,
+      partnerStudentLoanAnnualAmount: 9535,
+      partnerHasPostgraduateLoan: false,
+      partnerPostgraduateLoanAnnualAmount: 0,
+      partnerHasStudentGrant: false,
+      partnerStudentGrantAnnualAmount: 0,
+      partnerCourseAssessmentPeriods: 9,
+      partnerIsInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-both-ineligible',
+    name: 'Student 10: Both students, no children (ineligible)',
+    description: 'Both are full-time students, no children, no disability. Neither has a Reg 14 exception. Result: £0 UC.',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'LS1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 25,
+      partnerAge: 24,
+      housingStatus: 'renting',
+      tenantType: 'private',
+      rent: 800,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: [],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+      partnerIsFullTimeStudent: true,
+      partnerStudentExceptions: [],
+      partnerStudentType: 'undergraduate',
+      partnerHasStudentLoan: true,
+      partnerStudentLoanAnnualAmount: 8000,
+      partnerHasPostgraduateLoan: false,
+      partnerPostgraduateLoanAnnualAmount: 0,
+      partnerHasStudentGrant: false,
+      partnerStudentGrantAnnualAmount: 0,
+      partnerCourseAssessmentPeriods: 9,
+      partnerIsInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-both-different-types',
+    name: 'Student 11: Both students, different loan types',
+    description: 'Claimant is undergraduate with maintenance loan, partner is postgraduate (30% rule). Both have "responsible for child" exception. Tests dual income deduction.',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'B1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 32,
+      partnerAge: 34,
+      children: 2,
+      childrenInfo: [{ age: 3, hasDisability: 'no' }, { age: 5, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 550,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: false,
+      partnerIsFullTimeStudent: true,
+      partnerStudentExceptions: ['responsible_for_child'],
+      partnerStudentType: 'postgraduate',
+      partnerHasStudentLoan: false,
+      partnerStudentLoanAnnualAmount: 0,
+      partnerHasPostgraduateLoan: true,
+      partnerPostgraduateLoanAnnualAmount: 12167,
+      partnerHasStudentGrant: true,
+      partnerStudentGrantAnnualAmount: 2000,
+      partnerCourseAssessmentPeriods: 12,
+      partnerIsInSummerHoliday: false,
+    },
+  },
+  {
+    id: 'student-one-summer-holiday',
+    name: 'Student 12: One in summer holiday',
+    description: 'Both students with children. Claimant is in summer holiday (£0 income), partner is not (income deducted). Tests independent summer holiday handling.',
+    category: 'student',
+    data: {
+      area: 'england',
+      postcode: 'NE1 1AA',
+      taxYear: '2025_26',
+      circumstances: 'couple',
+      age: 29,
+      partnerAge: 27,
+      children: 1,
+      childrenInfo: [{ age: 2, hasDisability: 'no' }],
+      hasChildren: true,
+      housingStatus: 'renting',
+      tenantType: 'social',
+      rent: 600,
+      rentPeriod: 'per_month',
+      employmentType: 'not_working',
+      partnerEmploymentType: 'not_working',
+      isFullTimeStudent: true,
+      studentExceptions: ['responsible_for_child'],
+      studentType: 'undergraduate',
+      hasStudentLoan: true,
+      studentLoanAnnualAmount: 9535,
+      hasPostgraduateLoan: false,
+      postgraduateLoanAnnualAmount: 0,
+      hasStudentGrant: false,
+      studentGrantAnnualAmount: 0,
+      courseAssessmentPeriods: 9,
+      isInSummerHoliday: true,
+      partnerIsFullTimeStudent: true,
+      partnerStudentExceptions: ['couple_both_studying_partner_cares_for_child'],
+      partnerStudentType: 'undergraduate',
+      partnerHasStudentLoan: true,
+      partnerStudentLoanAnnualAmount: 8500,
+      partnerHasPostgraduateLoan: false,
+      partnerPostgraduateLoanAnnualAmount: 0,
+      partnerHasStudentGrant: false,
+      partnerStudentGrantAnnualAmount: 0,
+      partnerCourseAssessmentPeriods: 9,
+      partnerIsInSummerHoliday: false,
     },
   },
   // ============================================
@@ -1712,6 +1888,62 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                           {example.data.isInSummerHoliday && (
                             <div className="flex justify-between">
                               <dt className="text-gray-600">Summer holiday:</dt>
+                              <dd className="font-medium text-teal-700">Yes (no deduction)</dd>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {/* Partner student details */}
+                      {example.data.partnerIsFullTimeStudent && (
+                        <>
+                          <div className="flex justify-between border-t border-gray-200 pt-1 mt-1">
+                            <dt className="text-gray-600">Partner student type:</dt>
+                            <dd className="font-medium text-gray-900">
+                              {example.data.partnerStudentType === 'postgraduate' ? 'Postgraduate' : 'Undergraduate'}
+                            </dd>
+                          </div>
+                          {example.data.partnerStudentExceptions?.length > 0 && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Partner exception:</dt>
+                              <dd className="font-medium text-gray-900">
+                                {example.data.partnerStudentExceptions
+                                  .map((e: string) => EXCEPTION_SHORT_LABELS[e] || e)
+                                  .join(', ')}
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.partnerHasStudentLoan && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Partner annual loan:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.partnerStudentLoanAnnualAmount?.toLocaleString()}
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.partnerHasPostgraduateLoan && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Partner postgrad loan:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.partnerPostgraduateLoanAnnualAmount?.toLocaleString()} (30% counted)
+                              </dd>
+                            </div>
+                          )}
+                          {example.data.partnerHasStudentGrant && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Partner annual grant:</dt>
+                              <dd className="font-medium text-gray-900">
+                                £{example.data.partnerStudentGrantAnnualAmount?.toLocaleString()}
+                              </dd>
+                            </div>
+                          )}
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Partner course months:</dt>
+                            <dd className="font-medium text-gray-900">{example.data.partnerCourseAssessmentPeriods}</dd>
+                          </div>
+                          {example.data.partnerIsInSummerHoliday && (
+                            <div className="flex justify-between">
+                              <dt className="text-gray-600">Partner summer holiday:</dt>
                               <dd className="font-medium text-teal-700">Yes (no deduction)</dd>
                             </div>
                           )}

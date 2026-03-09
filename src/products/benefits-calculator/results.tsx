@@ -481,13 +481,22 @@ export function Results() {
             <p className="text-slate-600 mt-2">
               Tax Year: {results.taxYear?.replace('_', '/') || '2025/26'}
             </p>
-            {calc.studentIneligible && (
-              <p className="text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 mt-3 text-sm">
-                This person is a full-time student and does not meet any Regulation 14 exception. Full-time students are not eligible for Universal Credit.
-              </p>
-            )}
           </div>
 
+          {/* When student is ineligible, show Students panel inside the UC panel instead of breakdown */}
+          {calc.studentIneligible && (data?.isFullTimeStudent || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent)) && (
+            <div className="p-6 pt-0">
+              <StudentsAndBenefitsModule
+                data={data}
+                calc={calc}
+                selectedPeriod={selectedPeriod}
+                convertFromMonthly={convertFromMonthly}
+                embedded={true}
+              />
+            </div>
+          )}
+
+          {!calc.studentIneligible && (
           <div className="space-y-3 p-6">
             <h2 className="text-2xl font-semibold mb-4">Breakdown</h2>
 
@@ -662,11 +671,19 @@ export function Results() {
               )}
 
               {/* Student Income Deduction */}
-              {calc.studentIncomeDeduction > 0 && (
+              {calc.studentIncomeDetails?.monthlyStudentIncome > 0 && (
                 <div className="flex justify-between py-2 border-t border-slate-200">
-                  <span>Student Income Deduction</span>
+                  <span>{calc.partnerStudentIncomeDetails?.monthlyStudentIncome > 0 ? 'Your Student Income Deduction' : 'Student Income Deduction'}</span>
                   <span className="font-medium text-red-600">
-                    -{formatCurrency(convertFromMonthly(calc.studentIncomeDeduction, selectedPeriod))}
+                    -{formatCurrency(convertFromMonthly(calc.studentIncomeDetails.monthlyStudentIncome, selectedPeriod))}
+                  </span>
+                </div>
+              )}
+              {calc.partnerStudentIncomeDetails?.monthlyStudentIncome > 0 && (
+                <div className="flex justify-between py-2 border-t border-slate-200">
+                  <span>Partner's Student Income Deduction</span>
+                  <span className="font-medium text-red-600">
+                    -{formatCurrency(convertFromMonthly(calc.partnerStudentIncomeDetails.monthlyStudentIncome, selectedPeriod))}
                   </span>
                 </div>
               )}
@@ -705,10 +722,11 @@ export function Results() {
               </div>
             </div>
           </div>
+          )}
         </div>
 
-        {/* Students and benefits */}
-        {data?.isFullTimeStudent && (
+        {/* Students and benefits — only as separate panel when student IS eligible */}
+        {(data?.isFullTimeStudent || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent)) && !calc.studentIneligible && (
           <StudentsAndBenefitsModule
             data={data}
             calc={calc}
@@ -1141,10 +1159,11 @@ export function Results() {
         )
       })()}
 
-        {/* Capital Deduction Details (other cases) */}
+        {/* Capital Deduction Details (other cases - only show when savings over £6,000) */}
         {calc.capitalDeductionDetails &&
           calc.capitalDeductionDetails.explanation &&
-          calc.capitalDeductionDetails.tariffIncome === 0 && (
+          calc.capitalDeductionDetails.tariffIncome === 0 &&
+          data.hasSavingsOver6000 === 'yes' && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
               <p className="text-sm text-yellow-800">{calc.capitalDeductionDetails.explanation}</p>
             </div>

@@ -38,13 +38,6 @@ export function calculateStudentIncome(input: StudentIncomeInput): StudentIncome
   // Check if student meets an exception to claim UC
   const meetsException = input.studentExceptions.length > 0
 
-  if (!meetsException) {
-    warnings.push(
-      'You have not selected any exception that allows full-time students to claim UC. ' +
-      'Full-time students are generally not eligible for UC unless they meet one of the exceptions.'
-    )
-  }
-
   // If in summer holiday, no student income counts (Regulation 68)
   if (input.isInSummerHoliday) {
     return {
