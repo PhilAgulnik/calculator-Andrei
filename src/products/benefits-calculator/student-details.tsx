@@ -154,19 +154,19 @@ export function StudentDetails() {
               </Show>
 
               <Fields.BooleanRadio
-                label="Do you receive any student grants or bursaries that count towards UC?"
+                label="Do you receive any student grants or bursaries?"
                 name="hasStudentGrant"
                 defaultValue={false}
-                descriptionBefore={<>Some grants count as income for UC. These include: nursing and midwifery bursaries, care-experienced bursaries, FE bursary maintenance allowances, and dependent's or lone parent's grants paid alongside a student loan. Do <strong>not</strong> include: the special support loan (from 2024/25), tuition fee grants, disability-related grants, travel/books/equipment grants, childcare grants, or grants for residential study costs away from your institution — these are all excluded from the UC calculation. <a href="https://www.entitledto.co.uk/help/Student_income_Universal_Credit" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Find out more</a></>}
+                descriptionBefore={<>This includes grants, bursaries or scholarships related to your course. <a href="https://www.entitledto.co.uk/help/Student_income_Universal_Credit" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Find out more</a></>}
               />
 
               <Show when={({ formState }: any) => formState.values.hasStudentGrant === true}>
                 <Fields.NumberInput
-                  label="What is your annual grant amount (counted for UC)?"
+                  label="What is your annual grant amount?"
                   name="studentGrantAnnualAmount"
                   defaultValue={0}
                   inputClassName="max-w-[200px]"
-                  descriptionBefore="Enter the total annual amount of grants that count as UC income. Exclude: the special support loan, tuition fees, disability-related support, travel expenses, books and equipment, childcare costs, and residential study costs away from your institution."
+                  descriptionBefore={<>Only include grants that count as income for UC, such as: nursing and midwifery bursaries, care-experienced bursaries, FE bursary maintenance allowances, and dependent's or lone parent's grants paid alongside a student loan. Do <strong>not</strong> include: the special support loan (from 2024/25), tuition fee grants, disability-related grants, travel/books/equipment grants, childcare grants, or grants for residential study costs away from your institution — these are all excluded from the UC calculation.</>}
                 />
               </Show>
 
@@ -277,19 +277,19 @@ export function StudentDetails() {
               </Show>
 
               <Fields.BooleanRadio
-                label="Does your partner receive any student grants or bursaries that count towards UC?"
+                label="Does your partner receive any student grants or bursaries?"
                 name="partnerHasStudentGrant"
                 defaultValue={false}
-                descriptionBefore={<>Some grants count as income for UC. These include: nursing and midwifery bursaries, care-experienced bursaries, FE bursary maintenance allowances, and dependent's or lone parent's grants paid alongside a student loan. Do <strong>not</strong> include: the special support loan (from 2024/25), tuition fee grants, disability-related grants, travel/books/equipment grants, childcare grants, or grants for residential study costs away from your institution — these are all excluded from the UC calculation. <a href="https://www.entitledto.co.uk/help/Student_income_Universal_Credit" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Find out more</a></>}
+                descriptionBefore={<>This includes grants, bursaries or scholarships related to their course. <a href="https://www.entitledto.co.uk/help/Student_income_Universal_Credit" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">Find out more</a></>}
               />
 
               <Show when={({ formState }: any) => formState.values.partnerHasStudentGrant === true}>
                 <Fields.NumberInput
-                  label="What is your partner's annual grant amount (counted for UC)?"
+                  label="What is your partner's annual grant amount?"
                   name="partnerStudentGrantAnnualAmount"
                   defaultValue={0}
                   inputClassName="max-w-[200px]"
-                  descriptionBefore="Enter the total annual amount of grants that count as UC income. Exclude: the special support loan, tuition fees, disability-related support, travel expenses, books and equipment, childcare costs, and residential study costs away from your institution."
+                  descriptionBefore={<>Only include grants that count as income for UC, such as: nursing and midwifery bursaries, care-experienced bursaries, FE bursary maintenance allowances, and dependent's or lone parent's grants paid alongside a student loan. Do <strong>not</strong> include: the special support loan (from 2024/25), tuition fee grants, disability-related grants, travel/books/equipment grants, childcare grants, or grants for residential study costs away from your institution — these are all excluded from the UC calculation.</>}
                 />
               </Show>
 
@@ -362,8 +362,7 @@ function AutoFilledLoanAmount({
         inputClassName="max-w-[200px]"
         descriptionBefore={
           <>
-            This has been set to the standard maximum for your living situation (£{suggestedAmount.toLocaleString('en-GB')}).
-            You can change this if your maximum entitlement is different.
+            For UC purposes, the DWP always uses the maximum maintenance loan you are entitled to — not the amount you actually borrowed or received. This is set to the standard maximum for your living situation (£{suggestedAmount.toLocaleString('en-GB')}). You can change this if your maximum entitlement is different.
           </>
         }
       />
