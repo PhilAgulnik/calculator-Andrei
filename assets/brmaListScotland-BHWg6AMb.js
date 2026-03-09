@@ -1,0 +1,1 @@
+const e=["Aberdeen and Shire","Argyll and Bute","Ayrshires","Dumfries and Galloway","Dundee and Angus","East Dunbartonshire","Fife","Forth Valley","Greater Glasgow","Highland and Islands","Lothian","North Lanarkshire","Perth and Kinross","Renfrewshire/ Inverclyde","Scottish Borders","South Lanarkshire","West Dunbartonshire","West Lothian"];export{e as default};
