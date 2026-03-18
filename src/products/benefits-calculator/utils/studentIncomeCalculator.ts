@@ -31,7 +31,7 @@ export function calculateStudentIncome(input: StudentIncomeInput): StudentIncome
   const warnings: string[] = []
 
   // If not a full-time student, no student income
-  if (!input.isFullTimeStudent) {
+  if (input.isFullTimeStudent !== 'full-time' && input.isFullTimeStudent !== true) {
     return createZeroResult(input)
   }
 

@@ -5,24 +5,21 @@
  * further education (school or college, up to Level 3). It is not available in England
  * (abolished 2011) and is means-tested on household income.
  *
- * Weekly rates (2025/26):
- *   - Wales: £40/week (ages 16–18)
- *   - Scotland: £30/week (ages 16–19)
- *   - Northern Ireland: £30/week (ages 16–19)
- *   - England: not available
- *
- * Income thresholds:
- *   - Wales: ≤ £23,400/year (1 eligible student); ≤ £25,974/year (2+ eligible students)
- *   - Scotland: ≤ £26,884/year
- *   - Northern Ireland: ≤ £20,500/year
- *
+ * *** ANNUAL UPDATE REQUIRED ***
+ * Rates and thresholds below must be reviewed each academic year.
+ * Wales thresholds are announced around April; Scotland and NI may change later.
  * Sources:
- *   https://www.gov.wales/education-maintenance-allowance-wales-scheme-2025-2026
- *   https://www.studentfinancewales.co.uk/further-education-funding/education-maintenance-allowance/eligibility/
- *   https://www.turn2us.org.uk/get-support/information-for-your-situation/education-maintenance-allowance-ema-scotland-wales-northern-ireland/
+ *   Wales:    https://www.gov.wales/education-maintenance-allowance
+ *   Scotland: https://www.mygov.scot/ema
+ *   NI:       https://www.nidirect.gov.uk/articles/education-maintenance-allowance-explained
+ *
+ * Current rates (2025/26 academic year — 2026/27 not yet published):
+ *   Weekly: Wales £40, Scotland £30, NI £30
+ *   Thresholds: Wales ≤ £23,400 (1 student) / £25,974 (2+),
+ *               Scotland ≤ £26,884, NI ≤ £20,500
  */
 
-/** Weekly EMA payment rates by country (2025/26 academic year) */
+/** Weekly EMA payment rates by country (2025/26 academic year — update when 2026/27 published) */
 export const EMA_WEEKLY_RATES: Record<string, number> = {
   wales: 40,
   scotland: 30,
@@ -32,6 +29,7 @@ export const EMA_WEEKLY_RATES: Record<string, number> = {
 /**
  * Wales income thresholds (annual household income).
  * The threshold increases when there is more than one eligible young person in the household.
+ * Update when 2026/27 scheme is published (expected ~April 2026).
  */
 export const EMA_WALES_THRESHOLDS = {
   /** Household has exactly 1 eligible young person */
@@ -40,10 +38,10 @@ export const EMA_WALES_THRESHOLDS = {
   twoOrMoreStudents: 25974,
 } as const
 
-/** Annual household income threshold for Scotland (2025/26) */
+/** Annual household income threshold for Scotland (2025/26 — update when 2026/27 published) */
 export const EMA_SCOTLAND_THRESHOLD = 26884
 
-/** Annual household income threshold for Northern Ireland (2025/26) */
+/** Annual household income threshold for Northern Ireland (2025/26 — update when 2026/27 published) */
 export const EMA_NORTHERN_IRELAND_THRESHOLD = 20500
 
 /** Minimum age for EMA eligibility in Wales (must be 16+ on 31 August) */

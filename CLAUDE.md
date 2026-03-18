@@ -59,12 +59,14 @@ When relevant, include brief **Production Handoff Notes** with:
 - Risks or assumptions requiring developer validation
 
 ## Delivery Checklist
-For each feature or change, provide:
+For **significant changes** (new features, new benefit modules, structural changes like adding partner support), provide:
 1. **Summary** — what changed and why (plain language)
 2. **Files changed**
 3. **Validation** — manual test steps performed and results; run automated tests if they exist for the area
 4. **Handoff notes** — if relevant to production teams
 5. **Doc updates** — update `CLAUDE.md` only for significant architectural or policy changes
+
+Small text/label tweaks and copy edits do **not** need delivery notes — just commit and push.
 
 ## Known Issues
 - `authManager.test.ts` — 2 pre-existing failures (message text mismatch, attempts count)

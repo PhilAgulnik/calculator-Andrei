@@ -13,11 +13,10 @@ export type StudentException =
   | 'responsible_for_child'
   | 'single_foster_parent'
   | 'couple_both_studying_partner_cares_for_child'
-  | 'reached_state_pension_age_younger_partner'
 
 /** Input for student income calculation */
 export interface StudentIncomeInput {
-  isFullTimeStudent: boolean
+  isFullTimeStudent: 'full-time' | 'part-time' | 'no' | boolean
   studentExceptions: StudentException[]
   studentType: StudentType
   hasStudentLoan: boolean
@@ -71,6 +70,4 @@ export const STUDENT_EXCEPTION_LABELS: Record<StudentException, string> = {
     'Single foster parent with a child placed with you',
   couple_both_studying_partner_cares_for_child:
     'Both members of couple are students and partner cares for a child',
-  reached_state_pension_age_younger_partner:
-    'Reached state pension age with a younger partner',
 }

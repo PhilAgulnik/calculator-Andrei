@@ -484,7 +484,7 @@ export function Results() {
           </div>
 
           {/* When student is ineligible, show Students panel inside the UC panel instead of breakdown */}
-          {calc.studentIneligible && (data?.isFullTimeStudent || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent)) && (
+          {calc.studentIneligible && (data?.isFullTimeStudent === 'full-time' || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent === 'full-time')) && (
             <div className="p-6 pt-0">
               <StudentsAndBenefitsModule
                 data={data}
@@ -726,7 +726,7 @@ export function Results() {
         </div>
 
         {/* Students and benefits — only as separate panel when student IS eligible */}
-        {(data?.isFullTimeStudent || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent)) && !calc.studentIneligible && (
+        {(data?.isFullTimeStudent === 'full-time' || (data?.circumstances === 'couple' && data?.partnerIsFullTimeStudent === 'full-time')) && !calc.studentIneligible && (
           <StudentsAndBenefitsModule
             data={data}
             calc={calc}

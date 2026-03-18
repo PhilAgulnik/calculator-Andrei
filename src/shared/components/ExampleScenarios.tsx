@@ -10,7 +10,7 @@ export interface ExampleScenario {
   id: string
   name: string
   description: string
-  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student' | 'scp-test' | 'ema-test'
+  category: 'simple' | 'complex' | 'edge-case' | 'real-world' | 'fsm-test' | 'student' | 'scp-test' | 'ema-test' | 'uc-cutoff'
   data: Record<string, any>
 }
 
@@ -468,39 +468,8 @@ const examples: ExampleScenario[] = [
     },
   },
   {
-    id: 'student-pension-age',
-    name: 'Student 8: Pension age exception',
-    description: 'Age 67 with partner age 55 — tests exception 6 (state pension age with younger partner). Postgraduate with grant.',
-    category: 'student',
-    data: {
-      area: 'england',
-      postcode: 'EH1 1AA',
-      taxYear: '2025_26',
-      circumstances: 'couple',
-      age: 67,
-      partnerAge: 55,
-      housingStatus: 'renting',
-      tenantType: 'social',
-      rent: 700,
-      rentPeriod: 'per_month',
-      employmentType: 'not_working',
-      partnerEmploymentType: 'not_working',
-      isFullTimeStudent: true,
-      studentExceptions: ['reached_state_pension_age_younger_partner'],
-      studentType: 'postgraduate',
-      hasStudentLoan: false,
-      studentLoanAnnualAmount: 0,
-      hasPostgraduateLoan: true,
-      postgraduateLoanAnnualAmount: 12167,
-      hasStudentGrant: true,
-      studentGrantAnnualAmount: 2000,
-      courseAssessmentPeriods: 12,
-      isInSummerHoliday: false,
-    },
-  },
-  {
     id: 'student-partner-only',
-    name: 'Student 9: Partner-only student',
+    name: 'Student 8: Partner-only student',
     description: 'Claimant is NOT a student, partner IS. No Reg 14 exception needed — couple claims through non-student. Partner student income deducted.',
     category: 'student',
     data: {
@@ -533,7 +502,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-both-ineligible',
-    name: 'Student 10: Both students, no children (ineligible)',
+    name: 'Student 9: Both students, no children (ineligible)',
     description: 'Both are full-time students, no children, no disability. Neither has a Reg 14 exception. Result: £0 UC.',
     category: 'student',
     data: {
@@ -575,7 +544,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-both-different-types',
-    name: 'Student 11: Both students, different loan types',
+    name: 'Student 10: Both students, different loan types',
     description: 'Claimant is undergraduate with maintenance loan, partner is postgraduate (30% rule). Both have "responsible for child" exception. Tests dual income deduction.',
     category: 'student',
     data: {
@@ -620,7 +589,7 @@ const examples: ExampleScenario[] = [
   },
   {
     id: 'student-one-summer-holiday',
-    name: 'Student 12: One in summer holiday',
+    name: 'Student 11: One in summer holiday',
     description: 'Both students with children. Claimant is in summer holiday (£0 income), partner is not (income deducted). Tests independent summer holiday handling.',
     category: 'student',
     data: {
@@ -1691,6 +1660,91 @@ const examples: ExampleScenario[] = [
       monthlyEarningsPeriod: 'per_month',
     },
   },
+  // ── UC Cut-off Points (2026/27, no housing, single parent, eldest pre-2017) ──
+  {
+    id: 'uc-cutoff-1-child',
+    name: 'UC Cut-off 1: 1 child — £31,319/year',
+    description: 'Gross earnings where UC award reaches £0 for 1 child, no housing costs (2026/27)',
+    category: 'uc-cutoff',
+    data: {
+      area: 'england',
+      taxYear: '2026_27',
+      circumstances: 'single',
+      age: 30,
+      children: 1,
+      childrenInfo: [{ age: 11, hasDisability: false }],
+      housingStatus: 'none',
+      employmentType: 'employed',
+      monthlyEarnings: 2610,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'uc-cutoff-2-children',
+    name: 'UC Cut-off 2: 2 children — £40,847/year',
+    description: 'Gross earnings where UC award reaches £0 for 2 children, no housing costs (2026/27)',
+    category: 'uc-cutoff',
+    data: {
+      area: 'england',
+      taxYear: '2026_27',
+      circumstances: 'single',
+      age: 30,
+      children: 2,
+      childrenInfo: [
+        { age: 7, hasDisability: false },
+        { age: 11, hasDisability: false },
+      ],
+      housingStatus: 'none',
+      employmentType: 'employed',
+      monthlyEarnings: 3404,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'uc-cutoff-3-children',
+    name: 'UC Cut-off 3: 3 children — £50,364/year',
+    description: 'Gross earnings where UC award reaches £0 for 3 children, no housing costs (2026/27)',
+    category: 'uc-cutoff',
+    data: {
+      area: 'england',
+      taxYear: '2026_27',
+      circumstances: 'single',
+      age: 30,
+      children: 3,
+      childrenInfo: [
+        { age: 5, hasDisability: false },
+        { age: 7, hasDisability: false },
+        { age: 11, hasDisability: false },
+      ],
+      housingStatus: 'none',
+      employmentType: 'employed',
+      monthlyEarnings: 4197,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
+  {
+    id: 'uc-cutoff-4-children',
+    name: 'UC Cut-off 4: 4 children — £61,374/year',
+    description: 'Gross earnings where UC award reaches £0 for 4 children, no housing costs (2026/27)',
+    category: 'uc-cutoff',
+    data: {
+      area: 'england',
+      taxYear: '2026_27',
+      circumstances: 'single',
+      age: 30,
+      children: 4,
+      childrenInfo: [
+        { age: 3, hasDisability: false },
+        { age: 5, hasDisability: false },
+        { age: 7, hasDisability: false },
+        { age: 11, hasDisability: false },
+      ],
+      housingStatus: 'none',
+      employmentType: 'employed',
+      monthlyEarnings: 5115,
+      monthlyEarningsPeriod: 'per_month',
+    },
+  },
 ]
 
 const EXCEPTION_SHORT_LABELS: Record<string, string> = {
@@ -1699,7 +1753,6 @@ const EXCEPTION_SHORT_LABELS: Record<string, string> = {
   under21_non_advanced_no_parental_support: 'Under 21, no parental support',
   single_foster_parent: 'Foster parent',
   couple_both_studying_partner_cares_for_child: 'Couple both studying',
-  reached_state_pension_age_younger_partner: 'State pension age',
 }
 
 interface ExampleScenariosProps {
@@ -1709,6 +1762,7 @@ interface ExampleScenariosProps {
 
 export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScenariosProps) {
   const categories = [
+    { id: 'uc-cutoff', label: 'UC Cut-off Points', color: 'rose' },
     { id: 'ema-test', label: 'EMA Tests', color: 'yellow' },
     { id: 'scp-test', label: 'Scottish Child Payment', color: 'indigo' },
     { id: 'student', label: 'Students', color: 'teal' },
@@ -1839,7 +1893,7 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                         </div>
                       )}
                       {/* Student-specific details */}
-                      {example.data.isFullTimeStudent && (
+                      {(example.data.isFullTimeStudent === 'full-time' || example.data.isFullTimeStudent === true) && (
                         <>
                           <div className="flex justify-between">
                             <dt className="text-gray-600">Student type:</dt>
@@ -1895,7 +1949,7 @@ export function ExampleScenarios({ onLoadExample, compact = false }: ExampleScen
                       )}
 
                       {/* Partner student details */}
-                      {example.data.partnerIsFullTimeStudent && (
+                      {(example.data.partnerIsFullTimeStudent === 'full-time' || example.data.partnerIsFullTimeStudent === true) && (
                         <>
                           <div className="flex justify-between border-t border-gray-200 pt-1 mt-1">
                             <dt className="text-gray-600">Partner student type:</dt>

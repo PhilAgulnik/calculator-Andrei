@@ -103,16 +103,6 @@ describe('detectPartnerStudentExceptions', () => {
     )
   })
 
-  it('should detect pension age exception for older partner with younger claimant', () => {
-    const data = {
-      circumstances: 'couple',
-      partnerAge: 67,
-      age: 55,
-    }
-    const exceptions = detectPartnerStudentExceptions(data)
-    expect(exceptions).toContain('reached_state_pension_age_younger_partner')
-  })
-
   it('should detect disability exception for partner with PIP and LCWRA', () => {
     const data = {
       circumstances: 'couple',

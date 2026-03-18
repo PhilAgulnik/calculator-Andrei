@@ -18,7 +18,6 @@ export interface FreeSchoolMealsResult {
   reason: string
   country: string
   threshold: number
-  futureThreshold?: number // England September 2026 threshold
   netEarnedIncome: number
   eligibleChildren: FreeSchoolMealsChild[]
   hasUniversalCredit: boolean
@@ -37,12 +36,6 @@ export const FSM_THRESHOLDS = {
   northern_ireland: 14000,
 } as const
 
-/**
- * England future FSM threshold from September 2026
- * The government announced an increase to £20,000
- */
-export const FSM_ENGLAND_FUTURE_THRESHOLD = 20000
-export const FSM_ENGLAND_FUTURE_DATE = 'September 2026'
 
 /**
  * Scotland universal provision age range (P1-P5)

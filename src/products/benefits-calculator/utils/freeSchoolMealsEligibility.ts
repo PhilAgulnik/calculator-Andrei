@@ -161,7 +161,6 @@ export function assessFreeSchoolMealsEligibility(
       reason: 'No children in household',
       country: countryName,
       threshold,
-      futureThreshold: undefined,
       netEarnedIncome,
       eligibleChildren: [],
       hasUniversalCredit,
@@ -264,7 +263,6 @@ export function assessFreeSchoolMealsEligibility(
     reason: eligibilityReason,
     country: countryName,
     threshold,
-    futureThreshold: undefined, // No threshold — rule is just UC > 0
     netEarnedIncome,
     eligibleChildren,
     hasUniversalCredit,

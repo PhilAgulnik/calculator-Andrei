@@ -1,8 +1,5 @@
 import type { StudentException } from '../types/student-income'
 
-/** State pension age threshold (approximate — men and women both 66 as of 2024/25) */
-const STATE_PENSION_AGE = 66
-
 /**
  * Determines if a student case is "simple" — meaning no Regulation 14 exception
  * can possibly apply based on the data collected on other pages.
@@ -11,7 +8,7 @@ const STATE_PENSION_AGE = 66
  * We only skip when ALL exception routes are clearly ruled out.
  */
 export function isSimpleStudentCase(data: any): boolean {
-  if (!data?.isFullTimeStudent) return false
+  if (data?.isFullTimeStudent !== 'full-time' && data?.isFullTimeStudent !== true) return false
 
   // Exception 1: Under 21 in non-advanced education without parental support
   const age = data.age ?? 25
@@ -35,9 +32,6 @@ export function isSimpleStudentCase(data: any): boolean {
   // Exception 5: Both members of couple are students and partner cares for child
   const isCouple = data.circumstances === 'couple'
   if (isCouple) return false
-
-  // Exception 6: Reached state pension age with a younger partner
-  if (age >= STATE_PENSION_AGE) return false
 
   // Exception 2 (partner side): partner disability
   const partnerHasDisability =
@@ -84,16 +78,8 @@ export function detectStudentExceptions(data: any): StudentException[] {
 
   // Exception 5: Couple both studying, partner cares for child
   // Only suggest when partner is confirmed as a full-time student
-  if (data.circumstances === 'couple' && data.partnerIsFullTimeStudent === true && hasChildren) {
+  if (data.circumstances === 'couple' && (data.partnerIsFullTimeStudent === 'full-time' || data.partnerIsFullTimeStudent === true) && hasChildren) {
     detected.push('couple_both_studying_partner_cares_for_child')
-  }
-
-  // Exception 6: State pension age with younger partner
-  if (age >= STATE_PENSION_AGE && data.circumstances === 'couple') {
-    const partnerAge = data.partnerAge ?? 25
-    if (partnerAge < STATE_PENSION_AGE) {
-      detected.push('reached_state_pension_age_younger_partner')
-    }
   }
 
   return detected
@@ -131,16 +117,8 @@ export function detectPartnerStudentExceptions(data: any): StudentException[] {
 
   // Exception 5: Both studying, one cares for child
   // Only suggest when claimant is also confirmed as a student
-  if (data.isFullTimeStudent === true && hasChildren) {
+  if ((data.isFullTimeStudent === 'full-time' || data.isFullTimeStudent === true) && hasChildren) {
     detected.push('couple_both_studying_partner_cares_for_child')
-  }
-
-  // Exception 6: Reached state pension age with younger partner (the claimant)
-  if (partnerAge >= STATE_PENSION_AGE) {
-    const claimantAge = data.age ?? 25
-    if (claimantAge < STATE_PENSION_AGE) {
-      detected.push('reached_state_pension_age_younger_partner')
-    }
   }
 
   return detected

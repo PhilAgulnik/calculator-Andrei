@@ -27,8 +27,8 @@ export function StudentsAndBenefitsModule({
   convertFromMonthly,
   embedded = false,
 }: StudentsAndBenefitsModuleProps) {
-  const claimantIsStudent = data?.isFullTimeStudent === true
-  const partnerIsStudent = data?.partnerIsFullTimeStudent === true && data?.circumstances === 'couple'
+  const claimantIsStudent = data?.isFullTimeStudent === 'full-time'
+  const partnerIsStudent = data?.partnerIsFullTimeStudent === 'full-time' && data?.circumstances === 'couple'
 
   if (!claimantIsStudent && !partnerIsStudent) return null
 

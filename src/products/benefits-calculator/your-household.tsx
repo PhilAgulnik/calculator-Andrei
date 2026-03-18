@@ -84,89 +84,75 @@ export function YourHousehold() {
             name="resCare"
           />
 
-          <Fields.BooleanRadio
-            label="Are you a full-time student?"
+          <Fields.Radio
+            label="Are you a student?"
             name="isFullTimeStudent"
-            defaultValue={false}
-            descriptionBefore="A full-time student is someone undertaking a full-time course of advanced education, or any other full-time course where a student loan or grant is available."
+            defaultValue="no"
+            options={[
+              { value: 'full-time', label: 'Yes, full-time' },
+              { value: 'part-time', label: 'Yes, part-time' },
+              { value: 'no', label: 'No' },
+            ]}
           />
 
-          <Show when={({ formState }) => formState.values.isFullTimeStudent === true}>
+          <Show when={({ formState }) => formState.values.isFullTimeStudent === 'full-time'}>
             <Alert type="info" className="!items-start">
               <div className="space-y-3 text-sm">
                 <p className="font-semibold text-base">Full-time students and Universal Credit</p>
                 <p>
-                  Full-time students are generally not eligible for Universal Credit. However,
-                  there are important exceptions. We'll collect details about your student status
-                  later in the calculator, once we have more information about your circumstances.
+                  A full-time course is one that your university or college classifies as full-time.
+                  Full-time students are generally not eligible for Universal Credit unless they meet
+                  certain exceptions. We'll check your eligibility later in the calculator.
                 </p>
-                <Accordion title="What counts as a full-time student?" open={false}>
-                  <div className="mt-3 space-y-4">
-                    <div>
-                      <p className="font-medium mb-1">Definition (Regulation 12)</p>
-                      <p className="mb-2">You are "receiving education" if you are undertaking:</p>
-                      <ul className="list-disc ml-5 space-y-1">
-                        <li>A full-time course of advanced education, OR</li>
-                        <li>Any other full-time course of study or training where a student loan or grant is available</li>
-                      </ul>
-                    </div>
+              </div>
+            </Alert>
+          </Show>
 
-                    <div>
-                      <p className="font-medium mb-1">Advanced education includes:</p>
-                      <ul className="list-disc ml-5 space-y-1">
-                        <li>Postgraduate courses and degrees</li>
-                        <li>First degree courses</li>
-                        <li>Higher National Diplomas (HND)</li>
-                        <li>Diplomas of higher education</li>
-                        <li>Any course above A-level or Scottish Higher standard</li>
-                      </ul>
-                    </div>
-
-                    <div>
-                      <p className="font-medium mb-1">Exceptions that allow students to claim UC (Regulation 14):</p>
-                      <ul className="list-disc ml-5 space-y-1">
-                        <li>Under 21 in non-advanced education without parental support</li>
-                        <li>Receiving PIP, DLA or AA with documented limited capability for work</li>
-                        <li>Responsible for a child or qualifying young person</li>
-                        <li>Single foster parent with a child placed with you</li>
-                        <li>Both members of a couple are students, and the partner cares for a child</li>
-                        <li>Reached state pension age with a younger partner</li>
-                      </ul>
-                    </div>
-
-                    <div className="border-t border-blue-200 pt-3 space-y-2">
-                      <p>
-                        Under Regulation 13, the course period includes vacation periods within the course
-                        (e.g. Christmas and Easter breaks), but not the summer vacation after the course ends.
-                      </p>
-                      <p>
-                        If you qualify, your student income (loans and grants) will be taken into account
-                        when calculating your UC. You will be asked for details later in the calculator.
-                      </p>
-                    </div>
-                  </div>
-                </Accordion>
+          <Show when={({ formState }) => formState.values.isFullTimeStudent === 'part-time'}>
+            <Alert type="info" className="!items-start">
+              <div className="space-y-3 text-sm">
+                <p className="font-semibold text-base">Part-time students and Universal Credit</p>
+                <p>
+                  Part-time students can claim Universal Credit without any student-specific restrictions.
+                  Your course will not affect your eligibility. You should answer 'No' below unless your
+                  university or college classifies your course as full-time.
+                </p>
               </div>
             </Alert>
           </Show>
 
           <Show when={({ formState }) => formState.values.circumstances === 'couple'}>
-            <Fields.BooleanRadio
-              label="Is your partner a full-time student?"
+            <Fields.Radio
+              label="Is your partner a student?"
               name="partnerIsFullTimeStudent"
-              defaultValue={false}
-              descriptionBefore="A full-time student is someone undertaking a full-time course of advanced education, or any other full-time course where a student loan or grant is available."
+              defaultValue="no"
+              options={[
+                { value: 'full-time', label: 'Yes, full-time' },
+                { value: 'part-time', label: 'Yes, part-time' },
+                { value: 'no', label: 'No' },
+              ]}
             />
 
-            <Show when={({ formState }) => formState.values.partnerIsFullTimeStudent === true}>
+            <Show when={({ formState }) => formState.values.partnerIsFullTimeStudent === 'full-time'}>
               <Alert type="info" className="!items-start">
                 <div className="space-y-3 text-sm">
                   <p className="font-semibold text-base">Partner's student status and Universal Credit</p>
                   <p>
+                    A full-time course is one that their university or college classifies as full-time.
                     Your partner's student status may affect your UC claim. If both of you are full-time students,
-                    at least one of you must meet a Regulation 14 exception to claim UC. If only your partner is
-                    a student, you can still claim UC — but your partner's student income (loans and grants) will
-                    be taken into account.
+                    at least one of you must meet an exception to claim UC. We'll check this later in the calculator.
+                  </p>
+                </div>
+              </Alert>
+            </Show>
+
+            <Show when={({ formState }) => formState.values.partnerIsFullTimeStudent === 'part-time'}>
+              <Alert type="info" className="!items-start">
+                <div className="space-y-3 text-sm">
+                  <p className="font-semibold text-base">Part-time students and Universal Credit</p>
+                  <p>
+                    Part-time students can claim Universal Credit without any student-specific restrictions.
+                    Your partner's course will not affect your eligibility.
                   </p>
                 </div>
               </Alert>

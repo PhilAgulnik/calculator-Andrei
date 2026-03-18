@@ -1,12 +1,15 @@
 /**
- * Maximum maintenance loan rates for UC purposes (2025/26 academic year, England).
+ * Maximum maintenance loan rates for UC purposes (England).
  *
  * UC regulations require the MAXIMUM loan a student is entitled to be used,
  * even if they chose to borrow less. These rates help users identify their
  * likely maximum based on living situation.
  *
- * Source: Student Finance England — Plan 2 maintenance loan rates 2025/26
- * https://www.gov.uk/student-finance/new-fulltime-students
+ * *** ANNUAL UPDATE REQUIRED ***
+ * Rates must be updated each academic year when Student Finance England publishes new figures.
+ * Source: https://www.gov.uk/student-finance/new-fulltime-students
+ *
+ * Current rates: 2025/26 academic year (2026/27 not yet published)
  */
 
 export type LivingSituation = 'at_home' | 'away_not_london' | 'away_london'

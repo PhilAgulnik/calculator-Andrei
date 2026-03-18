@@ -43,8 +43,8 @@ export function StudentDetails() {
     ? entry.data.partnerStudentExceptions
     : detectedPartnerExceptions
 
-  const isClaimantStudent = entry?.data?.isFullTimeStudent === true
-  const isPartnerStudent = entry?.data?.partnerIsFullTimeStudent === true && entry?.data?.circumstances === 'couple'
+  const isClaimantStudent = entry?.data?.isFullTimeStudent === 'full-time'
+  const isPartnerStudent = entry?.data?.partnerIsFullTimeStudent === 'full-time' && entry?.data?.circumstances === 'couple'
   const bothAreStudents = isClaimantStudent && isPartnerStudent
 
   // Living situation options for maintenance loan guidance

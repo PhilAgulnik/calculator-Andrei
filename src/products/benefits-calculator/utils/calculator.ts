@@ -233,8 +233,8 @@ export class UniversalCreditCalculator {
       const studentIncomeDeduction = studentIncomeResult.monthlyStudentIncome + partnerStudentIncomeResult.monthlyStudentIncome
 
       // Determine student eligibility for couples (Regulation 14)
-      const claimantIsStudent = input.isFullTimeStudent === true
-      const partnerIsStudent = input.partnerIsFullTimeStudent === true && input.circumstances === 'couple'
+      const claimantIsStudent = input.isFullTimeStudent === 'full-time' || input.isFullTimeStudent === true
+      const partnerIsStudent = (input.partnerIsFullTimeStudent === 'full-time' || input.partnerIsFullTimeStudent === true) && input.circumstances === 'couple'
       const isCouple = input.circumstances === 'couple'
 
       let studentIneligible = false
@@ -975,7 +975,7 @@ export class UniversalCreditCalculator {
   }
 
   calculateStudentIncomeDeduction(input: any): StudentIncomeResult {
-    if (!input.isFullTimeStudent) {
+    if (input.isFullTimeStudent !== 'full-time' && input.isFullTimeStudent !== true) {
       return {
         monthlyStudentIncome: 0,
         loanComponent: 0,
@@ -1015,7 +1015,7 @@ export class UniversalCreditCalculator {
   }
 
   calculatePartnerStudentIncomeDeduction(input: any): StudentIncomeResult {
-    if (!input.partnerIsFullTimeStudent || input.circumstances !== 'couple') {
+    if ((input.partnerIsFullTimeStudent !== 'full-time' && input.partnerIsFullTimeStudent !== true) || input.circumstances !== 'couple') {
       return {
         monthlyStudentIncome: 0,
         loanComponent: 0,

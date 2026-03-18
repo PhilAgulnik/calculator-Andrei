@@ -95,8 +95,8 @@ export const PAGES: Page[] = [
     slug: 'student-details',
     isVisible: false,
     getIsVisible: (entryData: any) => {
-      const claimantNeedsDetails = entryData?.isFullTimeStudent === true && !isSimpleStudentCase(entryData)
-      const partnerNeedsDetails = entryData?.circumstances === 'couple' && entryData?.partnerIsFullTimeStudent === true
+      const claimantNeedsDetails = entryData?.isFullTimeStudent === 'full-time' && !isSimpleStudentCase(entryData)
+      const partnerNeedsDetails = entryData?.circumstances === 'couple' && entryData?.partnerIsFullTimeStudent === 'full-time'
       return claimantNeedsDetails || partnerNeedsDetails
     },
     component: StudentDetails,
@@ -191,7 +191,7 @@ export const DEFAULT_VALUES = {
   area: 'england',
 
   // Student Information
-  isFullTimeStudent: false,
+  isFullTimeStudent: 'no',
   studentExceptions: [],
   studentType: 'undergraduate',
   hasStudentLoan: false,
@@ -205,7 +205,7 @@ export const DEFAULT_VALUES = {
   isInSummerHoliday: false,
 
   // Partner Student Information
-  partnerIsFullTimeStudent: false,
+  partnerIsFullTimeStudent: 'no',
   partnerStudentExceptions: [],
   partnerStudentType: 'undergraduate',
   partnerHasStudentLoan: false,
